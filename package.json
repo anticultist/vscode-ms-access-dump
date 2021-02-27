@@ -2,7 +2,12 @@
     "name": "ms-access-dump-format",
     "displayName": "MS Access Dump Format",
     "description": "Syntax highlighting for the MS Access dump format",
+    "license": "ISC",
     "version": "0.1.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/anticultist/vscode-ms-access-dump"
+    },
     "engines": {
         "vscode": "^1.53.0"
     },
