@@ -1,0 +1,29 @@
+{
+    "name": "ms-access-dump-format",
+    "displayName": "MS Access Dump Format",
+    "description": "Syntax highlighting for the MS Access dump format",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.53.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "access-dump",
+            "aliases": ["MS Access Dump", "access-dump"],
+            "extensions": [".form",".mac",".qry",".report"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "access-dump",
+            "scopeName": "source.access-dump",
+            "path": "./syntaxes/access-dump.tmLanguage.json",
+            "embeddedLanguages": {
+                "source.vba": "vba",
+                "meta.embedded.block.vba": "vba"
+            }
+        }]
+    }
+}

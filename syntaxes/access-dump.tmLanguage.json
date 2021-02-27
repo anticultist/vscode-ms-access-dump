@@ -1,0 +1,124 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "MS Access Dump",
+	"scopeName": "source.access-dump",
+	"uuid": "b952227b-5efe-4265-9d30-b4ce2c18895e",
+	"fileTypes": [
+		"form",
+		"mac",
+		"qry",
+		"report"
+	],
+	"patterns": [
+		{ "include": "#number" },
+		{ "include": "#hex_number" },
+		{ "include": "#string" },
+		{ "include": "#constants" },
+		{ "include": "#assignment" },
+		{ "include": "#assignment_with_type" },
+		{ "include": "#block" },
+		{ "include": "#code_block" },
+		{ "include": "#comma" }
+	],
+	"repository": {
+		"prototype": {
+			"patterns": [
+				{ "include": "#number" },
+				{ "include": "#hex_number" },
+				{ "include": "#string" },
+				{ "include": "#constants" },
+				{ "include": "#assignment" },
+				{ "include": "#assignment_with_type" },
+				{ "include": "#block" },
+				{ "include": "#comma" }
+			]
+		},
+		"string": {
+			"name": "string.quoted.double.access-dump",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.access-dump",
+					"match": "\\\\."
+				},
+				{
+					"name": "keyword.other.access-dump",
+					"match": "\\[(?i:Event Procedure|Ereignisprozedur)\\]"
+				}
+			]
+		},
+		"number": {
+			"name": "constant.numeric.access-dump",
+			"match": "([-])?\\b([0-9][0-9_]*)(\\.|(\\.([0-9][0-9_]*))?([eE][+-]?([0-9][0-9_]*))?\\b)"
+		},
+		"hex_number": {
+			"name": "constant.numeric.access-dump",
+			"match": "\\b0x([0-9a-f]+)\\b"
+		},
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.language.access-dump",
+					"match": "\\b(NotDefault)\\b"
+				}
+			]
+		},
+		"comma": {
+			"match": ",",
+			"name": "punctuation.separator.delimiter.access-dump"
+		},
+		"block": {
+			"begin": "\\b(Begin)\\b\\s*\\b([A-Za-z_][A-Za-z_0-9]*)?\\b$",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.access-dump" },
+				"2": { "name": "storage.type.access-dump" }
+			},
+			"end": "\\b(End)\\b",
+			"endCaptures": {
+				"1": { "name": "keyword.other.access-dump" }
+			},
+			"patterns": [
+				{ "include": "#prototype" },
+				{ "include": "#block" }
+			]
+		},
+		"assignment": {
+			"begin": "\\b([A-Za-z_][A-Za-z_0-9]*)\\b\\s*(=)",
+			"beginCaptures": {
+				"1": { "name": "variable.parameter.access-dump punctuation.definition.variable.access-dump" },
+				"2": { "name": "keyword.operator.assignment.augmented.access-dump" }
+			},
+			"patterns": [
+				{ "include": "#prototype" }
+			],
+			"end": "$"
+		},
+		"assignment_with_type": {
+			"begin": "\\b(dbAttachment|dbBigInt|dbBinary|dbBoolean|dbByte|dbChar|dbComplexByte|dbComplexDecimal|dbComplexDouble|dbComplexGUID|dbComplexInteger|dbComplexLong|dbComplexSingle|dbComplexText|dbCurrency|dbDate|dbDecimal|dbDouble|dbFloat|dbGUID|dbInteger|dbLong|dbLongBinary|dbMemo|dbNumeric|dbSingle|dbText|dbTime|dbTimeStamp|dbVarBinary)\\b",
+			"beginCaptures": {
+				"1": { "name": "storage.type.access-dump" }
+			},
+			"patterns": [
+				{ "include": "#prototype" },
+				{
+					"name": "keyword.operator.assignment.augmented.access-dump",
+					"match": "(=)"
+				}
+			],
+			"end": "$"
+		},
+		"code_block": {
+			"contentName": "meta.embedded.block.vba",
+			"name": "meta.embedded.block.vba",
+			"begin": "^\\s*(CodeBehindForm)\\s*$",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.access-dump" }
+			},
+			"end": "$EOF",
+			"patterns": [
+				{ "include": "source.vba"}
+			]
+		}
+	}
+}
