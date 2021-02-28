@@ -3,7 +3,7 @@
     "displayName": "MS Access Dump Format",
     "description": "Syntax highlighting for the MS Access dump format",
     "license": "ISC",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "publisher": "anticultist",
     "icon": "images/icon.png",
     "repository": {
@@ -29,6 +29,7 @@
             "path": "./syntaxes/access-dump.tmLanguage.json",
             "embeddedLanguages": {
                 "source.vba": "vba",
+                "source.sql": "sql",
                 "meta.embedded.block.vba": "vba"
             }
         }]

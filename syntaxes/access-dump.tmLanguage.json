@@ -14,6 +14,7 @@
 		{ "include": "#hex_number" },
 		{ "include": "#string" },
 		{ "include": "#constants" },
+		{ "include": "#sql_assignment" },
 		{ "include": "#assignment" },
 		{ "include": "#assignment_with_type" },
 		{ "include": "#block" },
@@ -27,6 +28,7 @@
 				{ "include": "#hex_number" },
 				{ "include": "#string" },
 				{ "include": "#constants" },
+				{ "include": "#sql_assignment" },
 				{ "include": "#assignment" },
 				{ "include": "#assignment_with_type" },
 				{ "include": "#block" },
@@ -89,28 +91,53 @@
 				"1": { "name": "variable.parameter.access-dump punctuation.definition.variable.access-dump" },
 				"2": { "name": "keyword.operator.assignment.augmented.access-dump" }
 			},
+			"end": "$",
 			"patterns": [
 				{ "include": "#prototype" }
-			],
-			"end": "$"
+			]
 		},
 		"assignment_with_type": {
 			"begin": "\\b(dbAttachment|dbBigInt|dbBinary|dbBoolean|dbByte|dbChar|dbComplexByte|dbComplexDecimal|dbComplexDouble|dbComplexGUID|dbComplexInteger|dbComplexLong|dbComplexSingle|dbComplexText|dbCurrency|dbDate|dbDecimal|dbDouble|dbFloat|dbGUID|dbInteger|dbLong|dbLongBinary|dbMemo|dbNumeric|dbSingle|dbText|dbTime|dbTimeStamp|dbVarBinary)\\b",
 			"beginCaptures": {
 				"1": { "name": "storage.type.access-dump" }
 			},
+			"end": "$",
 			"patterns": [
 				{ "include": "#prototype" },
 				{
 					"name": "keyword.operator.assignment.augmented.access-dump",
 					"match": "(=)"
 				}
-			],
-			"end": "$"
+			]
+		},
+		"sql_assignment": {
+			"begin": "\\b(BaseInfo|RecordSource|RowSource)\\b",
+			"beginCaptures": {
+				"1": { "name": "variable.parameter.access-dump punctuation.definition.variable.access-dump" }
+			},
+			"end": "$",
+			"patterns": [
+				{ "include": "#sql_string" },
+				{ "include": "#prototype" },
+				{
+					"name": "keyword.operator.assignment.augmented.access-dump",
+					"match": "(=)"
+				}
+			]
+		},
+		"sql_string": {
+			"name": "string.quoted.double.access-dump",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.access-dump",
+					"match": "\\\\."
+				},
+				{ "include": "source.sql"}
+			]
 		},
 		"code_block": {
-			"contentName": "meta.embedded.block.vba",
-			"name": "meta.embedded.block.vba",
 			"begin": "^\\s*(CodeBehindForm)\\s*$",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.access-dump" }
