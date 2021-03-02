@@ -1,5 +1,9 @@
 # MS Access Dump Format Change Log
 
+## 0.3.0
+
+- Improve highlighting inside strings
+
 ## 0.2.0
 
 - Embed SQL syntax highlighting in strings for certain attribute assignments (BaseInfo, RecordSource and RowSource)
