@@ -3,7 +3,7 @@
     "displayName": "MS Access Dump Format",
     "description": "Syntax highlighting for the MS Access dump format",
     "license": "ISC",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "publisher": "anticultist",
     "icon": "images/icon.png",
     "repository": {
