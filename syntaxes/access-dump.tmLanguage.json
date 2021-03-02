@@ -12,6 +12,7 @@
 	"patterns": [
 		{ "include": "#number" },
 		{ "include": "#hex_number" },
+		{ "include": "#expression_string" },
 		{ "include": "#string" },
 		{ "include": "#constants" },
 		{ "include": "#sql_assignment" },
@@ -26,6 +27,7 @@
 			"patterns": [
 				{ "include": "#number" },
 				{ "include": "#hex_number" },
+				{ "include": "#expression_string" },
 				{ "include": "#string" },
 				{ "include": "#constants" },
 				{ "include": "#sql_assignment" },
@@ -42,12 +44,51 @@
 			"patterns": [
 				{
 					"name": "constant.character.escape.access-dump",
-					"match": "\\\\."
+					"match": "\\\\(012|015|.)"
 				},
 				{
 					"name": "keyword.other.access-dump",
 					"match": "\\[(?i:Event Procedure|Ereignisprozedur)\\]"
 				}
+			]
+		},
+		"sql_string": {
+			"name": "string.quoted.double.access-dump",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.access-dump",
+					"match": "\\\\(012|015|.)"
+				},
+				{ "include": "#variable" },
+				{ "include": "source.sql"}
+			]
+		},
+		"expression_string": {
+			"name": "string.quoted.double.access-dump",
+			"begin": "\"(=)",
+			"beginCaptures": {
+				"1": { "name": "keyword.operator.assignment.augmented.access-dump" }
+			},
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.access-dump",
+					"match": "\\\\(012|015|.)"
+				},
+				{
+					"match": "\\b(?=[^0-9])(\\w+)(\\()",
+					"captures": {
+						"1": {"name": "support.function.builtin.access-dump"},
+						"2": {"name": "punctuation.section.group.begin.access-dump"}
+					}
+				},
+				{
+					"name": "punctuation.section.group.end.access-dump",
+					"match": "(\\))"
+				},
+				{ "include": "#variable" }
 			]
 		},
 		"number": {
@@ -69,6 +110,14 @@
 		"comma": {
 			"match": ",",
 			"name": "punctuation.separator.delimiter.access-dump"
+		},
+		"variable": {
+			"match": "(\\[)(?=[^0-9])(\\w[\\w /-]*)(\\])",
+			"captures": {
+				"1": {"name": "punctuation.section.brackets.begin.access-dump"},
+				"2": {"name": "variable.parameter.access-dump"},
+				"3": {"name": "punctuation.section.brackets.end.access-dump"}
+			}
 		},
 		"block": {
 			"begin": "\\b(Begin)\\b\\s*\\b([A-Za-z_][A-Za-z_0-9]*)?\\b$",
@@ -123,18 +172,6 @@
 					"name": "keyword.operator.assignment.augmented.access-dump",
 					"match": "(=)"
 				}
-			]
-		},
-		"sql_string": {
-			"name": "string.quoted.double.access-dump",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.access-dump",
-					"match": "\\\\."
-				},
-				{ "include": "source.sql"}
 			]
 		},
 		"code_block": {
