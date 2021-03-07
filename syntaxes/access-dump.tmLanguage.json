@@ -78,7 +78,7 @@
 					"match": "\\\\(012|015|.)"
 				},
 				{
-					"match": "\\b(?=[^0-9])(\\w+)(\\()",
+					"match": "\\b(?=[^0-9])([\\w$]+)(\\()",
 					"captures": {
 						"1": {"name": "support.function.builtin.access-dump"},
 						"2": {"name": "punctuation.section.group.begin.access-dump"}
