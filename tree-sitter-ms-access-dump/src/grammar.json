@@ -1,0 +1,445 @@
+{
+  "name": "ms_access_dump",
+  "word": "identifier",
+  "rules": {
+    "dump": {
+      "type": "REPEAT",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_expression"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "code_section"
+          }
+        ]
+      }
+    },
+    "identifier": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z][a-zA-Z0-9]*"
+    },
+    "_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "assignment"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "assignment_with_type"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "block"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "string"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "hex_value"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "hex_value"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "_newline": {
+      "type": "PATTERN",
+      "value": "\\r?\\n|\\r"
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[^\"\\\\\\n]+|\\\\\\r?\\n|\\\\."
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "number": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[+-]"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "PATTERN",
+            "value": "[0-9][0-9_]*"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "."
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "PATTERN",
+                        "value": "[0-9][0-9_]*"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "[eE][+-]?([0-9][0-9_]*)"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "hex_value": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "0x([0-9a-f]+)"
+        }
+      ]
+    },
+    "assignment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "string"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "number"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "block"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "STRING",
+                  "value": "NotDefault"
+                },
+                "named": true,
+                "value": "not_default"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "assignment_with_type": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "dbAttachment"
+            },
+            {
+              "type": "STRING",
+              "value": "dbBigInt"
+            },
+            {
+              "type": "STRING",
+              "value": "dbBinary"
+            },
+            {
+              "type": "STRING",
+              "value": "dbBoolean"
+            },
+            {
+              "type": "STRING",
+              "value": "dbByte"
+            },
+            {
+              "type": "STRING",
+              "value": "dbChar"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexByte"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexDecimal"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexDouble"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexGUID"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexInteger"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexLong"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexSingle"
+            },
+            {
+              "type": "STRING",
+              "value": "dbComplexText"
+            },
+            {
+              "type": "STRING",
+              "value": "dbCurrency"
+            },
+            {
+              "type": "STRING",
+              "value": "dbDate"
+            },
+            {
+              "type": "STRING",
+              "value": "dbDecimal"
+            },
+            {
+              "type": "STRING",
+              "value": "dbDouble"
+            },
+            {
+              "type": "STRING",
+              "value": "dbFloat"
+            },
+            {
+              "type": "STRING",
+              "value": "dbGUID"
+            },
+            {
+              "type": "STRING",
+              "value": "dbInteger"
+            },
+            {
+              "type": "STRING",
+              "value": "dbLong"
+            },
+            {
+              "type": "STRING",
+              "value": "dbLongBinary"
+            },
+            {
+              "type": "STRING",
+              "value": "dbMemo"
+            },
+            {
+              "type": "STRING",
+              "value": "dbNumeric"
+            },
+            {
+              "type": "STRING",
+              "value": "dbSingle"
+            },
+            {
+              "type": "STRING",
+              "value": "dbText"
+            },
+            {
+              "type": "STRING",
+              "value": "dbTime"
+            },
+            {
+              "type": "STRING",
+              "value": "dbTimeStamp"
+            },
+            {
+              "type": "STRING",
+              "value": "dbVarBinary"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        }
+      ]
+    },
+    "block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "Begin"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "End"
+        }
+      ]
+    },
+    "code_section": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "CodeBehindForm"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        },
+        {
+          "type": "FIELD",
+          "name": "code",
+          "content": {
+            "type": "PATTERN",
+            "value": "(.|[\\r\\n])*"
+          }
+        }
+      ]
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s"
+    }
+  ],
+  "conflicts": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": []
+}
+

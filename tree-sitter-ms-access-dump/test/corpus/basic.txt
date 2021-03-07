@@ -1,0 +1,143 @@
+=================
+string assignment
+=================
+
+DatasheetFontName ="Arial"
+
+---
+(dump
+  (assignment
+    (identifier) (string)))
+
+
+=============
+string escape
+=============
+
+ColumnInfo ="\"\\012\015"
+
+---
+(dump
+  (assignment
+    (identifier) (string)))
+
+=========================
+integer number assignment
+=========================
+
+Version =20
+
+---
+(dump
+  (assignment
+    (identifier) (number)))
+
+=======================
+float number assignment
+=======================
+
+BorderShade =100.0
+
+---
+(dump
+  (assignment
+    (identifier) (number)))
+
+==========
+form block
+==========
+
+Begin Form
+    DefaultView =0
+End
+
+---
+(dump
+  (block
+    (identifier)
+    (assignment
+      (identifier) (number))))
+
+=========
+hex block
+=========
+
+RecSrcDt = Begin
+    0xde0a4ef2f89be540
+End
+
+---
+(dump
+  (assignment
+    (identifier)
+    (block
+      (hex_value))))
+
+=============================
+hex block with multiple lines
+=============================
+
+Begin
+    0xcafe ,
+    0xcafe
+End
+
+---
+(dump
+  (block
+    (hex_value)
+    (hex_value)))
+
+========================
+multi line block comment
+========================
+
+Begin
+    Comment ="first line"
+        "second line"
+End
+
+---
+(dump
+  (block
+    (assignment
+      (identifier)
+      (string))
+    (string)))
+
+============
+code section
+============
+
+VersionRequired =20
+CodeBehindForm
+attribute vB_GlobalNameSpace = false
+attribute vB_Creatable = true
+attribute vB_PredeclaredId = true
+attribute vB_Exposed = false
+
+---
+(dump
+  (assignment (identifier) (number))
+  (code_section))
+
+====================
+assignment with type
+====================
+
+dbByte "DefaultView" ="2"
+
+---
+
+(dump
+  (assignment_with_type (string) (string)))
+
+=========
+constants
+=========
+
+LayoutForPrint = NotDefault
+
+----------
+(dump
+  (assignment (identifier) (not_default)))

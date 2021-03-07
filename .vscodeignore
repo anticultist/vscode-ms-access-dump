@@ -1,3 +1,4 @@
+.tree-sitter-ms-access-dump/**
 .vscode/**
 .vscode-test/**
 .gitignore
