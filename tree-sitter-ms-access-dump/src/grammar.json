@@ -438,6 +438,7 @@
     }
   ],
   "conflicts": [],
+  "precedences": [],
   "externals": [],
   "inline": [],
   "supertypes": []
