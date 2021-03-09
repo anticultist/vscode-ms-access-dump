@@ -1,5 +1,16 @@
-.tree-sitter-ms-access-dump/**
 .vscode/**
 .vscode-test/**
 .gitignore
+**/*.py
+**/*.ts
+**/*.map
+**/tsconfig.json
+**/tsconfig.base.json
+tree-sitter-ms-access-dump/**
 vsc-extension-quickstart.md
+client/node_modules/**
+!client/node_modules/vscode-jsonrpc/**
+!client/node_modules/vscode-languageclient/**
+!client/node_modules/vscode-languageserver-protocol/**
+!client/node_modules/vscode-languageserver-types/**
+!client/node_modules/semver/**
