@@ -13,3 +13,11 @@ VBA Syntax Highlighting
 
 To enable syntax highlighting after the 'CodeBehindForm' tag you can install the following VSCode extension:
 - Visual Studio Code VBA [[Marketplace]](https://marketplace.visualstudio.com/items?itemName=aferri.avb)
+
+Related Links
+-------------
+
+These links may be interesting to further improve the development.
+
+- [Rubberduck](https://rubberduckvba.com/)
+- [vbWatchdog](https://www.everythingaccess.com/vbwatchdog.asp)
