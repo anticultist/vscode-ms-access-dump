@@ -1,3 +1,5 @@
+// this is the main tree-sitter grammar definition file
+
 module.exports = grammar({
   name: 'ms_access_dump',
 
