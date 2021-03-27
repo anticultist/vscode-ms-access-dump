@@ -196,8 +196,14 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 
 connection.onDocumentSymbol(
 	(params: DocumentSymbolParams): SymbolInformation[] => {
+		if (parser === undefined) {
+			connection.console.log('Could not provide symbol information: parser is not available');
+			return [];
+		}
+		
 		const document_text = documents.get(params.textDocument.uri)?.getText();
 		if (document_text === undefined) {
+			connection.console.log('Could not provide symbol information: failed to get document text');
 			return [];
 		}
 		
