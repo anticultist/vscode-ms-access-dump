@@ -3,3 +3,4 @@ package-lock.json
 out
 node_modules
 .vscode-test
+*.code-workspace

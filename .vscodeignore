@@ -1,6 +1,7 @@
 .vscode/**
 .vscode-test/**
 .gitignore
+*.code-workspace
 **/*.py
 **/*.ts
 **/*.map
