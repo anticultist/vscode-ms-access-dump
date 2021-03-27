@@ -1,19 +1,17 @@
 // Based on Microsoft LSP example
 // https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
 
-// TODO: continue
-
 import {
 	createConnection,
 	TextDocuments,
-	Diagnostic,
-	DiagnosticSeverity,
 	ProposedFeatures,
 	InitializeParams,
 	DidChangeConfigurationNotification,
-	CompletionItem,
-	CompletionItemKind,
-	TextDocumentPositionParams,
+	Location,
+	Range,
+	Position,
+	DocumentSymbolParams,
+	SymbolInformation,
 	TextDocumentSyncKind,
 	InitializeResult
 } from 'vscode-languageserver/node';
@@ -22,6 +20,16 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 
+import * as Parser from 'web-tree-sitter';
+import * as path from "path";
+
+async function loadParser() {
+	await Parser.init();
+	parser = new Parser;
+	const MyLang = await Parser.Language.load(path.resolve(__dirname, '..', 'tree-sitter-ms_access_dump.wasm'));
+	parser.setLanguage(MyLang);
+}
+
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
@@ -29,11 +37,13 @@ let connection = createConnection(ProposedFeatures.all);
 // Create a simple text document manager.
 let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
+var parser: Parser;
+
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 let hasDiagnosticRelatedInformationCapability: boolean = false;
 
-connection.onInitialize((params: InitializeParams) => {
+connection.onInitialize((params: InitializeParams) => {	
 	let capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
@@ -53,10 +63,7 @@ connection.onInitialize((params: InitializeParams) => {
 	const result: InitializeResult = {
 		capabilities: {
 			textDocumentSync: TextDocumentSyncKind.Incremental,
-			// Tell the client that this server supports code completion.
-			completionProvider: {
-				resolveProvider: true
-			}
+			documentSymbolProvider: true
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -66,6 +73,9 @@ connection.onInitialize((params: InitializeParams) => {
 			}
 		};
 	}
+
+	loadParser();
+	
 	return result;
 });
 
@@ -76,7 +86,6 @@ connection.onInitialized(() => {
 	}
 	if (hasWorkspaceFolderCapability) {
 		connection.workspace.onDidChangeWorkspaceFolders(_event => {
-			connection.console.log('Workspace folder change event received.');
 		});
 	}
 });
@@ -139,45 +148,61 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 }
 
 connection.onDidChangeWatchedFiles(_change => {
-	// Monitored files have change in VSCode
-	connection.console.log('We received a file change event');
 });
 
-// This handler provides the initial list of the completion items.
-connection.onCompletion(
-	(_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-		// The pass parameter contains the position of the text document in
-		// which code complete got requested. For the example we ignore this
-		// info and always provide the same completion items.
-		// TODO: remove this dummy code
-		return [
-			{
-				label: 'TypeScript',
-				kind: CompletionItemKind.Text,
-				data: 1
-			},
-			{
-				label: 'JavaScript',
-				kind: CompletionItemKind.Text,
-				data: 2
-			}
-		  ];
-	}
-);
+function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
+	const symbols:SymbolInformation[] = [];
 
-// This handler resolves additional information for the item selected in
-// the completion list.
-connection.onCompletionResolve(
-	(item: CompletionItem): CompletionItem => {
-		// TODO: remove this dummy code
-		if (item.data === 1) {
-			item.detail = 'TypeScript details';
-			item.documentation = 'TypeScript documentation';
-			} else if (item.data === 2) {
-			item.detail = 'JavaScript details';
-			item.documentation = 'JavaScript documentation';
+	function scanTopLevelStructure(x: Parser.SyntaxNode) {
+		switch (x.type) {
+			case 'assignment':
+				scanAssignment(x);
+				break;
+			case 'block':
+				scanBlock(x);
+				break;
 		}
-		return item;
+	}
+
+	function scanAssignment(x: Parser.SyntaxNode) {
+		if (x.firstNamedChild?.text == "Name") {
+			const name_node = x.firstNamedChild.nextNamedSibling;
+			if (name_node !== undefined &&
+				name_node?.startPosition !== undefined &&
+				name_node?.endPosition !== undefined)
+			{
+				symbols.push({
+					name: name_node.text,
+					kind: 22,
+					location: Location.create(uri, Range.create(Position.create(name_node.startPosition.row, name_node.startPosition.column),
+																Position.create(name_node.endPosition.row, name_node.endPosition.column)))
+				});
+			}
+		}
+	}
+
+	function scanBlock(x: Parser.SyntaxNode) {
+		for (const syntax_node of x.namedChildren) {
+			scanTopLevelStructure(syntax_node)
+		}
+	}
+
+	for (const syntax_node of root.rootNode.namedChildren) {
+		scanTopLevelStructure(syntax_node)
+	}
+
+	return symbols;
+}
+
+connection.onDocumentSymbol(
+	(params: DocumentSymbolParams): SymbolInformation[] => {
+		const document_text = documents.get(params.textDocument.uri)?.getText();
+		if (document_text === undefined) {
+			return [];
+		}
+		
+		const tree = parser.parse(document_text);
+		return symbolsFromAST(params.textDocument.uri, tree);
 	}
 );
 
@@ -187,4 +212,3 @@ documents.listen(connection);
 
 // Listen on the connection
 connection.listen();
-
