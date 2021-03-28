@@ -1,5 +1,9 @@
 # MS Access Dump Format Change Log
 
+## 0.4.0
+
+- Add first LSP feature: show some document symbols (component names)
+
 ## 0.3.0
 
 - Improve highlighting inside strings

@@ -43,7 +43,7 @@ let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
 let hasDiagnosticRelatedInformationCapability: boolean = false;
 
-connection.onInitialize((params: InitializeParams) => {	
+connection.onInitialize(async (params: InitializeParams) => {	
 	let capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
@@ -74,7 +74,7 @@ connection.onInitialize((params: InitializeParams) => {
 		};
 	}
 
-	loadParser();
+	await loadParser();
 	
 	return result;
 });

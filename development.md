@@ -48,7 +48,7 @@ code .
 ```
 
 To compile this extension press `Ctrl + Shift + B`.
-Than switch to the debug viewlet and select `Launch Client`
+Than switch to the debug viewlet and select `Launch Client`.
 
 VS Code Extension
 -----------------
@@ -90,8 +90,16 @@ WebAssembly
 Package
 -------
 
+To [publish](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) a new version you typically have to execute those commands:
+
 ```sh
 vsce login username
 vsce package
 vsce publish
+```
+
+In addition you can install and test the new version with this command:
+
+```sh
+code --install-extension extension_filename.vsix
 ```
