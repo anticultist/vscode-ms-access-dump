@@ -164,6 +164,12 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 		}
 	}
 
+	function removeQuotes(text:string): string {
+		if (text.charAt(0) != '"' || text.charAt(text.length-1) != '"')
+			return text;
+		return text.substring(1, text.length-1);
+	}
+
 	function scanAssignment(x: Parser.SyntaxNode) {
 		if (x.firstNamedChild?.text == "Name") {
 			const name_node = x.firstNamedChild.nextNamedSibling;
@@ -172,8 +178,9 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 				name_node?.endPosition !== undefined)
 			{
 				symbols.push({
-					name: name_node.text,
-					kind: 22,
+					name: removeQuotes(name_node.text),
+					// https://code.visualstudio.com/api/references/vscode-api#SymbolKind
+					kind: 22,  // 22=Structure
 					location: Location.create(uri, Range.create(Position.create(name_node.startPosition.row, name_node.startPosition.column),
 																Position.create(name_node.endPosition.row, name_node.endPosition.column)))
 				});
