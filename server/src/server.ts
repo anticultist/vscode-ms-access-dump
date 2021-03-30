@@ -161,6 +161,9 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 			case 'block':
 				scanBlock(x);
 				break;
+			case 'code_section':
+				scanCodeSection(x);
+				break;
 		}
 	}
 
@@ -192,6 +195,15 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 		for (const syntax_node of x.namedChildren) {
 			scanTopLevelStructure(syntax_node)
 		}
+	}
+
+	function scanCodeSection(x: Parser.SyntaxNode) {
+		symbols.push({
+			name: "CodeBehindForm",
+			kind: 2,  // 2=Namespace
+			location: Location.create(uri, Range.create(Position.create(x.startPosition.row, x.startPosition.column),
+														Position.create(x.endPosition.row, x.endPosition.column)))
+		});
 	}
 
 	for (const syntax_node of root.rootNode.namedChildren) {
