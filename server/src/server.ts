@@ -180,8 +180,12 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 				name_node?.startPosition !== undefined &&
 				name_node?.endPosition !== undefined)
 			{
+				const stripped_name_node = removeQuotes(name_node.text);
+				if (stripped_name_node.length == 0)
+					return;
+
 				symbols.push({
-					name: removeQuotes(name_node.text),
+					name: stripped_name_node,
 					// https://code.visualstudio.com/api/references/vscode-api#SymbolKind
 					kind: 22,  // 22=Structure
 					location: Location.create(uri, Range.create(Position.create(name_node.startPosition.row, name_node.startPosition.column),
