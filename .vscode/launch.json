@@ -20,9 +20,9 @@
             }
         },
         {
+            "name": "Attach to Server",
             "type": "node",
             "request": "attach",
-            "name": "Attach to Server",
             "port": 6009,
             "restart": true,
             "outFiles": ["${workspaceRoot}/server/out/**/*.js"]
@@ -35,7 +35,7 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceRoot}",
                 "--extensionTestsPath=${workspaceRoot}/client/out/test/index",
-                "${workspaceRoot}/client/testFixture"
+                "${workspaceRoot}/tree-sitter-ms-access-dump/examples"
             ],
             "outFiles": ["${workspaceRoot}/client/out/test/**/*.js"]
         }
