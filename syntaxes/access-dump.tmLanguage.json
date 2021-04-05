@@ -54,7 +54,7 @@
 		},
 		"sql_string": {
 			"name": "string.quoted.double.access-dump",
-			"begin": "\"",
+			"begin": "\"(?=[\\s|\\\\|\"|\\(]*(?i:SELECT|UNION))",
 			"end": "\"",
 			"patterns": [
 				{
