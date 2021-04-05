@@ -17,6 +17,7 @@
 		{ "include": "#constants" },
 		{ "include": "#sql_assignment" },
 		{ "include": "#assignment" },
+		{ "include": "#sql_memo" },
 		{ "include": "#assignment_with_type" },
 		{ "include": "#block" },
 		{ "include": "#code_block" },
@@ -32,6 +33,7 @@
 				{ "include": "#constants" },
 				{ "include": "#sql_assignment" },
 				{ "include": "#assignment" },
+				{ "include": "#sql_memo" },
 				{ "include": "#assignment_with_type" },
 				{ "include": "#block" },
 				{ "include": "#comma" }
@@ -157,6 +159,19 @@
 					"name": "keyword.operator.assignment.augmented.access-dump",
 					"match": "(=)"
 				}
+			]
+		},
+		"sql_memo": {
+			"begin": "\\b(dbMemo)\\s*(\"(?i:sql)\")\\s*(=)",
+			"beginCaptures": {
+				"1": { "name": "storage.type.access-dump" },
+				"2": { "name": "string.quoted.double.access-dump" },
+				"3": { "name": "keyword.operator.assignment.augmented.access-dump" }
+			},
+			"end": "$",
+			"patterns": [
+				{ "include": "#sql_string" },
+				{ "include": "#prototype" }
 			]
 		},
 		"sql_assignment": {
