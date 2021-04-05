@@ -11,6 +11,10 @@
 		"type": "git",
 		"url": "https://github.com/anticultist/vscode-ms-access-dump"
 	},
+	"scripts": {
+		"compile": "tsc -b",
+		"test": "npm run compile && node ./out/test/runTest"
+	},
 	"dependencies": {
 		"vscode-languageclient": "^7.0.0"
 	},

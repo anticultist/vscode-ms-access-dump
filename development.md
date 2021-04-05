@@ -87,6 +87,13 @@ WebAssembly
 - [Emscripten](https://emscripten.org/): This tool converts a C/C++ project into a WASM file.
 - [The WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt)
 
+Testing
+-------
+
+```sh
+npm run test
+```
+
 Package
 -------
 
