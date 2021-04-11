@@ -3,6 +3,7 @@
 ## 0.4.0
 
 - Add first LSP feature: show some document symbols (component names)
+- Improved embedded SQL strings detection
 
 ## 0.3.0
 
