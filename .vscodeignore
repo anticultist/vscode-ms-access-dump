@@ -11,8 +11,10 @@
 tree-sitter-ms-access-dump/**
 vsc-extension-quickstart.md
 development.md
-client/package.json
-client/package-lock.json
-client/out/test/**
-server/package.json
-server/package-lock.json
+shared.webpack.config.js
+client/**
+!client/out/extension.js
+server/**
+!server/out/server.js
+!server/out/tree-sitter.wasm
+!server/tree-sitter-ms_access_dump.wasm
