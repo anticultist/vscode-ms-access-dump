@@ -114,7 +114,7 @@
 			"name": "punctuation.separator.delimiter.access-dump"
 		},
 		"variable": {
-			"match": "(\\[)(?=[^0-9])(\\w[\\.\\w /-]*)(\\])",
+			"match": "(\\[)(\\w[\\.\\w /-]*)(\\])",
 			"captures": {
 				"1": {"name": "punctuation.section.brackets.begin.access-dump"},
 				"2": {"name": "variable.parameter.access-dump"},
