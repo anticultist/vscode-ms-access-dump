@@ -206,6 +206,18 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 	}
 
 	function scanBlock(x: Parser.SyntaxNode) {
+		if (x.firstNamedChild?.type == "identifier") {
+			if (x.firstNamedChild.text == "Form" || x.firstNamedChild.text == "Report") {
+				symbols.push({
+					name: x.firstNamedChild.text,
+					// https://code.visualstudio.com/api/references/vscode-api#SymbolKind
+					kind: 22,  // 22=Structure
+					location: Location.create(uri, Range.create(Position.create(x.startPosition.row, x.startPosition.column),
+																Position.create(x.endPosition.row, x.endPosition.column)))
+				});
+			}
+		}
+		
 		for (const syntax_node of x.namedChildren) {
 			scanTopLevelStructure(syntax_node)
 		}
