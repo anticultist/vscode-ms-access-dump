@@ -98,8 +98,11 @@
 			"match": "([-])?\\b([0-9][0-9_]*)(\\.|(\\.([0-9][0-9_]*))?([eE][+-]?([0-9][0-9_]*))?\\b)"
 		},
 		"hex_number": {
-			"name": "constant.numeric.access-dump",
-			"match": "\\b0x([0-9a-f]+)\\b"
+			"match": "\\b(0x)([0-9a-f]+)\\b",
+			"captures": {
+				"1": {"name": "storage.type.number.access-dump"},
+				"2": {"name": "constant.numeric.hex.access-dump"}
+			}
 		},
 		"constants": {
 			"patterns": [
