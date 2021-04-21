@@ -63,6 +63,7 @@ Syntax Highlighting
 - [Scope Naming](https://www.sublimetext.com/docs/3/scope_naming.html)
 - [Online RegEx tester](https://rubular.com/)
 - [Article: About writing a TextMate grammar](https://www.apeth.com/nonblog/stories/textmatebundle.html)
+- [NPM package to write TextMate grammar tests for VSCode](https://www.npmjs.com/package/vscode-tmgrammar-test)
 
 Tree-sitter
 -----------
