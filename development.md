@@ -11,7 +11,7 @@ In addition this extension has some [language server](https://code.visualstudio.
 Structure
 ---------
 
-```
+```text
 .
 ├── .vscode
 │   ├── launch.json                  // Config for launching and debugging the extension
@@ -70,7 +70,7 @@ Tree-sitter
 
 - [Website](https://tree-sitter.github.io/)
 - [Article: Guide to your first Tree-sitter grammar](https://gist.github.com/Aerijo/df27228d70c633e088b0591b8857eeef)
-- Building a WASM file on Windows (without Docker) [currently doesn't work](https://github.com/tree-sitter/tree-sitter/issues/434)
+- Building a WASM file on Windows (without Docker)
 
 ```sh
 cd tree-sitter-ms-access-dump
@@ -87,6 +87,9 @@ WebAssembly
 - [WebAssembly bindings for Tree-sitter](https://github.com/tree-sitter/tree-sitter/blob/master/lib/binding_web/README.md)
 - [Emscripten](https://emscripten.org/): This tool converts a C/C++ project into a WASM file.
 - [The WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt)
+- [Wasm3](https://github.com/wasm3/wasm3): A WebAssembly interpreter
+- [Wasmer](https://github.com/wasmerio/wasmer): A WebAssembly runtime
+- [Awesome WebAssembly Tools](https://github.com/vshymanskyy/awesome-wasm-tools)
 
 Testing
 -------

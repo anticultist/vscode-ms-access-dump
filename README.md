@@ -28,3 +28,4 @@ These links may be interesting to further improve the development.
 - Using the ribbon menu in Access: [General documentation](https://www.accessribbon.de/en/), [list of imageMSO pictures](https://bert-toolkit.com/imagemso-list.html), [imageMso gallery](http://www.spreadsheet1.com/office-excel-ribbon-imagemso-icons-gallery-page-01.html)
 - [Allen Browne's tips for Microsoft Access](http://allenbrowne.com/tips.html)
 - [Microsoft Access Developer and VBA Programming Help Center](http://www.fmsinc.com/microsoftaccess/developer/index.html)
+- [MDB Tools](https://github.com/mdbtools/mdbtools)
