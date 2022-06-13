@@ -12,6 +12,7 @@ import {
 	Position,
 	DocumentSymbolParams,
 	SymbolInformation,
+	SymbolKind,
 	TextDocumentSyncKind,
 	InitializeResult
 } from 'vscode-languageserver/node';
@@ -197,8 +198,7 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 
 			symbols.push({
 				name: stripped_name_node,
-				// https://code.visualstudio.com/api/references/vscode-api#SymbolKind
-				kind: 22,  // 22=Structure
+				kind: SymbolKind.Struct,
 				location: Location.create(uri, Range.create(Position.create(parent_node.startPosition.row, parent_node.startPosition.column),
 															Position.create(parent_node.endPosition.row, parent_node.endPosition.column)))
 			});
@@ -210,8 +210,7 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 			if (x.firstNamedChild.text == "Form" || x.firstNamedChild.text == "Report") {
 				symbols.push({
 					name: x.firstNamedChild.text,
-					// https://code.visualstudio.com/api/references/vscode-api#SymbolKind
-					kind: 22,  // 22=Structure
+					kind: SymbolKind.Struct,
 					location: Location.create(uri, Range.create(Position.create(x.startPosition.row, x.startPosition.column),
 																Position.create(x.endPosition.row, x.endPosition.column)))
 				});
@@ -226,7 +225,7 @@ function symbolsFromAST(uri:string, root: Parser.Tree): SymbolInformation[] {
 	function scanCodeSection(x: Parser.SyntaxNode) {
 		symbols.push({
 			name: "CodeBehindForm",
-			kind: 2,  // 2=Namespace
+			kind: SymbolKind.Namespace,
 			location: Location.create(uri, Range.create(Position.create(x.startPosition.row, x.startPosition.column),
 														Position.create(x.endPosition.row, x.endPosition.column)))
 		});
