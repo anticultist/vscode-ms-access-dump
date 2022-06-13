@@ -1,0 +1,90 @@
+Version =20
+VersionRequired =20
+Begin Form
+    DividingLines = NotDefault
+    AllowDesignChanges = NotDefault
+    DefaultView =0
+    PictureAlignment =2
+    DatasheetGridlinesBehavior =3
+    GridY =10
+    Width =2093
+    DatasheetFontHeight =11
+    ItemSuffix =2
+    Right =14325
+    Bottom =11550
+    DatasheetGridlinesColor =15062992
+    RecSrcDt = Begin
+        0xde0a4ef2f89be540
+    End
+    DatasheetFontName ="Segoe UI"
+    AllowDatasheetView =0
+    FilterOnLoad =0
+    DatasheetBackColor12 =-2147483643
+    ShowPageMargins =0
+    DisplayOnSharePointSite =1
+    DatasheetAlternateBackColor =16053492
+    DatasheetGridlinesColor12 =15062992
+    FitToScreen =1
+    Begin
+        Begin CommandButton
+            Width =1701
+            Height =283
+            FontSize =11
+            FontWeight =400
+            FontName ="Segoe UI"
+            ForeThemeColorIndex =2
+            ForeShade =50.0
+            GridlineThemeColorIndex =1
+            GridlineShade =65.0
+            BackColor =-2147483633
+            BorderLineStyle =0
+            BorderThemeColorIndex =3
+            BorderShade =90.0
+            ThemeFontIndex =1
+        End
+        Begin EmptyCell
+            Height =240
+            GridlineThemeColorIndex =1
+            GridlineShade =65.0
+        End
+        Begin Section
+            Height =675
+            Name ="My Form"
+            EventProcPrefix ="My_Form"
+            AutoHeight =1
+            AlternateBackColor =15921906
+            AlternateBackThemeColorIndex =1
+            AlternateBackShade =95.0
+            BackThemeColorIndex =1
+            Begin
+                Begin CommandButton
+                    OverlapFlags =85
+                    Left =120
+                    Top =165
+                    Width =1695
+                    Height =285
+                    ForeColor =3484194
+                    Name ="MyButton"
+                    Caption ="My Button"
+                    OnClick ="[Event Procedure]"
+                    FontName ="Calibri"
+                    GroupTable =1
+                    GridlineColor =10921638
+                    LayoutGroup =1
+                    BorderColor =13553360
+                    GroupTable =1
+                End
+            End
+        End
+    End
+End
+CodeBehindForm
+attribute vB_GlobalNameSpace = false
+attribute vB_Creatable = true
+attribute vB_PredeclaredId = true
+attribute vB_Exposed = false
+option compare database
+
+private sub myButton_Click()
+
+end sub
