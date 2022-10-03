@@ -50,6 +50,15 @@ code .
 To compile this extension press `Ctrl + Shift + B`.
 Than switch to the debug viewlet and select `Launch Client`.
 
+Tech Stack
+----------
+
+- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
+- [Tree-sitter](https://tree-sitter.github.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Webpack](https://webpack.js.org/)
+- [WebAssembly](https://webassembly.org/)
+
 VS Code Extension
 -----------------
 
