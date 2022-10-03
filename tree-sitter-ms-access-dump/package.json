@@ -6,13 +6,13 @@
   "license": "ISC",
   "main": "bindings/node",
   "dependencies": {
-    "nan": "^2.14.2"
+    "nan": "^2.16.0"
   },
   "scripts": {
     "build": "tree-sitter generate",
     "test-windows": "tree-sitter test"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.19.2"
+    "tree-sitter-cli": "^0.20.7"
   }
 }
