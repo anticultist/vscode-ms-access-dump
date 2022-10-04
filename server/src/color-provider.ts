@@ -1,20 +1,4 @@
-import {
-  CancellationToken,
-  Color,
-  ColorInformation,
-  createConnection,
-  DidChangeConfigurationNotification,
-  DocumentColorParams,
-  DocumentSymbolParams,
-  InitializeParams,
-  InitializeResult,
-  Position,
-  ProposedFeatures,
-  Range,
-  SymbolInformation,
-  TextDocuments,
-  TextDocumentSyncKind,
-} from 'vscode-languageserver/node';
+import { Color, ColorInformation, Position, Range } from 'vscode-languageserver/node';
 
 import Parser = require('web-tree-sitter');
 

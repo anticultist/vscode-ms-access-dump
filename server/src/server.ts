@@ -3,7 +3,8 @@
 
 import {
   CancellationToken,
-  ColorInformation,
+  ColorPresentation,
+  ColorPresentationParams,
   createConnection,
   DidChangeConfigurationNotification,
   DocumentColorParams,
@@ -182,6 +183,10 @@ connection.onDocumentColor((params: DocumentColorParams, _token: CancellationTok
   }
 
   return colorsFromAST(params.textDocument.uri, ast);
+});
+
+connection.onColorPresentation((params: ColorPresentationParams) => {
+  return null;
 });
 
 // Make the text document manager listen on the connection
