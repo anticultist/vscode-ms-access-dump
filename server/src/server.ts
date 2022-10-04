@@ -2,19 +2,23 @@
 // https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
 
 import {
+  CancellationToken,
+  ColorInformation,
   createConnection,
-  TextDocuments,
-  ProposedFeatures,
-  InitializeParams,
   DidChangeConfigurationNotification,
+  DocumentColorParams,
   DocumentSymbolParams,
-  SymbolInformation,
-  TextDocumentSyncKind,
+  InitializeParams,
   InitializeResult,
+  ProposedFeatures,
+  SymbolInformation,
+  TextDocuments,
+  TextDocumentSyncKind,
 } from 'vscode-languageserver/node';
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
+import { colorsFromAST } from './color-provider';
 import { symbolsFromAST } from './symbols-creation';
 
 import * as Parser from 'web-tree-sitter';
@@ -61,6 +65,7 @@ connection.onInitialize(async (params: InitializeParams) => {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       documentSymbolProvider: true,
+      colorProvider: true,
     },
   };
   if (hasWorkspaceFolderCapability) {
@@ -144,20 +149,39 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 connection.onDidChangeWatchedFiles((_change) => {});
 
-connection.onDocumentSymbol((params: DocumentSymbolParams): SymbolInformation[] => {
+function parseDocument(uri: string): Parser.Tree | null {
   if (parser === undefined) {
-    connection.console.log('Could not provide symbol information: parser is not available');
-    return [];
+    connection.console.log('parser is not available');
+    return null;
   }
 
-  const document_text = documents.get(params.textDocument.uri)?.getText();
+  const document_text = documents.get(uri)?.getText();
   if (document_text === undefined) {
-    connection.console.log('Could not provide symbol information: failed to get document text');
+    connection.console.log('failed to get document text');
+    return null;
+  }
+
+  return parser.parse(document_text);
+}
+
+connection.onDocumentSymbol(
+  (params: DocumentSymbolParams, _token: CancellationToken): SymbolInformation[] => {
+    const ast = parseDocument(params.textDocument.uri);
+    if (ast === null) {
+      return [];
+    }
+
+    return symbolsFromAST(params.textDocument.uri, ast);
+  },
+);
+
+connection.onDocumentColor((params: DocumentColorParams, _token: CancellationToken) => {
+  const ast = parseDocument(params.textDocument.uri);
+  if (ast === null) {
     return [];
   }
 
-  const tree = parser.parse(document_text);
-  return symbolsFromAST(params.textDocument.uri, tree);
+  return colorsFromAST(params.textDocument.uri, ast);
 });
 
 // Make the text document manager listen on the connection
