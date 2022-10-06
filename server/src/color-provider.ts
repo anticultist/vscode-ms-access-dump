@@ -27,12 +27,28 @@ function scanBlock(uri: string, node: Parser.SyntaxNode, colors: ColorInformatio
   }
 }
 
+// https://learn.microsoft.com/en-us/office/vba/api/access.form.datasheetgridlinescolor
+const color_properties = [
+  'AlternateBackColor',
+  'BackColor',
+  'BorderColor',
+  'DatasheetAlternateBackColor',
+  'DatasheetBackColor12',
+  'DatasheetGridlinesColor',
+  'DatasheetGridlinesColor12',
+  'ForeColor',
+  'GridlineColor',
+];
+
 function scanAssignment(
   uri: string,
   assignment_node: Parser.SyntaxNode,
   colors: ColorInformation[],
 ) {
-  if (assignment_node.firstNamedChild?.text !== 'DatasheetGridlinesColor') {
+  if (
+    !assignment_node.firstNamedChild ||
+    !color_properties.includes(assignment_node.firstNamedChild.text)
+  ) {
     return;
   }
 
