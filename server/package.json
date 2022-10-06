@@ -19,7 +19,10 @@
 	"devDependencies": {
 		"@types/node": "^18.8.0",
 		"@types/vscode": "^1.71.0",
+		"ts-jest": "^29.0.3",
 		"vscode-test": "^1.6.1"
 	},
-	"scripts": {}
+	"scripts": {
+		"test": "jest"
+	}
 }

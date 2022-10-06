@@ -40,6 +40,11 @@ const color_properties = [
   'GridlineColor',
 ];
 
+export function convertTextToColor(text: string) {
+  // TODO: pass real values
+  return Color.create(1, 0, 0, 1);
+}
+
 function scanAssignment(
   uri: string,
   assignment_node: Parser.SyntaxNode,
@@ -66,6 +71,6 @@ function scanAssignment(
       Position.create(color_value_node.startPosition.row, color_value_node.startPosition.column),
       Position.create(color_value_node.endPosition.row, color_value_node.endPosition.column),
     ),
-    color: Color.create(1, 0, 0, 1), // TODO: pass real values
+    color: convertTextToColor(color_value_node.text),
   });
 }
