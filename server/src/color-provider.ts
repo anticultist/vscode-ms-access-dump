@@ -40,9 +40,27 @@ const color_properties = [
   'GridlineColor',
 ];
 
-export function convertTextToColor(text: string) {
-  // TODO: pass real values
-  return Color.create(1, 0, 0, 1);
+function GetRValue(color: number): number {
+  return color & 0x000000ff;
+}
+
+function GetGValue(color: number): number {
+  return (color & 0x0000ff00) >> 8;
+}
+
+function GetBValue(color: number): number {
+  return (color & 0x00ff0000) >> 16;
+}
+
+export function convertTextToColor(color_as_text: string) {
+  const color_as_number = parseInt(color_as_text);
+
+  return Color.create(
+    GetRValue(color_as_number) / 255,
+    GetGValue(color_as_number) / 255,
+    GetBValue(color_as_number) / 255,
+    1,
+  );
 }
 
 function scanAssignment(
