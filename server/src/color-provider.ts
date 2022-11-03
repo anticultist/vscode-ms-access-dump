@@ -52,6 +52,11 @@ function GetBValue(color: number): number {
   return (color & 0x00ff0000) >> 16;
 }
 
+// TODO: check alpha representation
+function GetAValue(color: number): number {
+  return (color & 0xff000000) >> 24;
+}
+
 export function convertTextToColor(color_as_text: string) {
   const color_as_number = parseInt(color_as_text);
 
@@ -60,6 +65,14 @@ export function convertTextToColor(color_as_text: string) {
     GetGValue(color_as_number) / 255,
     GetBValue(color_as_number) / 255,
     1,
+  );
+}
+
+export function convertColorToNumber(color: Color): number {
+  return (
+    (Math.trunc(color.red * 255) & 0xff) +
+    ((Math.trunc(color.green * 255) & 0xff) << 8) +
+    ((Math.trunc(color.blue * 255) & 0xff) << 16)
   );
 }
 

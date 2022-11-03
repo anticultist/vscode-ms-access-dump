@@ -19,11 +19,12 @@ import {
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
-import { colorsFromAST } from './color-provider';
+import { colorsFromAST, convertColorToNumber } from './color-provider';
 import { symbolsFromAST } from './symbols-creation';
 
 import * as Parser from 'web-tree-sitter';
 import * as path from 'path';
+import { TextEdit } from 'vscode';
 
 async function loadParser() {
   await Parser.init();
@@ -186,7 +187,14 @@ connection.onDocumentColor((params: DocumentColorParams, _token: CancellationTok
 });
 
 connection.onColorPresentation((params: ColorPresentationParams) => {
-  return null;
+  const result: ColorPresentation[] = [];
+
+  const label = convertColorToNumber(params.color).toString();
+
+  result.push({ label: label /*, textEdit: TextEdit.replace(params.range, label)*/ });
+
+  // return null;
+  return result;
 });
 
 // Make the text document manager listen on the connection
