@@ -55,7 +55,8 @@ function GetBValue(color: number): number {
 export function convertTextToColor(color_as_text: string) {
   const color_as_number = parseInt(color_as_text);
 
-  if (color_as_number < 0) return null;
+  const color_mask = 0xffffff;
+  if ((color_as_number | color_mask) != color_mask) return null;
 
   return Color.create(
     GetRValue(color_as_number) / 255,
