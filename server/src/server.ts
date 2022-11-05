@@ -3,6 +3,7 @@
 
 import {
   CancellationToken,
+  Color,
   ColorPresentation,
   ColorPresentationParams,
   createConnection,
@@ -19,12 +20,13 @@ import {
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
+import { TextEdit } from 'vscode-languageserver-types';
+
 import { colorsFromAST, convertColorToNumber } from './color-provider';
 import { symbolsFromAST } from './symbols-creation';
 
 import * as Parser from 'web-tree-sitter';
 import * as path from 'path';
-import { TextEdit } from 'vscode';
 
 async function loadParser() {
   await Parser.init();
@@ -186,14 +188,25 @@ connection.onDocumentColor((params: DocumentColorParams, _token: CancellationTok
   return colorsFromAST(params.textDocument.uri, ast);
 });
 
+function colorHexRepresentation(color: Color): string {
+  function toHex(num: number): string {
+    let hex = Math.trunc(num * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  }
+
+  return '#' + toHex(color.red) + toHex(color.green) + toHex(color.blue);
+}
+
 connection.onColorPresentation((params: ColorPresentationParams) => {
   const result: ColorPresentation[] = [];
+  const representation = convertColorToNumber(params.color).toString();
+  const title = colorHexRepresentation(params.color) + ' - ' + representation;
 
-  const label = convertColorToNumber(params.color).toString();
+  result.push({
+    label: title,
+    textEdit: TextEdit.replace(params.range, representation),
+  });
 
-  result.push({ label: label /*, textEdit: TextEdit.replace(params.range, label)*/ });
-
-  // return null;
   return result;
 });
 

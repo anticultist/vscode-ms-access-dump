@@ -52,13 +52,10 @@ function GetBValue(color: number): number {
   return (color & 0x00ff0000) >> 16;
 }
 
-// TODO: check alpha representation
-function GetAValue(color: number): number {
-  return (color & 0xff000000) >> 24;
-}
-
 export function convertTextToColor(color_as_text: string) {
   const color_as_number = parseInt(color_as_text);
+
+  if (color_as_number < 0) return null;
 
   return Color.create(
     GetRValue(color_as_number) / 255,
@@ -97,11 +94,14 @@ function scanAssignment(
     return;
   }
 
+  const color = convertTextToColor(color_value_node.text);
+  if (color === null) return;
+
   colors.push({
     range: Range.create(
       Position.create(color_value_node.startPosition.row, color_value_node.startPosition.column),
       Position.create(color_value_node.endPosition.row, color_value_node.endPosition.column),
     ),
-    color: convertTextToColor(color_value_node.text),
+    color: color,
   });
 }
