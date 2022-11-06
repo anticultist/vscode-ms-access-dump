@@ -1,5 +1,9 @@
 # MS Access Dump Format Change Log
 
+## 0.5.0
+
+- Add a color provider to support picking and modifying colors within the editor
+
 ## 0.4.0
 
 - Add first LSP feature: show some document symbols (component names)

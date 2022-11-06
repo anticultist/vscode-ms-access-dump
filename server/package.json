@@ -2,7 +2,7 @@
 	"name": "ms-access-dump-format-server",
 	"description": "MS Access dump format LSP server",
 	"license": "ISC",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"publisher": "anticultist",
 	"engines": {
 		"node": "*"
