@@ -52,8 +52,11 @@ function GetBValue(color: number): number {
   return (color & 0x00ff0000) >> 16;
 }
 
-export function convertTextToColor(color_as_text: string) {
+export function convertTextToColor(color_as_text: string): Color | null {
+  if (!/^[0-9]+$/.test(color_as_text)) return null;
+
   const color_as_number = parseInt(color_as_text);
+  if (isNaN(color_as_number)) return null;
 
   const color_mask = 0xffffff;
   if ((color_as_number | color_mask) != color_mask) return null;

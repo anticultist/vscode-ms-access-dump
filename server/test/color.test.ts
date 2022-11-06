@@ -36,6 +36,18 @@ describe('convert text to color', () => {
   test('test value out of range', () => {
     expect(convertTextToColor((0x1000000).toString())).toEqual(null);
   });
+
+  test('test invalid value', () => {
+    expect(convertTextToColor('invalid')).toEqual(null);
+  });
+
+  test('test float number', () => {
+    expect(convertTextToColor('1.0')).toEqual(null);
+  });
+
+  test('test number with text at the end', () => {
+    expect(convertTextToColor('1abc')).toEqual(null);
+  });
 });
 
 describe('convert color to number', () => {
