@@ -22,6 +22,7 @@ tree-sitter-ms-access-dump/**
 
 .eslintignore
 .gitignore
+.prettierignore
 development.md
 shared.webpack.config.js
 vsc-extension-quickstart.md

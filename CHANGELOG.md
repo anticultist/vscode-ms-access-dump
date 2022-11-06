@@ -19,7 +19,7 @@
 
 ## 0.1.1
 
-- Add a icon
+- Add an icon
 
 ## 0.1.0
 
