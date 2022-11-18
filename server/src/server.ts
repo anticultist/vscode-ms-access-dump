@@ -10,6 +10,7 @@ import {
   DidChangeConfigurationNotification,
   DocumentColorParams,
   DocumentSymbolParams,
+  HoverParams,
   InitializeParams,
   InitializeResult,
   ProposedFeatures,
@@ -23,6 +24,7 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 import { TextEdit } from 'vscode-languageserver-types';
 
 import { colorsFromAST, convertColorToNumber } from './color-provider';
+import { hoverFromAST } from './hover-provider';
 import { symbolsFromAST } from './symbols-creation';
 
 import * as Parser from 'web-tree-sitter';
@@ -70,6 +72,7 @@ connection.onInitialize(async (params: InitializeParams) => {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       documentSymbolProvider: true,
       colorProvider: true,
+      hoverProvider: true,
     },
   };
   if (hasWorkspaceFolderCapability) {
@@ -208,6 +211,13 @@ connection.onColorPresentation((params: ColorPresentationParams) => {
   });
 
   return result;
+});
+
+connection.onHover((params: HoverParams) => {
+  const ast = parseDocument(params.textDocument.uri);
+  if (ast === null) return null;
+
+  return hoverFromAST(ast, params.position.line, params.position.character);
 });
 
 // Make the text document manager listen on the connection
