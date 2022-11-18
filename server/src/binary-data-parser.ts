@@ -11,10 +11,14 @@ function hexValuesFromNode(node: Parser.SyntaxNode) {
   return hex_values;
 }
 
-export function exportPrtDevMode(assignment_node: Parser.SyntaxNode) {
-  // let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
-  // if (content_node) {
-  //   return hexValuesFromNode(content_node).join(' ,\n');
-  // }
+export function prtDevModeFromAST(assignment_node: Parser.SyntaxNode) {
+  let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
+  if (content_node) {
+    return hexValuesFromNode(content_node).join(' ,\n');
+  }
   return 'PrtDevMode';
+}
+
+export function prtDevModeFromHexValues(hex_values: string[]): [] {
+  return [];
 }

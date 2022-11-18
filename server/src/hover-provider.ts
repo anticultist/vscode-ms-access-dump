@@ -2,7 +2,7 @@ import { Hover, Range, Position } from 'vscode-languageserver/node';
 
 import Parser = require('web-tree-sitter');
 
-import { exportPrtDevMode } from './binary-data-parser';
+import { prtDevModeFromAST } from './binary-data-parser';
 
 export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return scanBlock(root.rootNode, line, character);
@@ -59,7 +59,7 @@ function scanAssignment(
       //   contents += content_node.firstChild?.nextNamedSibling?.text;
       // }
       return {
-        contents: exportPrtDevMode(assignment_node),
+        contents: prtDevModeFromAST(assignment_node),
         range: range,
       };
     }
