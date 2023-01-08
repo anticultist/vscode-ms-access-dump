@@ -38,6 +38,6 @@ describe('convert binary printing device module data', () => {
       '0x6f6e00004c656164696e67456467650000000000000000000000000000000000',
       '0x00000000000000000000000000000000100000004450534d0100000000000000',
     ];
-    expect(prtDevModeFromHexValues(hex_values)).toEqual([]);
+    expect(prtDevModeFromHexValues(hex_values)).toEqual({});
   });
 });
