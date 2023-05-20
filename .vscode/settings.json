@@ -4,9 +4,5 @@
     "editor.formatOnPaste": false,
     "files.exclude": {
         "**/node_modules": true
-    },
-    "cSpell.words": [
-        "copyfiles",
-        "eqeqeq"
-    ]
+    }
 }
