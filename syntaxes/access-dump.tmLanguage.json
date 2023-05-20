@@ -3,12 +3,7 @@
 	"name": "MS Access Dump",
 	"scopeName": "source.access-dump",
 	"uuid": "b952227b-5efe-4265-9d30-b4ce2c18895e",
-	"fileTypes": [
-		"form",
-		"mac",
-		"qry",
-		"report"
-	],
+	"fileTypes": ["form", "mac", "qry", "report"],
 	"patterns": [
 		{ "include": "#number" },
 		{ "include": "#hex_number" },
@@ -64,7 +59,7 @@
 					"match": "\\\\(012|015|.)"
 				},
 				{ "include": "#variable" },
-				{ "include": "source.sql"}
+				{ "include": "source.sql" }
 			]
 		},
 		"expression_string": {
@@ -82,8 +77,8 @@
 				{
 					"match": "\\b(?=[^0-9])([\\w$]+)(\\()",
 					"captures": {
-						"1": {"name": "support.function.builtin.access-dump"},
-						"2": {"name": "punctuation.section.group.begin.access-dump"}
+						"1": { "name": "support.function.builtin.access-dump" },
+						"2": { "name": "punctuation.section.group.begin.access-dump" }
 					}
 				},
 				{
@@ -100,8 +95,8 @@
 		"hex_number": {
 			"match": "\\b(0x)([0-9a-f]+)\\b",
 			"captures": {
-				"1": {"name": "storage.type.number.access-dump"},
-				"2": {"name": "constant.numeric.hex.access-dump"}
+				"1": { "name": "storage.type.number.access-dump" },
+				"2": { "name": "constant.numeric.hex.access-dump" }
 			}
 		},
 		"constants": {
@@ -119,9 +114,9 @@
 		"variable": {
 			"match": "(\\[)(\\w[\\.\\w /-]*)(\\])",
 			"captures": {
-				"1": {"name": "punctuation.section.brackets.begin.access-dump"},
-				"2": {"name": "variable.parameter.access-dump"},
-				"3": {"name": "punctuation.section.brackets.end.access-dump"}
+				"1": { "name": "punctuation.section.brackets.begin.access-dump" },
+				"2": { "name": "variable.parameter.access-dump" },
+				"3": { "name": "punctuation.section.brackets.end.access-dump" }
 			}
 		},
 		"block": {
@@ -134,21 +129,18 @@
 			"endCaptures": {
 				"1": { "name": "keyword.other.access-dump" }
 			},
-			"patterns": [
-				{ "include": "#prototype" },
-				{ "include": "#block" }
-			]
+			"patterns": [{ "include": "#prototype" }, { "include": "#block" }]
 		},
 		"assignment": {
 			"begin": "\\b([A-Za-z_][A-Za-z_0-9]*)\\b\\s*(=)",
 			"beginCaptures": {
-				"1": { "name": "variable.parameter.access-dump punctuation.definition.variable.access-dump" },
+				"1": {
+					"name": "variable.parameter.access-dump punctuation.definition.variable.access-dump"
+				},
 				"2": { "name": "keyword.operator.assignment.augmented.access-dump" }
 			},
 			"end": "$",
-			"patterns": [
-				{ "include": "#prototype" }
-			]
+			"patterns": [{ "include": "#prototype" }]
 		},
 		"assignment_with_type": {
 			"begin": "\\b(dbAttachment|dbBigInt|dbBinary|dbBoolean|dbByte|dbChar|dbComplexByte|dbComplexDecimal|dbComplexDouble|dbComplexGUID|dbComplexInteger|dbComplexLong|dbComplexSingle|dbComplexText|dbCurrency|dbDate|dbDecimal|dbDouble|dbFloat|dbGUID|dbInteger|dbLong|dbLongBinary|dbMemo|dbNumeric|dbSingle|dbText|dbTime|dbTimeStamp|dbVarBinary)\\b",
@@ -172,15 +164,14 @@
 				"3": { "name": "keyword.operator.assignment.augmented.access-dump" }
 			},
 			"end": "$",
-			"patterns": [
-				{ "include": "#sql_string" },
-				{ "include": "#prototype" }
-			]
+			"patterns": [{ "include": "#sql_string" }, { "include": "#prototype" }]
 		},
 		"sql_assignment": {
 			"begin": "\\b(BaseInfo|RecordSource|RowSource)\\b",
 			"beginCaptures": {
-				"1": { "name": "variable.parameter.access-dump punctuation.definition.variable.access-dump" }
+				"1": {
+					"name": "variable.parameter.access-dump punctuation.definition.variable.access-dump"
+				}
 			},
 			"end": "$",
 			"patterns": [
@@ -198,9 +189,7 @@
 				"1": { "name": "keyword.other.access-dump" }
 			},
 			"end": "$EOF",
-			"patterns": [
-				{ "include": "source.vba"}
-			]
+			"patterns": [{ "include": "source.vba" }]
 		}
 	}
 }
