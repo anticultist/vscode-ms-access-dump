@@ -53,21 +53,18 @@ function scanAssignment(
 
   if (assignment_node.firstNamedChild?.type == 'identifier') {
     if (assignment_node.firstNamedChild.text == 'PrtDevMode') {
-      // let content_node = assignment_node.firstNamedChild.nextNamedSibling;
-      // let contents = '';
-      // if (content_node) {
-      //   contents += content_node.firstChild?.nextNamedSibling?.text;
-      // }
+      const struct = prtDevModeFromAST(assignment_node);
+      let contents = '**PrtDevMode:**\n\n';
+      contents += Object.entries(struct)
+        .map((el) => `- ${el[0]}: ${el[1]}`)
+        .join('\n');
+
       return {
-        contents: prtDevModeFromAST(assignment_node),
+        contents: contents,
         range: range,
       };
     }
   }
 
-  //   return {
-  //     contents: assignment_node.text,
-  //     range: range,
-  //   };
   return null;
 }
