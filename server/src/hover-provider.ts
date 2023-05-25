@@ -2,7 +2,7 @@ import { Hover, Range, Position } from 'vscode-languageserver/node';
 
 import Parser = require('web-tree-sitter');
 
-import { prtDevModeFromAST } from './binary-data-parser';
+import { pictureDataFromAST, prtDevModeFromAST, prtDevModeWFromAST } from './binary-data-parser';
 
 export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return scanBlock(root.rootNode, line, character);
@@ -54,10 +54,48 @@ function scanAssignment(
   if (assignment_node.firstNamedChild?.type == 'identifier') {
     if (assignment_node.firstNamedChild.text == 'PrtDevMode') {
       const struct = prtDevModeFromAST(assignment_node);
-      let contents = '**PrtDevMode:**\n\n';
-      contents += Object.entries(struct)
-        .map((el) => `- ${el[0]}: ${el[1]}`)
-        .join('\n');
+      let contents = '**PrtDevMode (EXPERIMENTAL):**\n\n';
+      if (struct === undefined) {
+        contents += '*could not parse structure*';
+      } else {
+        contents += Object.entries(struct)
+          .map((el) => `- ${el[0]}: ${el[1]}`)
+          .join('\n');
+        contents +=
+          '\n\n[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
+      }
+
+      return {
+        contents: contents,
+        range: range,
+      };
+    } else if (assignment_node.firstNamedChild.text == 'PrtDevModeW') {
+      const struct = prtDevModeWFromAST(assignment_node);
+      let contents = '**PrtDevModeW (EXPERIMENTAL):**\n\n';
+      if (struct === undefined) {
+        contents += '*could not parse structure*';
+      } else {
+        contents += Object.entries(struct)
+          .map((el) => `- ${el[0]}: ${el[1]}`)
+          .join('\n');
+        contents +=
+          '\n\n[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
+      }
+
+      return {
+        contents: contents,
+        range: range,
+      };
+    } else if (assignment_node.firstNamedChild.text == 'PictureData') {
+      const previewAsBase64 = pictureDataFromAST(assignment_node);
+      // TODO: add 'experimental' note
+      let contents = '**Preview**\n\n';
+      contents += `![Preview](data:image/png;base64,${previewAsBase64})`;
+
+      // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
+      // https://superuser.com/questions/1199393/is-it-possible-to-directly-embed-an-image-into-a-markdown-document
+      // let contents =
+      //   '![Hello World](data:image/png;base64,...)';
 
       return {
         contents: contents,
