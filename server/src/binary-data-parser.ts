@@ -85,8 +85,12 @@ function extractString(raw_data: number[], start_pos: number, num_char: number):
 }
 
 function extractWString(raw_data: number[], start_pos: number, num_char: number): string {
-  // TODO: implement
-  return '';
+  let string_data: number[] = [];
+  for (let char_idx = 0; char_idx < num_char; ++char_idx) {
+    string_data.push(extractWORD(raw_data, start_pos + char_idx * 2));
+  }
+  const end_idx = string_data.findIndex((elem) => elem == 0);
+  return String.fromCharCode(...string_data.slice(0, end_idx));
 }
 
 /**
