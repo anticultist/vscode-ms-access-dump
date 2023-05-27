@@ -59,7 +59,7 @@ function scanAssignment(
         contents += '*could not parse structure*';
       } else {
         contents += Object.entries(struct)
-          .map((el) => `- ${el[0]}: ${el[1]}`)
+          .map((el) => `- ${el[0]}: ${typeof el[1] === 'string' ? "'" + el[1] + "'" : el[1]}`)
           .join('\n');
         contents +=
           '\n\n[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
@@ -76,7 +76,7 @@ function scanAssignment(
         contents += '*could not parse structure*';
       } else {
         contents += Object.entries(struct)
-          .map((el) => `- ${el[0]}: ${el[1]}`)
+          .map((el) => `- ${el[0]}: ${typeof el[1] === 'string' ? "'" + el[1] + "'" : el[1]}`)
           .join('\n');
         contents +=
           '\n\n[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
