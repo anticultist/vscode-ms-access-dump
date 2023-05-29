@@ -2,7 +2,12 @@ import { Hover, Range, Position } from 'vscode-languageserver/node';
 
 import Parser = require('web-tree-sitter');
 
-import { pictureDataFromAST, prtDevModeFromAST, prtDevModeWFromAST } from './binary-data-parser';
+import {
+  extractDmFieldsFlags,
+  pictureDataFromAST,
+  prtDevModeFromAST,
+  prtDevModeWFromAST,
+} from './binary-data-parser';
 
 export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return scanBlock(root.rootNode, line, character);
@@ -39,6 +44,47 @@ function positionInNode(line: number, character: number, node: Parser.SyntaxNode
   );
 }
 
+function formatDevMode(struct: {} | undefined, ansiVersion: boolean): string {
+  let contents = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
+  if (struct === undefined) {
+    contents += '*could not parse structure*';
+    return contents;
+  }
+
+  function formatEntry(name: string, value: any): string {
+    if (typeof value === 'string') {
+      return `- ${name}: '${value}'`;
+    } else if (name === 'dmFields') {
+      // TODO: add byte representation
+      let txt = `- ${name}: ${value}`;
+      let flags = extractDmFieldsFlags(value);
+      if (Object.keys(flags).length > 0) {
+        txt += '\n';
+      }
+      for (const [flag, flag_name] of Object.entries(flags)) {
+        txt += `  - ${flag_name} (${flag})\n`;
+      }
+      return txt;
+    } else {
+      return `- ${name}: ${value}`;
+    }
+  }
+
+  contents += Object.entries(struct)
+    .map((el) => formatEntry(el[0], el[1]))
+    .join('\n');
+
+  if (ansiVersion) {
+    contents +=
+      '\n\n[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
+  } else {
+    contents +=
+      '\n\n[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
+  }
+
+  return contents;
+}
+
 function scanAssignment(
   assignment_node: Parser.SyntaxNode,
   line: number,
@@ -54,36 +100,16 @@ function scanAssignment(
   if (assignment_node.firstNamedChild?.type == 'identifier') {
     if (assignment_node.firstNamedChild.text == 'PrtDevMode') {
       const struct = prtDevModeFromAST(assignment_node);
-      let contents = '**PrtDevMode (EXPERIMENTAL):**\n\n';
-      if (struct === undefined) {
-        contents += '*could not parse structure*';
-      } else {
-        contents += Object.entries(struct)
-          .map((el) => `- ${el[0]}: ${typeof el[1] === 'string' ? "'" + el[1] + "'" : el[1]}`)
-          .join('\n');
-        contents +=
-          '\n\n[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
-      }
 
       return {
-        contents: contents,
+        contents: formatDevMode(struct, true),
         range: range,
       };
     } else if (assignment_node.firstNamedChild.text == 'PrtDevModeW') {
       const struct = prtDevModeWFromAST(assignment_node);
-      let contents = '**PrtDevModeW (EXPERIMENTAL):**\n\n';
-      if (struct === undefined) {
-        contents += '*could not parse structure*';
-      } else {
-        contents += Object.entries(struct)
-          .map((el) => `- ${el[0]}: ${typeof el[1] === 'string' ? "'" + el[1] + "'" : el[1]}`)
-          .join('\n');
-        contents +=
-          '\n\n[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
-      }
 
       return {
-        contents: contents,
+        contents: formatDevMode(struct, false),
         range: range,
       };
     } else if (assignment_node.firstNamedChild.text == 'PictureData') {

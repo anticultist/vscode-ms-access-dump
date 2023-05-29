@@ -44,6 +44,7 @@ describe('convert binary printing device module data', () => {
       dmDriverVersion: 1536,
       dmSize: 156,
       dmDriverExtra: 868,
+      dmFields: 61261,
       dmFormName: 'A4',
     });
   });
@@ -91,6 +92,7 @@ describe('convert binary printing device module data', () => {
       dmDriverVersion: 1536,
       dmSize: 220,
       dmDriverExtra: 868,
+      dmFields: 61261,
       dmFormName: 'A4',
     });
   });
