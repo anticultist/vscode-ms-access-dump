@@ -44,18 +44,24 @@ function positionInNode(line: number, character: number, node: Parser.SyntaxNode
   );
 }
 
-function formatDevMode(struct: {} | undefined, ansiVersion: boolean): string {
+function generateDocsForDevMode(struct: {} | undefined, ansiVersion: boolean): string {
   let contents = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
   if (struct === undefined) {
     contents += '*could not parse structure*';
     return contents;
   }
 
-  function formatEntry(name: string, value: any): string {
+  function formatEntry(name: string, value: any, indentation: number): string {
     if (typeof value === 'string') {
-      return `- ${name}: '${value}'`;
+      return `${'  '.repeat(indentation)}- ${name}: '${value}'`;
+    } else if (typeof value === 'object') {
+      let txt = `${'  '.repeat(indentation)}- ${name}:\n`;
+      for (const [sub_name, sub_value] of Object.entries(value)) {
+        txt += formatEntry(sub_name, sub_value, indentation + 1) + '\n';
+      }
+      return txt;
     } else if (name === 'dmFields') {
-      // TODO: add byte representation
+      // TODO: maybe add a byte representation
       let txt = `- ${name}: ${value}`;
       let flags = extractDmFieldsFlags(value);
       if (Object.keys(flags).length > 0) {
@@ -66,12 +72,12 @@ function formatDevMode(struct: {} | undefined, ansiVersion: boolean): string {
       }
       return txt;
     } else {
-      return `- ${name}: ${value}`;
+      return `${'  '.repeat(indentation)}- ${name}: ${value}`;
     }
   }
 
   contents += Object.entries(struct)
-    .map((el) => formatEntry(el[0], el[1]))
+    .map((el) => formatEntry(el[0], el[1], 0))
     .join('\n');
 
   if (ansiVersion) {
@@ -102,14 +108,15 @@ function scanAssignment(
       const struct = prtDevModeFromAST(assignment_node);
 
       return {
-        contents: formatDevMode(struct, true),
+        contents: generateDocsForDevMode(struct, true),
         range: range,
       };
     } else if (assignment_node.firstNamedChild.text == 'PrtDevModeW') {
+      // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/the-devmodew-structure
       const struct = prtDevModeWFromAST(assignment_node);
 
       return {
-        contents: formatDevMode(struct, false),
+        contents: generateDocsForDevMode(struct, false),
         range: range,
       };
     } else if (assignment_node.firstNamedChild.text == 'PictureData') {

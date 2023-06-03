@@ -105,19 +105,15 @@ export function extractDmFieldsFlags(dmFields: number): {} {
     switch (flag) {
       case 1:
         flags[flag] = 'DM_ORIENTATION';
-        // flags[flag] = 'DM_UPDATE';
         break;
       case 2:
         flags[flag] = 'DM_PAPERSIZE';
-        // flags[flag] = 'DM_COPY';
         break;
       case 4:
         flags[flag] = 'DM_PAPERLENGTH';
-        // flags[flag] = 'DM_PROMPT';
         break;
       case 8:
         flags[flag] = 'DM_PAPERWIDTH';
-        // flags[flag] = 'DM_MODIFY';
         break;
       case 16:
         flags[flag] = 'DM_SCALE';
@@ -139,20 +135,7 @@ export function extractDmFieldsFlags(dmFields: number): {} {
         break;
       case 1024:
         flags[flag] = 'DM_PRINTQUALITY';
-        // flags[flag] = 'DM_GETDEFID';
         break;
-      // case 1025: flags[flag] = 'DM_SETDEFID'; break;
-      // case 1025: flags[flag] = 'DM_SPECVERSION'; break;
-      // case 1026: flags[flag] = 'DM_REPOSITION'; break;
-      // case 1124: flags[flag] = 'DM_FIRST'; break;
-      // case 1124: flags[flag] = 'DM_GETSPEC'; break;
-      // case 1125: flags[flag] = 'DM_GETFILEPATH'; break;
-      // case 1126: flags[flag] = 'DM_GETFOLDERPATH'; break;
-      // case 1127: flags[flag] = 'DM_GETFOLDERIDLIST'; break;
-      // case 1128: flags[flag] = 'DM_SETCONTROLTEXT'; break;
-      // case 1129: flags[flag] = 'DM_HIDECONTROL'; break;
-      // case 1130: flags[flag] = 'DM_SETDEFEXT'; break;
-      // case 1224: flags[flag] = 'DM_LAST'; break;
       case 2048:
         flags[flag] = 'DM_COLOR';
         break;
@@ -233,13 +216,50 @@ export function prtDevModeFromHexValues(hex_values: string[]) {
     dmSize: extractWORD(raw_data, 36),
     dmDriverExtra: extractWORD(raw_data, 38),
     dmFields: extractDWORD(raw_data, 40),
+    DUMMYUNIONNAME: {
+      DUMMYSTRUCTNAME: {
+        dmOrientation: extractShort(raw_data, 44),
+        dmPaperSize: extractShort(raw_data, 46),
+        dmPaperLength: extractShort(raw_data, 48),
+        dmPaperWidth: extractShort(raw_data, 50),
+        dmScale: extractShort(raw_data, 52),
+        dmCopies: extractShort(raw_data, 54),
+        dmDefaultSource: extractShort(raw_data, 56),
+        dmPrintQuality: extractShort(raw_data, 58),
+      },
+      DUMMYSTRUCTNAME2: {
+        dmPosition: 0,
+        dmDisplayOrientation: 0,
+        dmDisplayFixedOutput: 0,
+      },
+    },
+    dmColor: extractShort(raw_data, 60),
+    dmDuplex: extractShort(raw_data, 62),
+    dmYResolution: extractShort(raw_data, 64),
+    dmTTOption: extractShort(raw_data, 66),
+    dmCollate: extractShort(raw_data, 78),
     dmFormName: extractString(raw_data, 70, 32),
+    dmLogPixels: extractWORD(raw_data, 102),
+    dmBitsPerPel: extractDWORD(raw_data, 104),
+    dmPelsWidth: extractDWORD(raw_data, 108),
+    dmPelsHeight: extractDWORD(raw_data, 112),
+    DUMMYUNIONNAME2: {
+      dmDisplayFlags: extractDWORD(raw_data, 116),
+      dmNup: extractDWORD(raw_data, 116),
+    },
+    dmDisplayFrequency: extractDWORD(raw_data, 120),
+    dmICMMethod: extractDWORD(raw_data, 124),
+    dmICMIntent: extractDWORD(raw_data, 128),
+    dmMediaType: extractDWORD(raw_data, 132),
+    dmDitherType: extractDWORD(raw_data, 136),
+    dmReserved1: extractDWORD(raw_data, 140),
+    dmReserved2: extractDWORD(raw_data, 144),
+    dmPanningWidth: extractDWORD(raw_data, 148),
+    dmPanningHeight: extractDWORD(raw_data, 152),
   };
   if (struct.dmSize + struct.dmDriverExtra != raw_data.length) {
     return;
   }
-
-  // TODO: apply sorting order of DEVMODEA
 
   return struct;
 }
@@ -260,13 +280,50 @@ export function prtDevModeWFromHexValues(hex_values: string[]) {
     dmSize: extractWORD(raw_data, 68),
     dmDriverExtra: extractWORD(raw_data, 70),
     dmFields: extractDWORD(raw_data, 72),
+    DUMMYUNIONNAME: {
+      DUMMYSTRUCTNAME: {
+        dmOrientation: extractShort(raw_data, 76),
+        dmPaperSize: extractShort(raw_data, 78),
+        dmPaperLength: extractShort(raw_data, 80),
+        dmPaperWidth: extractShort(raw_data, 82),
+        dmScale: extractShort(raw_data, 84),
+        dmCopies: extractShort(raw_data, 86),
+        dmDefaultSource: extractShort(raw_data, 88),
+        dmPrintQuality: extractShort(raw_data, 90),
+      },
+      DUMMYSTRUCTNAME2: {
+        dmPosition: 0,
+        dmDisplayOrientation: 0,
+        dmDisplayFixedOutput: 0,
+      },
+    },
+    dmColor: extractShort(raw_data, 92),
+    dmDuplex: extractShort(raw_data, 94),
+    dmYResolution: extractShort(raw_data, 96),
+    dmTTOption: extractShort(raw_data, 98),
+    dmCollate: extractShort(raw_data, 100),
     dmFormName: extractWString(raw_data, 102, 32),
+    dmLogPixels: extractWORD(raw_data, 166),
+    dmBitsPerPel: extractDWORD(raw_data, 168),
+    dmPelsWidth: extractDWORD(raw_data, 172),
+    dmPelsHeight: extractDWORD(raw_data, 176),
+    DUMMYUNIONNAME2: {
+      dmDisplayFlags: extractDWORD(raw_data, 180),
+      dmNup: extractDWORD(raw_data, 180),
+    },
+    dmDisplayFrequency: extractDWORD(raw_data, 184),
+    dmICMMethod: extractDWORD(raw_data, 188),
+    dmICMIntent: extractDWORD(raw_data, 192),
+    dmMediaType: extractDWORD(raw_data, 196),
+    dmDitherType: extractDWORD(raw_data, 200),
+    dmReserved1: extractDWORD(raw_data, 204),
+    dmReserved2: extractDWORD(raw_data, 208),
+    dmPanningWidth: extractDWORD(raw_data, 212),
+    dmPanningHeight: extractDWORD(raw_data, 216),
   };
   if (struct.dmSize + struct.dmDriverExtra != raw_data.length) {
     return;
   }
-
-  // TODO: apply sorting order of DEVMODEW
 
   return struct;
 }
