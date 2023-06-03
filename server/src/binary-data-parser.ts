@@ -102,53 +102,117 @@ export function extractDmFieldsFlags(dmFields: number): {} {
       continue;
     }
 
-    if (flag === 262144) flags[flag] = 'DM_BITSPERPEL';
-    if (flag === 32768) flags[flag] = 'DM_COLLATE';
-    if (flag === 2048) flags[flag] = 'DM_COLOR';
-    if (flag === 256) flags[flag] = 'DM_COPIES';
-    if (flag === 2) flags[flag] = 'DM_COPY';
-    if (flag === 512) flags[flag] = 'DM_DEFAULTSOURCE';
-    if (flag === 536870912) flags[flag] = 'DM_DISPLAYFIXEDOUTPUT';
-    if (flag === 2097152) flags[flag] = 'DM_DISPLAYFLAGS';
-    if (flag === 4194304) flags[flag] = 'DM_DISPLAYFREQUENCY';
-    if (flag === 128) flags[flag] = 'DM_DISPLAYORIENTATION';
-    if (flag === 67108864) flags[flag] = 'DM_DITHERTYPE';
-    if (flag === 4096) flags[flag] = 'DM_DUPLEX';
-    if (flag === 1124) flags[flag] = 'DM_FIRST';
-    if (flag === 65536) flags[flag] = 'DM_FORMNAME';
-    if (flag === 1024) flags[flag] = 'DM_GETDEFID';
-    if (flag === 1125) flags[flag] = 'DM_GETFILEPATH';
-    if (flag === 1127) flags[flag] = 'DM_GETFOLDERIDLIST';
-    if (flag === 1126) flags[flag] = 'DM_GETFOLDERPATH';
-    if (flag === 1124) flags[flag] = 'DM_GETSPEC';
-    if (flag === 1129) flags[flag] = 'DM_HIDECONTROL';
-    if (flag === 16777216) flags[flag] = 'DM_ICMINTENT';
-    if (flag === 8388608) flags[flag] = 'DM_ICMMETHOD';
-    if (flag === 1224) flags[flag] = 'DM_LAST';
-    if (flag === 131072) flags[flag] = 'DM_LOGPIXELS';
-    if (flag === 33554432) flags[flag] = 'DM_MEDIATYPE';
-    if (flag === 8) flags[flag] = 'DM_MODIFY';
-    if (flag === 64) flags[flag] = 'DM_NUP';
-    if (flag === 1) flags[flag] = 'DM_ORIENTATION';
-    if (flag === 268435456) flags[flag] = 'DM_PANNINGHEIGHT';
-    if (flag === 134217728) flags[flag] = 'DM_PANNINGWIDTH';
-    if (flag === 4) flags[flag] = 'DM_PAPERLENGTH';
-    if (flag === 2) flags[flag] = 'DM_PAPERSIZE';
-    if (flag === 8) flags[flag] = 'DM_PAPERWIDTH';
-    if (flag === 1048576) flags[flag] = 'DM_PELSHEIGHT';
-    if (flag === 524288) flags[flag] = 'DM_PELSWIDTH';
-    if (flag === 32) flags[flag] = 'DM_POSITION';
-    if (flag === 1024) flags[flag] = 'DM_PRINTQUALITY';
-    if (flag === 4) flags[flag] = 'DM_PROMPT';
-    if (flag === 1026) flags[flag] = 'DM_REPOSITION';
-    if (flag === 16) flags[flag] = 'DM_SCALE';
-    if (flag === 1128) flags[flag] = 'DM_SETCONTROLTEXT';
-    if (flag === 1130) flags[flag] = 'DM_SETDEFEXT';
-    if (flag === 1025) flags[flag] = 'DM_SETDEFID';
-    if (flag === 1025) flags[flag] = 'DM_SPECVERSION';
-    if (flag === 16384) flags[flag] = 'DM_TTOPTION';
-    if (flag === 1) flags[flag] = 'DM_UPDATE';
-    if (flag === 8192) flags[flag] = 'DM_YRESOLUTION';
+    switch (flag) {
+      case 1:
+        flags[flag] = 'DM_ORIENTATION';
+        // flags[flag] = 'DM_UPDATE';
+        break;
+      case 2:
+        flags[flag] = 'DM_PAPERSIZE';
+        // flags[flag] = 'DM_COPY';
+        break;
+      case 4:
+        flags[flag] = 'DM_PAPERLENGTH';
+        // flags[flag] = 'DM_PROMPT';
+        break;
+      case 8:
+        flags[flag] = 'DM_PAPERWIDTH';
+        // flags[flag] = 'DM_MODIFY';
+        break;
+      case 16:
+        flags[flag] = 'DM_SCALE';
+        break;
+      case 32:
+        flags[flag] = 'DM_POSITION'; // ?
+        break;
+      case 64:
+        flags[flag] = 'DM_NUP'; // ?
+        break;
+      case 128:
+        flags[flag] = 'DM_DISPLAYORIENTATION'; // ?
+        break;
+      case 256:
+        flags[flag] = 'DM_COPIES';
+        break;
+      case 512:
+        flags[flag] = 'DM_DEFAULTSOURCE';
+        break;
+      case 1024:
+        flags[flag] = 'DM_PRINTQUALITY';
+        // flags[flag] = 'DM_GETDEFID';
+        break;
+      // case 1025: flags[flag] = 'DM_SETDEFID'; break;
+      // case 1025: flags[flag] = 'DM_SPECVERSION'; break;
+      // case 1026: flags[flag] = 'DM_REPOSITION'; break;
+      // case 1124: flags[flag] = 'DM_FIRST'; break;
+      // case 1124: flags[flag] = 'DM_GETSPEC'; break;
+      // case 1125: flags[flag] = 'DM_GETFILEPATH'; break;
+      // case 1126: flags[flag] = 'DM_GETFOLDERPATH'; break;
+      // case 1127: flags[flag] = 'DM_GETFOLDERIDLIST'; break;
+      // case 1128: flags[flag] = 'DM_SETCONTROLTEXT'; break;
+      // case 1129: flags[flag] = 'DM_HIDECONTROL'; break;
+      // case 1130: flags[flag] = 'DM_SETDEFEXT'; break;
+      // case 1224: flags[flag] = 'DM_LAST'; break;
+      case 2048:
+        flags[flag] = 'DM_COLOR';
+        break;
+      case 4096:
+        flags[flag] = 'DM_DUPLEX';
+        break;
+      case 8192:
+        flags[flag] = 'DM_YRESOLUTION';
+        break;
+      case 16384:
+        flags[flag] = 'DM_TTOPTION';
+        break;
+      case 32768:
+        flags[flag] = 'DM_COLLATE';
+        break;
+      case 65536:
+        flags[flag] = 'DM_FORMNAME';
+        break;
+      case 131072:
+        flags[flag] = 'DM_LOGPIXELS';
+        break;
+      case 262144:
+        flags[flag] = 'DM_BITSPERPEL';
+        break;
+      case 524288:
+        flags[flag] = 'DM_PELSWIDTH';
+        break;
+      case 1048576:
+        flags[flag] = 'DM_PELSHEIGHT';
+        break;
+      case 2097152:
+        flags[flag] = 'DM_DISPLAYFLAGS';
+        break;
+      case 4194304:
+        flags[flag] = 'DM_DISPLAYFREQUENCY';
+        break;
+      case 8388608:
+        flags[flag] = 'DM_ICMMETHOD';
+        break;
+      case 16777216:
+        flags[flag] = 'DM_ICMINTENT';
+        break;
+      case 33554432:
+        flags[flag] = 'DM_MEDIATYPE';
+        break;
+      case 67108864:
+        flags[flag] = 'DM_DITHERTYPE';
+        break;
+      case 134217728:
+        flags[flag] = 'DM_PANNINGWIDTH';
+        break;
+      case 268435456:
+        flags[flag] = 'DM_PANNINGHEIGHT';
+        break;
+      case 536870912:
+        flags[flag] = 'DM_DISPLAYFIXEDOUTPUT'; // ?
+        break;
+      default:
+        flags[flag] = '???';
+    }
   }
   return flags;
 }
