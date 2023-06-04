@@ -95,6 +95,13 @@ function extractWString(raw_data: number[], start_pos: number, num_char: number)
   return String.fromCharCode(...string_data.slice(0, end_idx));
 }
 
+function extractPOINTL(raw_data: number[], start_pos: number) {
+  return {
+    x: extractLong(raw_data, start_pos),
+    y: extractLong(raw_data, start_pos + 4),
+  };
+}
+
 export function extractDmFieldsFlags(dmFields: number): {} {
   const flags: { [id: number]: string } = {};
 
@@ -230,9 +237,9 @@ export function prtDevModeFromHexValues(hex_values: string[]) {
         dmPrintQuality: extractShort(raw_data, 58),
       },
       DUMMYSTRUCTNAME2: {
-        dmPosition: 0,
-        dmDisplayOrientation: 0,
-        dmDisplayFixedOutput: 0,
+        dmPosition: extractPOINTL(raw_data, 44),
+        dmDisplayOrientation: extractDWORD(raw_data, 52),
+        dmDisplayFixedOutput: extractDWORD(raw_data, 56),
       },
     },
     dmColor: extractShort(raw_data, 60),
@@ -294,9 +301,9 @@ export function prtDevModeWFromHexValues(hex_values: string[]) {
         dmPrintQuality: extractShort(raw_data, 90),
       },
       DUMMYSTRUCTNAME2: {
-        dmPosition: 0,
-        dmDisplayOrientation: 0,
-        dmDisplayFixedOutput: 0,
+        dmPosition: extractPOINTL(raw_data, 76),
+        dmDisplayOrientation: extractDWORD(raw_data, 84),
+        dmDisplayFixedOutput: extractDWORD(raw_data, 88),
       },
     },
     dmColor: extractShort(raw_data, 92),
