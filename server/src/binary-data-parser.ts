@@ -56,14 +56,16 @@ function hex2bin(hex_values: string[]): number[] {
 
 /** signed, 2 bytes */
 function extractShort(raw_data: number[], start_pos: number): number {
-  // TODO: implement
-  return 0;
+  const unsigned = extractWORD(raw_data, start_pos);
+  const [signed] = new Int16Array([unsigned]);
+  return signed;
 }
 
 /** signed, 4 bytes */
 function extractLong(raw_data: number[], start_pos: number): number {
-  // TODO: implement
-  return 0;
+  const unsigned = extractDWORD(raw_data, start_pos);
+  const [signed] = new Int32Array([unsigned]);
+  return signed;
 }
 
 /** maps to unsigned short, 2 bytes */
@@ -74,7 +76,7 @@ function extractWORD(raw_data: number[], start_pos: number): number {
 
 /** maps to unsigned short, 4 bytes */
 function extractDWORD(raw_data: number[], start_pos: number): number {
-  const data = raw_data.slice(start_pos, start_pos + 2);
+  const data = raw_data.slice(start_pos, start_pos + 4);
   return data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
 }
 
