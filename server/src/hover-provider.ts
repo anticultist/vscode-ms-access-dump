@@ -83,11 +83,11 @@ function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolea
     // mark flagged values
     const check_for_flag = `DM_${name.slice(2).toUpperCase()}`;
     if (pinned_entry_names.includes(name)) {
-      out += ' 📌';
+      out += ' \uD83D\uDCCC'; // https://emojipedia.org/pushpin/
     } else if (Object.values(dmFieldsFlags).includes(check_for_flag)) {
-      out += ' 🏳️';
+      out += ' \uD83C\uDFF3\uFE0F'; // https://emojipedia.org/white-flag/
     } else if (Object.values(available_flags).includes(check_for_flag)) {
-      out += ' ⛔';
+      out += ' \u26D4'; // https://emojipedia.org/no-entry/
     }
 
     // add a sub list
