@@ -3,6 +3,7 @@ import { Hover, Range, Position } from 'vscode-languageserver/node';
 import Parser = require('web-tree-sitter');
 
 import {
+  DevMode,
   extractDmFieldsFlags,
   pictureDataFromAST,
   prtDevModeFromAST,
@@ -44,41 +45,77 @@ function positionInNode(line: number, character: number, node: Parser.SyntaxNode
   );
 }
 
-function generateDocsForDevMode(struct: {} | undefined, ansiVersion: boolean): string {
+function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolean): string {
   let contents = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
   if (struct === undefined) {
     contents += '*could not parse structure*';
     return contents;
   }
 
+  const dmFields = struct['dmFields'];
+  let dmFieldsFlags = extractDmFieldsFlags(dmFields);
+
+  const pinned_entry_names = [
+    'dmDeviceName',
+    'dmSpecVersion',
+    'dmDriverVersion',
+    'dmSize',
+    'dmDriverExtra',
+    'dmFields',
+  ];
+  const available_flags = extractDmFieldsFlags(0b111111111111111111111111111111);
+
   function formatEntry(name: string, value: any, indentation: number): string {
+    // display entry name
+    let out = `${'  '.repeat(indentation)}- ${name}:`;
+
+    // display value
     if (typeof value === 'string') {
-      return `${'  '.repeat(indentation)}- ${name}: '${value}'`;
+      out += ` '${value}'`;
     } else if (typeof value === 'object') {
-      let txt = `${'  '.repeat(indentation)}- ${name}:\n`;
-      for (const [sub_name, sub_value] of Object.entries(value)) {
-        txt += formatEntry(sub_name, sub_value, indentation + 1) + '\n';
-      }
-      return txt;
+      // values are displayed in a sub list
     } else if (name === 'dmFields') {
-      // TODO: maybe add a byte representation
-      let txt = `- ${name}: ${value}`;
-      let flags = extractDmFieldsFlags(value);
-      if (Object.keys(flags).length > 0) {
-        txt += '\n';
-      }
-      for (const [flag, flag_name] of Object.entries(flags)) {
-        txt += `  - ${flag_name} (${flag})\n`;
-      }
-      return txt;
+      out += ` ${value} (=${Object.keys(dmFieldsFlags).length} flags)`;
     } else {
-      return `${'  '.repeat(indentation)}- ${name}: ${value}`;
+      out += ` ${value}`;
     }
+
+    // mark flagged values
+    const check_for_flag = `DM_${name.slice(2).toUpperCase()}`;
+    if (pinned_entry_names.includes(name)) {
+      out += ' 📌';
+    } else if (Object.values(dmFieldsFlags).includes(check_for_flag)) {
+      out += ' 🏳️';
+    } else if (Object.values(available_flags).includes(check_for_flag)) {
+      out += ' ⛔';
+    }
+
+    // add a sub list
+    if (name === 'dmFields') {
+      if (Object.keys(dmFieldsFlags).length > 0) {
+        out += '\n';
+      }
+      for (const [flag, flag_name] of Object.entries(dmFieldsFlags)) {
+        out += `  - ${flag_name} (${flag})\n`;
+      }
+    } else if (typeof value === 'object') {
+      out += '\n';
+      for (const [sub_name, sub_value] of Object.entries(value)) {
+        out += formatEntry(sub_name, sub_value, indentation + 1) + '\n';
+      }
+    }
+
+    return out;
   }
 
   contents += Object.entries(struct)
     .map((el) => formatEntry(el[0], el[1], 0))
     .join('\n');
+
+  // TODO: add comments on the structure, e.g.:
+  // - be aware of (two) unions
+  // - data structure is probably not initialized vs. not flagged values
+  // - not flagged data
 
   if (ansiVersion) {
     contents +=

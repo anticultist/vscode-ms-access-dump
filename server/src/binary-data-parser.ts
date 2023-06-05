@@ -209,10 +209,62 @@ export function extractDmFieldsFlags(dmFields: number): {} {
   return flags;
 }
 
+export type DevMode = {
+  dmDeviceName: string;
+  dmSpecVersion: number;
+  dmDriverVersion: number;
+  dmSize: number;
+  dmDriverExtra: number;
+  dmFields: number;
+  DUMMYUNIONNAME: {
+    DUMMYSTRUCTNAME: {
+      dmOrientation: number;
+      dmPaperSize: number;
+      dmPaperLength: number;
+      dmPaperWidth: number;
+      dmScale: number;
+      dmCopies: number;
+      dmDefaultSource: number;
+      dmPrintQuality: number;
+    };
+    DUMMYSTRUCTNAME2: {
+      dmPosition: {
+        x: number;
+        y: number;
+      };
+      dmDisplayOrientation: number;
+      dmDisplayFixedOutput: number;
+    };
+  };
+  dmColor: number;
+  dmDuplex: number;
+  dmYResolution: number;
+  dmTTOption: number;
+  dmCollate: number;
+  dmFormName: string;
+  dmLogPixels: number;
+  dmBitsPerPel: number;
+  dmPelsWidth: number;
+  dmPelsHeight: number;
+  DUMMYUNIONNAME2: {
+    dmDisplayFlags: number;
+    dmNup: number;
+  };
+  dmDisplayFrequency: number;
+  dmICMMethod: number;
+  dmICMIntent: number;
+  dmMediaType: number;
+  dmDitherType: number;
+  dmReserved1: number;
+  dmReserved2: number;
+  dmPanningWidth: number;
+  dmPanningHeight: number;
+};
+
 /**
  * - [DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)
  */
-export function prtDevModeFromHexValues(hex_values: string[]) {
+export function prtDevModeFromHexValues(hex_values: string[]): DevMode | undefined {
   const raw_data = hex2bin(hex_values);
   if (raw_data.length < 156) {
     return;
@@ -276,7 +328,7 @@ export function prtDevModeFromHexValues(hex_values: string[]) {
 /**
  * - [DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)
  */
-export function prtDevModeWFromHexValues(hex_values: string[]) {
+export function prtDevModeWFromHexValues(hex_values: string[]): DevMode | undefined {
   const raw_data = hex2bin(hex_values);
   if (raw_data.length < 220) {
     return;
