@@ -45,11 +45,37 @@ function positionInNode(line: number, character: number, node: Parser.SyntaxNode
   );
 }
 
-function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolean): string {
-  let contents = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
+function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolean): string[] {
+  // remarks
+  let structDocLink;
+  if (ansiVersion) {
+    structDocLink =
+      '[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
+  } else {
+    structDocLink =
+      '[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
+  }
+  let remarks = `This member is of the type ${structDocLink}.
+
+Be aware that only entries marked by the flags of the member *dmFields* are considered as valid.
+To speed up reading of this structure there are emojis next to the values indicating whether the entry is flagged:
+
+- \uD83C\uDFF3\uFE0F: value is valid
+- \u26D4: value is not valid
+- \uD83D\uDCCC: value is always valid
+
+Furthermore this structure contains two [unions](https://en.cppreference.com/w/cpp/language/union).
+This means that only one member (including all submembers) can be valid at a time.
+
+By the way it seems that MS Access does not clear the memory after allocation.
+Therefore the structure may contain garbage especially after the zero byte of the two fixed size strings.
+This is also the reason why this member seams always to have different content after an export even though nothing had changed.`;
+
+  let content = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
   if (struct === undefined) {
-    contents += '*could not parse structure*';
-    return contents;
+    // TODO: add reason why
+    content += '*could not parse structure*';
+    return [content, remarks];
   }
 
   const dmFields = struct['dmFields'];
@@ -108,24 +134,11 @@ function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolea
     return out;
   }
 
-  contents += Object.entries(struct)
+  content += Object.entries(struct)
     .map((el) => formatEntry(el[0], el[1], 0))
     .join('\n');
 
-  // TODO: add comments on the structure, e.g.:
-  // - be aware of (two) unions
-  // - data structure is probably not initialized vs. not flagged values
-  // - not flagged data
-
-  if (ansiVersion) {
-    contents +=
-      '\n\n[DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)';
-  } else {
-    contents +=
-      '\n\n[DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)';
-  }
-
-  return contents;
+  return [content, remarks];
 }
 
 function scanAssignment(
