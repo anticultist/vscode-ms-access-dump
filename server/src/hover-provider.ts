@@ -8,6 +8,7 @@ import {
   pictureDataFromAST,
   prtDevModeFromAST,
   prtDevModeWFromAST,
+  devModeConstants,
 } from './binary-data-parser';
 
 export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
@@ -102,6 +103,15 @@ This is also the reason why this member seams always to have different content a
       // values are displayed in a sub list
     } else if (name === 'dmFields') {
       out += ` ${value} (=${Object.keys(dmFieldsFlags).length} flags)`;
+    } else if (Object.keys(devModeConstants).includes(name)) {
+      let subKey;
+      if (typeof value === 'number' && value < 0) {
+        subKey = String(value);
+      } else {
+        subKey = value;
+      }
+
+      out += ` ${devModeConstants[name][subKey] ?? '???'} (${value})`;
     } else {
       out += ` ${value}`;
     }
