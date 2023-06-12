@@ -103,6 +103,8 @@ This is also the reason why this member seams always to have different content a
       // values are displayed in a sub list
     } else if (name === 'dmFields') {
       out += ` ${value} (=${Object.keys(dmFieldsFlags).length} flags)`;
+    } else if (name === 'dmPrintQuality' && value >= 0) {
+      out += ` ${value}`;
     } else if (Object.keys(devModeConstants).includes(name)) {
       let subKey;
       if (typeof value === 'number' && value < 0) {
