@@ -1,25 +1,31 @@
 # MS Access Dump Format Change Log
 
+## 0.6.0
+
+- Added a hover provider to display the encoded PrtDevMode(W) block
+- Improved embedding of VB code
+- Improved the icon
+
 ## 0.5.0
 
-- Add a color provider to support picking and modifying colors within the editor
+- Added a color provider to support picking and modifying colors within the editor
 
 ## 0.4.0
 
-- Add first LSP feature: show some document symbols (component names)
+- Added first LSP feature: show some document symbols (component names)
 - Improved embedded SQL strings detection
 
 ## 0.3.0
 
-- Improve highlighting inside strings
+- Improved highlighting inside strings
 
 ## 0.2.0
 
-- Embed SQL syntax highlighting in strings for certain attribute assignments (BaseInfo, RecordSource and RowSource)
+- Embedded SQL syntax highlighting in strings for certain attribute assignments (BaseInfo, RecordSource and RowSource)
 
 ## 0.1.1
 
-- Add an icon
+- Added an icon
 
 ## 0.1.0
 
