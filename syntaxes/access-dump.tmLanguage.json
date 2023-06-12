@@ -189,7 +189,7 @@
 				"1": { "name": "keyword.other.access-dump" }
 			},
 			"end": "$EOF",
-			"patterns": [{ "include": "source.vba" }]
+			"patterns": [{ "include": "source.vba" }, { "include": "source.asp.vb.net" }]
 		}
 	}
 }

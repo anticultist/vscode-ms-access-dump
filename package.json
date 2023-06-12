@@ -45,7 +45,8 @@
 				"embeddedLanguages": {
 					"source.vba": "vba",
 					"source.sql": "sql",
-					"meta.embedded.block.vba": "vba"
+					"meta.embedded.block.vba": "vba",
+					"source.asp.vb.net": "vb"
 				}
 			}
 		]
