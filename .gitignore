@@ -3,4 +3,5 @@ out
 node_modules
 .vscode-test
 *.code-workspace
+*.vsix
 /tree-sitter-ms-access-dump/build
