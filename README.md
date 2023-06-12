@@ -1,18 +1,30 @@
 # MS Access Dump Format
 
+## About
+
 Through the COM interface it is possible to dump internal resources (e.g. forms, macros, queries, reports etc.) of a Microsoft Access application into separate files[\[1\]](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development).
 This allows to develop such an application with multiple developers simultaneously.
 To ease the handling of such files this VSCode extension provides syntax highlighting for that dump format.
 
-## Screenshot
+## Features
+
+- Syntax highlighting for MS Access dump format (forms, macros, queries, reports)
+- embedded syntax highlighting for SQL and Visual Basic
+- breadcrumbs support
+- color picker
+- encoding of the PrtDevMode(W) block
+
+## Showcase
 
 ![Screenshot](./images/screenshot.png)
 
-## VBA Syntax Highlighting
+![PrtDevModeW](./images/PrtDevModeW.png)
 
-To enable syntax highlighting after the 'CodeBehindForm' tag you can install the following VSCode extension:
+## Usage
 
-- Visual Studio Code VBA [\[Marketplace\]](https://marketplace.visualstudio.com/items?itemName=aferri.avb)
+The easiest way is to export the files with the following file endings: `*.form`, `*.mac`, `*.qry`, `*.report`.
+In that case Visual Studio Code will automatically enable the syntax highlighting which is shipped by this extension.
+Otherwise you have to manually select `MS Access Dump` as language mode.
 
 ## Related Links
 
