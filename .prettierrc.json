@@ -21,6 +21,19 @@
             "options": {
                 "useTabs": true
             }
+        },
+        {
+            "files": ".prettierrc.json",
+            "options": {
+                "tabWidth": 4,
+                "endOfLine": "auto"
+            }
+        },
+        {
+            "files": "package.json",
+            "options": {
+                "useTabs": true
+            }
         }
     ]
 }
