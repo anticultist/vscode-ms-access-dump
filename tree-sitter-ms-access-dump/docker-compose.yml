@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  node:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ./:/home/node/app
