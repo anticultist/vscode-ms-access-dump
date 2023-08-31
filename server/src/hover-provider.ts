@@ -59,7 +59,7 @@ function generateDocsForDevMode(struct: DevMode | undefined, ansiVersion: boolea
   let remarks = `This member is of the type ${structDocLink}.
 
 Be aware that only entries marked by the flags of the member *dmFields* are considered as valid.
-To speed up reading of this structure there are emojis next to the values indicating whether the entry is flagged:
+To speed up reading of this structure there are symbols next to the values indicating whether the entry is flagged:
 
 - \uD83C\uDFF3\uFE0F: value is valid
 - \u26D4: value is not valid
