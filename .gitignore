@@ -5,3 +5,4 @@ node_modules
 *.code-workspace
 *.vsix
 /tree-sitter-ms-access-dump/build
+/tree-sitter-ms-access-dump/tree-sitter-ms_access_dump.wasm
