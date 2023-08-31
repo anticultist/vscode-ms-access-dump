@@ -14,5 +14,5 @@ RUN ./emsdk activate latest
 RUN npm install -g tree-sitter-cli@0.20.8
 
 WORKDIR /home/node/app
-CMD ["./build.sh"]
+CMD ["./build-inside-docker.sh"]
 

@@ -5,4 +5,5 @@ cd /home/emsdk
 source ./emsdk_env.sh
 
 cd /home/node/app
+npx tree-sitter generate
 npx tree-sitter build-wasm

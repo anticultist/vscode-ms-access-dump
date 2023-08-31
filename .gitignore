@@ -4,5 +4,10 @@ node_modules
 .vscode-test
 *.code-workspace
 *.vsix
+/tree-sitter-ms-access-dump/bindings
 /tree-sitter-ms-access-dump/build
+/tree-sitter-ms-access-dump/src
+/tree-sitter-ms-access-dump/binding.gyp
+/tree-sitter-ms-access-dump/Cargo.toml
+/tree-sitter-ms-access-dump/package.json
 /tree-sitter-ms-access-dump/tree-sitter-ms_access_dump.wasm
