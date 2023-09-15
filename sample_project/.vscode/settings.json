@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.frm.txt": "access-dump",
+    "*.rpt.txt": "access-dump"
+  }
+}

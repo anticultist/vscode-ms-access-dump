@@ -18,6 +18,7 @@ server/**
 !server/out/tree-sitter.wasm
 !server/tree-sitter-ms_access_dump.wasm
 
+sample_project/**
 tree-sitter-ms-access-dump/**
 
 .eslintignore

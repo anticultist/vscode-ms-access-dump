@@ -13,7 +13,7 @@
             "args": [
                 "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--folder-uri=${workspaceFolder}/tree-sitter-ms-access-dump/examples/"
+                "--folder-uri=${workspaceFolder}/sample_project/"
             ],
             "outFiles": ["${workspaceRoot}/client/out/**/*.js"],
             "preLaunchTask": {
@@ -38,7 +38,7 @@
                 "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceRoot}",
                 "--extensionTestsPath=${workspaceRoot}/client/out/test/index",
-                "${workspaceRoot}/tree-sitter-ms-access-dump/examples"
+                "${workspaceRoot}/sample_project/"
             ],
             "outFiles": ["${workspaceRoot}/client/out/test/**/*.js"]
         }
