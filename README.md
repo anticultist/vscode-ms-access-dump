@@ -20,13 +20,21 @@ To ease the handling of such files this VSCode extension provides syntax highlig
 
 ![PrtDevModeW](./images/PrtDevModeW.png)
 
-## Usage
+## File Association
 
-The easiest way is to export the files with the following file endings: `*.form`, `*.mac`, `*.qry`, `*.report`.
-In that case Visual Studio Code will automatically enable the syntax highlighting which is shipped by this extension.
-Otherwise you have to manually select `MS Access Dump` as language mode.
+This extension has a predefined file association for the following file endings: `*.form`, `*.mac`, `*.qry`, `*.report`.
+If your project uses different file endings you can also add new [file association](https://code.visualstudio.com/docs/languages/overview#_add-a-file-extension-to-a-language) in `settings.json`, e.g.:
 
-## Related Links
+```json
+{
+  "files.associations": {
+    "*.frm.txt": "access-dump",
+    "*.rpt.txt": "access-dump"
+  }
+}
+```
+
+## Useful Links
 
 These links may be interesting to further improve the development.
 
