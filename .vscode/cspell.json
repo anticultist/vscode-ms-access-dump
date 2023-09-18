@@ -3,6 +3,7 @@
     "language": "en",
     "words": [
         "anticultist",
+        "BITMAPINFOHEADER",
         "BITSPERPEL",
         "Bullzip",
         "Calibri",
@@ -78,6 +79,7 @@
         "Predeclared",
         "PRINTQUALITY",
         "Recordset",
+        "RGBQUAD",
         "Rubberduck",
         "Segoe",
         "SETCONTROLTEXT",
