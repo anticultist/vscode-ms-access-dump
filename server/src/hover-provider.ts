@@ -183,15 +183,11 @@ function scanAssignment(
       };
     } else if (assignment_node.firstNamedChild.text == 'PictureData') {
       const previewAsBase64 = pictureDataFromAST(assignment_node);
-      // TODO: add 'experimental' note
-      let contents = '**Preview**\n\n';
-      contents += `![Preview](data:image/png;base64,${previewAsBase64})`;
 
-      // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
-      // https://superuser.com/questions/1199393/is-it-possible-to-directly-embed-an-image-into-a-markdown-document
-      // let contents =
-      //   '![Hello World](data:image/png;base64,...)';
+      let contents = '**Preview:**\n\n';
+      contents += `![Preview](data:image/bmp;base64,${previewAsBase64})`;
 
+      // TODO: add meta information of the image
       return {
         contents: contents,
         range: range,

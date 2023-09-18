@@ -19,9 +19,34 @@ export function pictureDataFromAST(assignment_node: Parser.SyntaxNode): string {
   }
 
   const hex_values = hexValuesFromNode(content_node);
-  // const raw_data = hex2bin(hex_values);
+  const raw_data = hex2bin(hex_values);
 
-  return hex_values.map((el) => el.slice(2)).join('');
+  // https://learn.microsoft.com/en-us/office/vba/api/access.image.picturedata
+  // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
+  const structDef: StructMember[] = [
+    // BITMAPINFOHEADER
+    ['biSize', 'DWORD'],
+    ['biWidth', 'LONG'],
+    ['biHeight', 'LONG'],
+    ['biPlanes', 'WORD'],
+    ['biBitCount', 'WORD'],
+    ['biCompression', 'DWORD'],
+    ['biSizeImage', 'DWORD'],
+    ['biXPelsPerMeter', 'LONG'],
+    ['biYPelsPerMeter', 'LONG'],
+    ['biClrUsed', 'DWORD'],
+    ['biClrImportant', 'DWORD'],
+    // ---
+    ['bmiColors', 'RGBQUAD'],
+  ];
+  const bitmapInfo = extractStruct(raw_data, structDef);
+
+  // https://en.wikipedia.org/wiki/BMP_file_format
+  // TODO: set size correctly
+  const bmpHeader = [66, 77, 0, 0, 0, 0, 0, 0, 0, 0, 14 + bitmapInfo['biSize'], 0, 0, 0];
+  var u8 = new Uint8Array(bmpHeader.concat(raw_data));
+  var b64 = Buffer.from(u8).toString('base64');
+  return b64;
 }
 
 export function prtDevModeFromAST(assignment_node: Parser.SyntaxNode) {
@@ -68,6 +93,11 @@ function extractLong(raw_data: number[], start_pos: number): number {
   return signed;
 }
 
+/** 1 byte */
+function extractBYTE(raw_data: number[], start_pos: number) {
+  return raw_data[start_pos];
+}
+
 /** maps to unsigned short, 2 bytes */
 function extractWORD(raw_data: number[], start_pos: number): number {
   const data = raw_data.slice(start_pos, start_pos + 2);
@@ -95,11 +125,65 @@ function extractWString(raw_data: number[], start_pos: number, num_char: number)
   return String.fromCharCode(...string_data.slice(0, end_idx));
 }
 
+/** contains two long values, 8 bytes */
 function extractPOINTL(raw_data: number[], start_pos: number) {
   return {
     x: extractLong(raw_data, start_pos),
     y: extractLong(raw_data, start_pos + 4),
   };
+}
+
+/** 4 bytes */
+function extractRGBQUAD(raw_data: number[], start_pos: number) {
+  return {
+    rgbBlue: extractBYTE(raw_data, start_pos),
+    rgbGreen: extractBYTE(raw_data, start_pos + 1),
+    rgbRed: extractBYTE(raw_data, start_pos + 2),
+    rgbReserved: extractBYTE(raw_data, start_pos + 3),
+  };
+}
+
+type StructMember = [string, 'SHORT' | 'LONG' | 'WORD' | 'DWORD' | 'POINTL' | 'RGBQUAD'];
+
+function extractStruct(raw_data: number[], structDef: StructMember[]) {
+  let struct: { [id: string]: any } = new Map();
+  let offset = 0;
+  for (const structMember of structDef) {
+    const name = structMember[0];
+    const type = structMember[1];
+    let value = undefined;
+
+    switch (type) {
+      case 'SHORT':
+        value = extractShort(raw_data, offset);
+        offset += 2;
+        break;
+      case 'LONG':
+        value = extractLong(raw_data, offset);
+        offset += 4;
+        break;
+      case 'WORD':
+        value = extractWORD(raw_data, offset);
+        offset += 2;
+        break;
+      case 'DWORD':
+        value = extractDWORD(raw_data, offset);
+        offset += 4;
+        break;
+      case 'POINTL':
+        value = extractPOINTL(raw_data, offset);
+        offset += 8;
+        break;
+      case 'RGBQUAD':
+        value = extractRGBQUAD(raw_data, offset);
+        offset += 4;
+        break;
+    }
+    struct[name] = value;
+  }
+  struct['__size__'] = offset;
+
+  return struct;
 }
 
 export function extractDmFieldsFlags(dmFields: number): {} {
