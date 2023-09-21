@@ -42,8 +42,11 @@ export function pictureDataFromAST(assignment_node: Parser.SyntaxNode): string {
   const bitmapInfo = extractStruct(raw_data, structDef);
 
   // https://en.wikipedia.org/wiki/BMP_file_format
-  // TODO: set size correctly
-  const bmpHeader = [66, 77, 0, 0, 0, 0, 0, 0, 0, 0, 14 + bitmapInfo['biSize'], 0, 0, 0];
+  let bmpHeader: number[] = [];
+  bmpHeader.push(...[66, 77]); // bfType: ascii string 'BM'
+  bmpHeader.push(...convertToDWORD(raw_data.length)); // bfSize
+  bmpHeader.push(...convertToDWORD(0)); // bfReserved
+  bmpHeader.push(...convertToDWORD(14 + bitmapInfo['biSize'])); //bfOffBits
   var u8 = new Uint8Array(bmpHeader.concat(raw_data));
   var b64 = Buffer.from(u8).toString('base64');
   return b64;
@@ -105,9 +108,20 @@ function extractWORD(raw_data: number[], start_pos: number): number {
 }
 
 /** maps to unsigned short, 4 bytes */
-function extractDWORD(raw_data: number[], start_pos: number): number {
+export function extractDWORD(raw_data: number[], start_pos: number): number {
   const data = raw_data.slice(start_pos, start_pos + 4);
   return data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
+}
+
+export function convertToDWORD(value: number): number[] {
+  let data: number[] = [];
+
+  for (let idx = 0; idx < 4; idx++) {
+    data.push(value & 0xff);
+    value = value >> 8;
+  }
+
+  return data;
 }
 
 function extractString(raw_data: number[], start_pos: number, num_char: number): string {
