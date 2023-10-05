@@ -186,14 +186,42 @@ function scanAssignment(
     } else if (assignment_node.firstNamedChild.text == 'PictureData') {
       const raw_data = rawDataFromAST(assignment_node);
       const bitmapInfo = bitmapInfoFromRawData(raw_data);
-      const previewAsBase64 = bitmapAsBase64EncodedString(bitmapInfo, raw_data);
 
-      let contents = '**Preview:**\n\n';
-      contents += `![Preview](data:image/bmp;base64,${previewAsBase64})`;
+      if (!raw_data || !bitmapInfo) {
+        return null;
+      }
+
+      const structContent = `
+- biSize: ${bitmapInfo['biSize']}
+- biWidth: ${bitmapInfo['biWidth']}
+- biHeight: ${bitmapInfo['biHeight']}
+- biPlanes: ${bitmapInfo['biPlanes']}
+- biBitCount: ${bitmapInfo['biBitCount']}
+- biCompression: ${bitmapInfo['biCompression']}
+- biSizeImage: ${bitmapInfo['biSizeImage']}
+- biXPelsPerMeter: ${bitmapInfo['biXPelsPerMeter']}
+- biYPelsPerMeter: ${bitmapInfo['biYPelsPerMeter']}
+- biClrUsed: ${bitmapInfo['biClrUsed']}
+- biClrImportant: ${bitmapInfo['biClrImportant']}
+- bmiColors: (${bitmapInfo['bmiColors']['rgbRed']}, ${bitmapInfo['bmiColors']['rgbGreen']}, ${bitmapInfo['bmiColors']['rgbBlue']}) [${bitmapInfo['bmiColors']['rgbReserved']}]
+      `;
+
+      let preview = '**Preview:**\n\n';
+
+      const previewAsBase64 = bitmapAsBase64EncodedString(bitmapInfo, raw_data);
+      if (previewAsBase64) {
+        preview += `![Preview](data:image/bmp;base64,${previewAsBase64})`;
+      } else {
+        preview += '*could not parse structure*';
+      }
+
+      // contents += `<img width="20" height="20" src="data:image/bmp;base64,${previewAsBase64}"/>`;
+      // contents +=
+      //   '<img width="20" height="15" src="data:image/jpeg;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="/>';
 
       // TODO: add meta information of the image
       return {
-        contents: contents,
+        contents: [preview, structContent],
         range: range,
       };
     }

@@ -48,12 +48,9 @@ export function bitmapInfoFromRawData(raw_data?: number[]) {
   return extractStruct(raw_data, structDef);
 }
 
-export function bitmapAsBase64EncodedString(
-  bitmapInfo?: { [id: string]: any },
-  raw_data?: number[],
-) {
-  // TODO: add length checks
-  if (!raw_data || !bitmapInfo) {
+export function bitmapAsBase64EncodedString(bitmapInfo: { [id: string]: any }, raw_data: number[]) {
+  // TODO: add more checks
+  if (!raw_data || !bitmapInfo || bitmapInfo['biSize'] != 40) {
     return;
   }
 
