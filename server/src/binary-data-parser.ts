@@ -11,15 +11,20 @@ function hexValuesFromNode(node: Parser.SyntaxNode) {
   return hex_values;
 }
 
-// TODO: continue
-export function pictureDataFromAST(assignment_node: Parser.SyntaxNode): string {
+export function rawDataFromAST(assignment_node: Parser.SyntaxNode): number[] | undefined {
   let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
   if (!content_node) {
-    return '';
+    return;
   }
 
-  const hex_values = hexValuesFromNode(content_node);
-  const raw_data = hex2bin(hex_values);
+  return hex2bin(hexValuesFromNode(content_node));
+}
+
+export function bitmapInfoFromRawData(raw_data?: number[]) {
+  // TODO: add length check
+  if (!raw_data) {
+    return;
+  }
 
   // https://learn.microsoft.com/en-us/office/vba/api/access.image.picturedata
   // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
@@ -39,7 +44,18 @@ export function pictureDataFromAST(assignment_node: Parser.SyntaxNode): string {
     // ---
     ['bmiColors', 'RGBQUAD'],
   ];
-  const bitmapInfo = extractStruct(raw_data, structDef);
+
+  return extractStruct(raw_data, structDef);
+}
+
+export function bitmapAsBase64EncodedString(
+  bitmapInfo?: { [id: string]: any },
+  raw_data?: number[],
+) {
+  // TODO: add length checks
+  if (!raw_data || !bitmapInfo) {
+    return;
+  }
 
   // https://en.wikipedia.org/wiki/BMP_file_format
   let bmpHeader: number[] = [];
@@ -49,28 +65,11 @@ export function pictureDataFromAST(assignment_node: Parser.SyntaxNode): string {
   bmpHeader.push(...convertToDWORD(14 + bitmapInfo['biSize'])); //bfOffBits
   var u8 = new Uint8Array(bmpHeader.concat(raw_data));
   var b64 = Buffer.from(u8).toString('base64');
+
   return b64;
 }
 
-export function prtDevModeFromAST(assignment_node: Parser.SyntaxNode) {
-  let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
-  if (!content_node) {
-    return;
-  }
-
-  return prtDevModeFromHexValues(hexValuesFromNode(content_node));
-}
-
-export function prtDevModeWFromAST(assignment_node: Parser.SyntaxNode) {
-  let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
-  if (!content_node) {
-    return;
-  }
-
-  return prtDevModeWFromHexValues(hexValuesFromNode(content_node));
-}
-
-function hex2bin(hex_values: string[]): number[] {
+export function hex2bin(hex_values: string[]): number[] {
   let total_hex: string = hex_values.map((v) => v.slice(2)).join('');
   if (total_hex.length % 2 == 1) return []; // TODO: maybe throw an error or return undefined
   let raw_data: number[] = [];
@@ -575,9 +574,8 @@ export type DevMode = {
 /**
  * - [DEVMODEA](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodea)
  */
-export function prtDevModeFromHexValues(hex_values: string[]): DevMode | undefined {
-  const raw_data = hex2bin(hex_values);
-  if (raw_data.length < 156) {
+export function prtDevModeFromRawData(raw_data?: number[]): DevMode | undefined {
+  if (!raw_data || raw_data.length < 156) {
     return;
   }
 
@@ -639,9 +637,8 @@ export function prtDevModeFromHexValues(hex_values: string[]): DevMode | undefin
 /**
  * - [DEVMODEW](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-devmodew)
  */
-export function prtDevModeWFromHexValues(hex_values: string[]): DevMode | undefined {
-  const raw_data = hex2bin(hex_values);
-  if (raw_data.length < 220) {
+export function prtDevModeWFromRawData(raw_data?: number[]): DevMode | undefined {
+  if (!raw_data || raw_data.length < 220) {
     return;
   }
 

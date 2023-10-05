@@ -3,12 +3,14 @@ import { Hover, Range, Position } from 'vscode-languageserver/node';
 import Parser = require('web-tree-sitter');
 
 import {
+  bitmapAsBase64EncodedString,
+  bitmapInfoFromRawData,
   DevMode,
-  extractDmFieldsFlags,
-  pictureDataFromAST,
-  prtDevModeFromAST,
-  prtDevModeWFromAST,
   devModeConstants,
+  extractDmFieldsFlags,
+  prtDevModeFromRawData,
+  prtDevModeWFromRawData,
+  rawDataFromAST,
 } from './binary-data-parser';
 
 export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
@@ -167,7 +169,7 @@ function scanAssignment(
 
   if (assignment_node.firstNamedChild?.type == 'identifier') {
     if (assignment_node.firstNamedChild.text == 'PrtDevMode') {
-      const struct = prtDevModeFromAST(assignment_node);
+      const struct = prtDevModeFromRawData(rawDataFromAST(assignment_node));
 
       return {
         contents: generateDocsForDevMode(struct, true),
@@ -175,14 +177,16 @@ function scanAssignment(
       };
     } else if (assignment_node.firstNamedChild.text == 'PrtDevModeW') {
       // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/the-devmodew-structure
-      const struct = prtDevModeWFromAST(assignment_node);
+      const struct = prtDevModeWFromRawData(rawDataFromAST(assignment_node));
 
       return {
         contents: generateDocsForDevMode(struct, false),
         range: range,
       };
     } else if (assignment_node.firstNamedChild.text == 'PictureData') {
-      const previewAsBase64 = pictureDataFromAST(assignment_node);
+      const raw_data = rawDataFromAST(assignment_node);
+      const bitmapInfo = bitmapInfoFromRawData(raw_data);
+      const previewAsBase64 = bitmapAsBase64EncodedString(bitmapInfo, raw_data);
 
       let contents = '**Preview:**\n\n';
       contents += `![Preview](data:image/bmp;base64,${previewAsBase64})`;

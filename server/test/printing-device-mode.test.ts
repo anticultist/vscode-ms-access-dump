@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { prtDevModeFromHexValues, prtDevModeWFromHexValues } from '../src/binary-data-parser';
+import { prtDevModeFromRawData, prtDevModeWFromRawData, hex2bin } from '../src/binary-data-parser';
 
 describe('convert binary printing device module data', () => {
   test('DevModeA', () => {
@@ -39,7 +39,7 @@ describe('convert binary printing device module data', () => {
       '0x00000000000000000000000000000000100000004450534d0100000000000000',
     ];
 
-    expect(prtDevModeFromHexValues(hex_values)).toEqual({
+    expect(prtDevModeFromRawData(hex2bin(hex_values))).toEqual({
       dmDeviceName: '',
       dmSpecVersion: 1025,
       dmDriverVersion: 1536,
@@ -124,7 +124,7 @@ describe('convert binary printing device module data', () => {
       '0x00000000000000000000000000000000100000004450534d0100000000000000',
     ];
 
-    expect(prtDevModeWFromHexValues(hex_values)).toEqual({
+    expect(prtDevModeWFromRawData(hex2bin(hex_values))).toEqual({
       dmDeviceName: '',
       dmSpecVersion: 1025,
       dmDriverVersion: 1536,
