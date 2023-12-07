@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"publisher": "anticultist",
 	"engines": {
-		"vscode": "^1.53.0"
+		"vscode": "^1.84.0"
 	},
 	"repository": {
 		"type": "git",
@@ -16,14 +16,14 @@
 		"test": "npm run compile && node ./out/test/runTest"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^8.1.0"
+		"vscode-languageclient": "^9.0.1"
 	},
 	"devDependencies": {
-		"@types/glob": "^8.0.0",
-		"@types/mocha": "^10.0.1",
-		"@types/node": "^20.5.7",
-		"@types/vscode": "^1.81.0",
-		"glob": "^8.0.3",
+		"@types/glob": "^8.1.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "^20.10.4",
+		"@types/vscode": "^1.84.2",
+		"glob": "^10.3.10",
 		"mocha": "^10.2.0",
 		"vscode-test": "^1.6.1"
 	}
