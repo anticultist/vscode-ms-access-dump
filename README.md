@@ -45,3 +45,11 @@ These links may be interesting to further improve the development.
 - [Allen Browne's tips for Microsoft Access](http://allenbrowne.com/tips.html)
 - [Microsoft Access Developer and VBA Programming Help Center](http://www.fmsinc.com/microsoftaccess/developer/index.html)
 - [MDB Tools](https://github.com/mdbtools/mdbtools)
+
+## Feedback
+
+Share your feedback as a [GitHub issue](https://github.com/anticultist/vscode-java-policy/issues/new).
+
+## Support
+
+[Buy me a coffee](https://ko-fi.com/anticultist) to support the progress of this extension.
