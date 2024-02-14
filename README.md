@@ -48,7 +48,7 @@ These links may be interesting to further improve the development.
 
 ## Feedback
 
-Share your feedback as a [GitHub issue](https://github.com/anticultist/vscode-java-policy/issues/new).
+Share your feedback as a [GitHub issue](https://github.com/anticultist/vscode-ms-access-dump/issues/new).
 
 ## Support
 
