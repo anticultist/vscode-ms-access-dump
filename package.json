@@ -61,7 +61,7 @@
 		"compile:server": "tsc -b ./server/tsconfig.json",
 		"watch": "tsc -b -w",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-		"clean": "rimraf client/out && rimraf server/out",
+		"clean": "rimraf client/out client/.vscode-test server/out",
 		"test": "cd client && npm test"
 	},
 	"devDependencies": {
