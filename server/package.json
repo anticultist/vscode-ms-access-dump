@@ -18,9 +18,9 @@
 		"web-tree-sitter": "^0.20.8"
 	},
 	"devDependencies": {
-		"@types/node": "^20.10.4",
-		"@types/vscode": "^1.84.2",
-		"ts-jest": "^29.1.1",
+		"@types/node": "^20.11.19",
+		"@types/vscode": "^1.86.0",
+		"ts-jest": "^29.1.2",
 		"vscode-test": "^1.6.1"
 	},
 	"scripts": {
