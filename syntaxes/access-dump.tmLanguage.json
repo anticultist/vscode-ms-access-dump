@@ -135,7 +135,7 @@
 			"begin": "\\b([A-Za-z_][A-Za-z_0-9]*)\\b\\s*(=)",
 			"beginCaptures": {
 				"1": {
-					"name": "variable.parameter.access-dump punctuation.definition.variable.access-dump"
+					"name": "punctuation.definition.variable.access-dump variable.other.property.access-dump"
 				},
 				"2": { "name": "keyword.operator.assignment.augmented.access-dump" }
 			},
@@ -170,7 +170,7 @@
 			"begin": "\\b(BaseInfo|RecordSource|RowSource)\\b",
 			"beginCaptures": {
 				"1": {
-					"name": "variable.parameter.access-dump punctuation.definition.variable.access-dump"
+					"name": "punctuation.definition.variable.access-dump variable.other.property.access-dump"
 				}
 			},
 			"end": "$",
