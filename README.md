@@ -6,6 +6,11 @@ Through the COM interface it is possible to dump internal resources (e.g. forms,
 This allows to develop such an application with multiple developers simultaneously.
 To ease the handling of such files this VSCode extension provides syntax highlighting for that dump format.
 
+## Call for Sponsorship
+
+This is a **free extension**.
+If you find it useful to yourself or your business then you might consider [sponsoring](https://ko-fi.com/anticultist) it.
+
 ## Features
 
 - Syntax highlighting for MS Access dump format (forms, macros, queries, reports)
@@ -49,7 +54,3 @@ These links may be interesting to further improve the development.
 ## Feedback
 
 Share your feedback as a [GitHub issue](https://github.com/anticultist/vscode-ms-access-dump/issues/new).
-
-## Support
-
-[Buy me a coffee](https://ko-fi.com/anticultist) to support the progress of this extension.
