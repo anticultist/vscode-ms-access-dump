@@ -1,5 +1,9 @@
 # MS Access Dump Format Change Log
 
+## 0.6.1
+
+- Improved syntax highlighting for the 'Solarized Dark' theme
+
 ## 0.6.0
 
 - Added a hover provider to display the encoded PrtDevMode(W) block
