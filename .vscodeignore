@@ -5,6 +5,7 @@
 **/tsconfig.json
 **/tsconfig.base.json
 
+.github/**
 .vscode/**
 .vscode-test/**
 
@@ -13,13 +14,16 @@
 client/**
 !client/out/extension.js
 
+images/**
+!images/icon.png
+
+sample_project/**
+tree-sitter-ms-access-dump/**
+
 server/**
 !server/out/server.js
 !server/out/tree-sitter.wasm
 !server/tree-sitter-ms_access_dump.wasm
-
-sample_project/**
-tree-sitter-ms-access-dump/**
 
 .eslintignore
 .gitignore
@@ -27,5 +31,6 @@ tree-sitter-ms-access-dump/**
 .prettierignore
 CONTRIBUTING.md
 NOTES.md
+ROADMAP.md
 shared.webpack.config.js
 vsc-extension-quickstart.md
