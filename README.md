@@ -3,8 +3,8 @@
 ## About
 
 Through the COM interface it is possible to dump internal resources (e.g. forms, macros, queries, reports etc.) of a Microsoft Access application into separate files[\[1\]](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development).
-This allows to develop such an application with multiple developers simultaneously.
-To ease the handling of such files this VSCode extension provides syntax highlighting for that dump format.
+This allows to develop a Microsoft Access application with multiple developers simultaneously.
+To ease the handling of such files this VSCode extension provides syntax highlighting for this custom dump format.
 
 ## Call for Sponsorship
 
