@@ -11,7 +11,7 @@ To ease the handling of such files this VSCode extension provides syntax highlig
 This is a **free extension**.
 If you find it useful to yourself or your business then you might consider [sponsoring](https://ko-fi.com/anticultist) it.
 
-## Features
+## Feature Overview
 
 - Syntax highlighting for MS Access dump format (forms, macros, queries, reports)
 - embedded syntax highlighting for SQL and Visual Basic
@@ -19,11 +19,17 @@ If you find it useful to yourself or your business then you might consider [spon
 - color picker
 - encoding of the PrtDevMode(W) block
 
-## Showcase
+### Syntax highlighting
 
 ![Screenshot](./images/screenshot.png)
 
+This extension has syntax highlighting and breadcrumbs support so that the content can be analyzed more quickly.
+
+### PrtDevMode(W)
+
 ![PrtDevModeW](./images/PrtDevModeW.png)
+
+You can hover over the PrtDevMode(W) block to display the information stored there.
 
 ## File Association
 
