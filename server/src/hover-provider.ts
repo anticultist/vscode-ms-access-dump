@@ -162,6 +162,9 @@ This is also the reason why this member seams always to have different content a
   return [content, remarks];
 }
 
+/** feature still in development */
+const enablePictureData = false;
+
 async function scanAssignment(
   assignment_node: Parser.SyntaxNode,
   line: number,
@@ -190,7 +193,7 @@ async function scanAssignment(
         contents: generateDocsForDevMode(struct, false),
         range: range,
       };
-    } else if (assignment_node.firstNamedChild.text == 'PictureData') {
+    } else if (enablePictureData && assignment_node.firstNamedChild.text == 'PictureData') {
       const raw_data = rawDataFromAST(assignment_node);
       const bitmapInfo = bitmapInfoFromRawData(raw_data);
 
