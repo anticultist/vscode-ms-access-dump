@@ -1,10 +1,13 @@
 import { Hover, Range, Position } from 'vscode-languageserver/node';
 
+import Jimp = require('jimp');
+
 import Parser = require('web-tree-sitter');
 
 import {
   bitmapAsBase64EncodedString,
   bitmapInfoFromRawData,
+  convertToDWORD,
   DevMode,
   devModeConstants,
   extractDmFieldsFlags,
@@ -13,27 +16,31 @@ import {
   rawDataFromAST,
 } from './binary-data-parser';
 
-export function hoverFromAST(root: Parser.Tree, line: number, character: number) {
-  return scanBlock(root.rootNode, line, character);
+export async function hoverFromAST(root: Parser.Tree, line: number, character: number) {
+  return await scanBlock(root.rootNode, line, character);
 }
 
-function scanTopLevelStructure(
+async function scanTopLevelStructure(
   node: Parser.SyntaxNode,
   line: number,
   character: number,
-): Hover | null {
+): Promise<Hover | null> {
   switch (node.type) {
     case 'assignment':
-      return scanAssignment(node, line, character);
+      return await scanAssignment(node, line, character);
     case 'block':
-      return scanBlock(node, line, character);
+      return await scanBlock(node, line, character);
   }
   return null;
 }
 
-function scanBlock(node: Parser.SyntaxNode, line: number, character: number): Hover | null {
+async function scanBlock(
+  node: Parser.SyntaxNode,
+  line: number,
+  character: number,
+): Promise<Hover | null> {
   for (const syntax_node of node.namedChildren) {
-    let ret = scanTopLevelStructure(syntax_node, line, character);
+    let ret = await scanTopLevelStructure(syntax_node, line, character);
     if (ret !== null) return ret;
   }
   return null;
@@ -74,7 +81,7 @@ By the way it seems that MS Access does not clear the memory after allocation.
 Therefore the structure may contain garbage especially after the zero byte of the two fixed size strings.
 This is also the reason why this member seams always to have different content after an export even though nothing had changed.`;
 
-  let content = `**PrtDevMode${ansiVersion ? '' : 'W'} (EXPERIMENTAL):**\n\n`;
+  let content = `**PrtDevMode${ansiVersion ? '' : 'W'}:**\n\n`;
   if (struct === undefined) {
     // TODO: add reason why
     content += '*could not parse structure*';
@@ -155,11 +162,11 @@ This is also the reason why this member seams always to have different content a
   return [content, remarks];
 }
 
-function scanAssignment(
+async function scanAssignment(
   assignment_node: Parser.SyntaxNode,
   line: number,
   character: number,
-): Hover | null {
+): Promise<Hover | null> {
   if (!positionInNode(line, character, assignment_node)) return null;
 
   let range = Range.create(
@@ -188,10 +195,13 @@ function scanAssignment(
       const bitmapInfo = bitmapInfoFromRawData(raw_data);
 
       if (!raw_data || !bitmapInfo) {
-        return null;
+        return {
+          contents: '*could not parse structure*',
+          range: range,
+        };
       }
 
-      const structContent = `
+      const structContent = `**BITMAPINFOHEADER**
 - biSize: ${bitmapInfo['biSize']}
 - biWidth: ${bitmapInfo['biWidth']}
 - biHeight: ${bitmapInfo['biHeight']}
@@ -203,16 +213,48 @@ function scanAssignment(
 - biYPelsPerMeter: ${bitmapInfo['biYPelsPerMeter']}
 - biClrUsed: ${bitmapInfo['biClrUsed']}
 - biClrImportant: ${bitmapInfo['biClrImportant']}
-- bmiColors: (${bitmapInfo['bmiColors']['rgbRed']}, ${bitmapInfo['bmiColors']['rgbGreen']}, ${bitmapInfo['bmiColors']['rgbBlue']}) [${bitmapInfo['bmiColors']['rgbReserved']}]
       `;
 
-      let preview = '**Preview:**\n\n';
+      let preview = '**PictureData (EXPERIMENTAL):**\n\n';
 
       const previewAsBase64 = bitmapAsBase64EncodedString(bitmapInfo, raw_data);
       if (previewAsBase64) {
-        preview += `![Preview](data:image/bmp;base64,${previewAsBase64})`;
+        // preview += `![Preview](data:image/bmp;base64,${previewAsBase64})`;
+
+        let bmpHeader: number[] = [];
+        bmpHeader.push(...[66, 77]); // bfType: ascii string 'BM'
+        bmpHeader.push(...convertToDWORD(raw_data.length)); // bfSize
+        bmpHeader.push(...convertToDWORD(0)); // bfReserved
+        bmpHeader.push(...convertToDWORD(14 + bitmapInfo['biSize'])); //bfOffBits
+
+        const u8 = new Uint8Array(bmpHeader.concat(raw_data));
+        const buf = Buffer.from(u8);
+
+        try {
+          const img = await Jimp.create(buf);
+          preview += `![Preview](${await img.getBase64Async('image/bmp')})`;
+        } catch {
+          return {
+            contents: '*could not parse structure*',
+            range: range,
+          };
+        }
       } else {
-        preview += '*could not parse structure*';
+        let header: number[] = [];
+        // http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+        header.push(...[137, 80, 78, 71, 13, 10, 26, 10]);
+        const u8 = new Uint8Array(header.concat(raw_data));
+        const buf = Buffer.from(u8);
+
+        try {
+          const img = await Jimp.create(buf);
+          preview += `![Preview](${await img.getBase64Async('image/png')})`;
+        } catch {
+          return {
+            contents: '*could not parse structure*',
+            range: range,
+          };
+        }
       }
 
       // contents += `<img width="20" height="20" src="data:image/bmp;base64,${previewAsBase64}"/>`;

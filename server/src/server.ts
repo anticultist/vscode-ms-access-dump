@@ -213,11 +213,11 @@ connection.onColorPresentation((params: ColorPresentationParams) => {
   return result;
 });
 
-connection.onHover((params: HoverParams) => {
+connection.onHover(async (params: HoverParams) => {
   const ast = parseDocument(params.textDocument.uri);
   if (ast === null) return null;
 
-  return hoverFromAST(ast, params.position.line, params.position.character);
+  return await hoverFromAST(ast, params.position.line, params.position.character);
 });
 
 // Make the text document manager listen on the connection

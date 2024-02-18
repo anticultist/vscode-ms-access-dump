@@ -28,6 +28,7 @@ export function bitmapInfoFromRawData(raw_data?: number[]) {
 
   // https://learn.microsoft.com/en-us/office/vba/api/access.image.picturedata
   // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfoheader
+  // https://stackoverflow.com/questions/10792426/access-export-images-from-image-controls-in-forms
   const structDef: StructMember[] = [
     // BITMAPINFOHEADER
     ['biSize', 'DWORD'],
@@ -41,11 +42,14 @@ export function bitmapInfoFromRawData(raw_data?: number[]) {
     ['biYPelsPerMeter', 'LONG'],
     ['biClrUsed', 'DWORD'],
     ['biClrImportant', 'DWORD'],
-    // ---
-    ['bmiColors', 'RGBQUAD'],
   ];
 
-  return extractStruct(raw_data, structDef);
+  const struct = extractStruct(raw_data, structDef);
+  if (struct['__size__'] != struct['biSize']) {
+    return;
+  }
+
+  return struct;
 }
 
 export function bitmapAsBase64EncodedString(bitmapInfo: { [id: string]: any }, raw_data: number[]) {
@@ -60,8 +64,8 @@ export function bitmapAsBase64EncodedString(bitmapInfo: { [id: string]: any }, r
   bmpHeader.push(...convertToDWORD(raw_data.length)); // bfSize
   bmpHeader.push(...convertToDWORD(0)); // bfReserved
   bmpHeader.push(...convertToDWORD(14 + bitmapInfo['biSize'])); //bfOffBits
-  var u8 = new Uint8Array(bmpHeader.concat(raw_data));
-  var b64 = Buffer.from(u8).toString('base64');
+  const u8 = new Uint8Array(bmpHeader.concat(raw_data));
+  const b64 = Buffer.from(u8).toString('base64');
 
   return b64;
 }
