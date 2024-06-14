@@ -1,7 +1,7 @@
 {
 	"name": "ms-access-dump-format",
 	"displayName": "MS Access Dump Format",
-	"description": "Syntax highlighting for the MS Access dump format",
+	"description": "Analyze and fix MS Access dump files",
 	"license": "ISC",
 	"sponsor": {
 		"url": "https://ko-fi.com/anticultist"
