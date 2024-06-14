@@ -11,19 +11,19 @@
 		"type": "git",
 		"url": "https://github.com/anticultist/vscode-ms-access-dump"
 	},
+	"scripts": {
+		"test": "jest"
+	},
 	"dependencies": {
-		"jimp": "^0.22.10",
+		"jimp": "^0.22.12",
 		"vscode-languageserver": "^9.0.1",
 		"vscode-languageserver-textdocument": "^1.0.11",
 		"web-tree-sitter": "^0.20.8"
 	},
 	"devDependencies": {
-		"@types/node": "^20.11.19",
-		"@types/vscode": "^1.86.0",
-		"ts-jest": "^29.1.2",
+		"@types/node": "^20.14.2",
+		"@types/vscode": "^1.90.0",
+		"ts-jest": "^29.1.4",
 		"vscode-test": "^1.6.1"
-	},
-	"scripts": {
-		"test": "jest"
 	}
 }
