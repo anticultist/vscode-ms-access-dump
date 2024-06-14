@@ -25,5 +25,8 @@
 		"@types/vscode": "^1.90.0",
 		"ts-jest": "^29.1.4",
 		"vscode-test": "^1.6.1"
+	},
+	"overrides": {
+		"phin": "^3.7.1"
 	}
 }
