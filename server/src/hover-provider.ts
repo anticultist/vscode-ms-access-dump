@@ -41,7 +41,9 @@ async function scanBlock(
 ): Promise<Hover | null> {
   for (const syntax_node of node.namedChildren) {
     let ret = await scanTopLevelStructure(syntax_node, line, character);
-    if (ret !== null) return ret;
+    if (ret !== null) {
+      return ret;
+    }
   }
   return null;
 }
@@ -49,9 +51,9 @@ async function scanBlock(
 function positionInNode(line: number, character: number, node: Parser.SyntaxNode): boolean {
   return (
     (node.startPosition.row < line ||
-      (node.startPosition.row == line && node.startPosition.column <= character)) &&
+      (node.startPosition.row === line && node.startPosition.column <= character)) &&
     (line < node.endPosition.row ||
-      (line == node.endPosition.row && character <= node.endPosition.column))
+      (line === node.endPosition.row && character <= node.endPosition.column))
   );
 }
 
@@ -170,22 +172,24 @@ async function scanAssignment(
   line: number,
   character: number,
 ): Promise<Hover | null> {
-  if (!positionInNode(line, character, assignment_node)) return null;
+  if (!positionInNode(line, character, assignment_node)) {
+    return null;
+  }
 
   let range = Range.create(
     Position.create(assignment_node.startPosition.row, assignment_node.startPosition.column),
     Position.create(assignment_node.endPosition.row, assignment_node.endPosition.column),
   );
 
-  if (assignment_node.firstNamedChild?.type == 'identifier') {
-    if (assignment_node.firstNamedChild.text == 'PrtDevMode') {
+  if (assignment_node.firstNamedChild?.type === 'identifier') {
+    if (assignment_node.firstNamedChild.text === 'PrtDevMode') {
       const struct = prtDevModeFromRawData(rawDataFromAST(assignment_node));
 
       return {
         contents: generateDocsForDevMode(struct, true),
         range: range,
       };
-    } else if (assignment_node.firstNamedChild.text == 'PrtDevModeW') {
+    } else if (assignment_node.firstNamedChild.text === 'PrtDevModeW') {
       // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/the-devmodew-structure
       const struct = prtDevModeWFromRawData(rawDataFromAST(assignment_node));
 
@@ -193,7 +197,7 @@ async function scanAssignment(
         contents: generateDocsForDevMode(struct, false),
         range: range,
       };
-    } else if (enablePictureData && assignment_node.firstNamedChild.text == 'PictureData') {
+    } else if (enablePictureData && assignment_node.firstNamedChild.text === 'PictureData') {
       const raw_data = rawDataFromAST(assignment_node);
       const bitmapInfo = bitmapInfoFromRawData(raw_data);
 

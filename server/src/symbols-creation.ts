@@ -33,7 +33,9 @@ function scanTopLevelStructure(uri: string, node: Parser.SyntaxNode, symbols: Sy
 }
 
 function removeQuotes(text: string): string {
-  if (text.charAt(0) != '"' || text.charAt(text.length - 1) != '"') return text;
+  if (text.charAt(0) !== '"' || text.charAt(text.length - 1) !== '"') {
+    return text;
+  }
   return text.substring(1, text.length - 1);
 }
 
@@ -42,7 +44,7 @@ function scanAssignment(
   assignment_node: Parser.SyntaxNode,
   symbols: SymbolInformation[],
 ) {
-  if (assignment_node.firstNamedChild?.text == 'Name') {
+  if (assignment_node.firstNamedChild?.text === 'Name') {
     const name_node = assignment_node.firstNamedChild.nextNamedSibling;
     if (
       name_node === undefined ||
@@ -62,7 +64,9 @@ function scanAssignment(
     }
 
     const stripped_name_node = removeQuotes(name_node.text);
-    if (stripped_name_node.length == 0) return;
+    if (stripped_name_node.length === 0) {
+      return;
+    }
 
     symbols.push({
       name: stripped_name_node,
@@ -79,8 +83,8 @@ function scanAssignment(
 }
 
 function scanBlock(uri: string, node: Parser.SyntaxNode, symbols: SymbolInformation[]) {
-  if (node.firstNamedChild?.type == 'identifier') {
-    if (node.firstNamedChild.text == 'Form' || node.firstNamedChild.text == 'Report') {
+  if (node.firstNamedChild?.type === 'identifier') {
+    if (node.firstNamedChild.text === 'Form' || node.firstNamedChild.text === 'Report') {
       symbols.push({
         name: node.firstNamedChild.text,
         kind: SymbolKind.Struct,

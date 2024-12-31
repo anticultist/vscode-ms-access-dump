@@ -46,7 +46,7 @@ let connection = createConnection(ProposedFeatures.all);
 // Create a simple text document manager.
 let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
-var parser: Parser;
+let parser: Parser;
 
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
@@ -57,15 +57,10 @@ connection.onInitialize(async (params: InitializeParams) => {
 
   // Does the client support the `workspace/configuration` request?
   // If not, we fall back using global settings.
-  hasConfigurationCapability = !!(capabilities.workspace && !!capabilities.workspace.configuration);
-  hasWorkspaceFolderCapability = !!(
-    capabilities.workspace && !!capabilities.workspace.workspaceFolders
-  );
-  hasDiagnosticRelatedInformationCapability = !!(
-    capabilities.textDocument &&
-    capabilities.textDocument.publishDiagnostics &&
-    capabilities.textDocument.publishDiagnostics.relatedInformation
-  );
+  hasConfigurationCapability = !!capabilities?.workspace?.configuration;
+  hasWorkspaceFolderCapability = !!capabilities?.workspace?.workspaceFolders;
+  hasDiagnosticRelatedInformationCapability =
+    !!capabilities?.textDocument?.publishDiagnostics?.relatedInformation;
 
   const result: InitializeResult = {
     capabilities: {
@@ -152,7 +147,9 @@ documents.onDidChangeContent((change) => {
   validateTextDocument(change.document);
 });
 
-async function validateTextDocument(textDocument: TextDocument): Promise<void> {}
+async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+  /** TODO: implement */
+}
 
 connection.onDidChangeWatchedFiles((_change) => {});
 
@@ -215,7 +212,9 @@ connection.onColorPresentation((params: ColorPresentationParams) => {
 
 connection.onHover(async (params: HoverParams) => {
   const ast = parseDocument(params.textDocument.uri);
-  if (ast === null) return null;
+  if (ast === null) {
+    return null;
+  }
 
   return await hoverFromAST(ast, params.position.line, params.position.character);
 });

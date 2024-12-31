@@ -45,7 +45,7 @@ export function bitmapInfoFromRawData(raw_data?: number[]) {
   ];
 
   const struct = extractStruct(raw_data, structDef);
-  if (struct['__size__'] != struct['biSize']) {
+  if (struct['__size__'] !== struct['biSize']) {
     return;
   }
 
@@ -54,7 +54,7 @@ export function bitmapInfoFromRawData(raw_data?: number[]) {
 
 export function bitmapAsBase64EncodedString(bitmapInfo: { [id: string]: any }, raw_data: number[]) {
   // TODO: add more checks
-  if (!raw_data || !bitmapInfo || bitmapInfo['biSize'] != 40) {
+  if (!raw_data || !bitmapInfo || bitmapInfo['biSize'] !== 40) {
     return;
   }
 
@@ -72,7 +72,9 @@ export function bitmapAsBase64EncodedString(bitmapInfo: { [id: string]: any }, r
 
 export function hex2bin(hex_values: string[]): number[] {
   let total_hex: string = hex_values.map((v) => v.slice(2)).join('');
-  if (total_hex.length % 2 == 1) return []; // TODO: maybe throw an error or return undefined
+  if (total_hex.length % 2 === 1) {
+    return [];
+  } // TODO: maybe throw an error or return undefined
   let raw_data: number[] = [];
 
   for (let idx = 0; idx < total_hex.length / 2; ++idx) {
@@ -126,7 +128,7 @@ export function convertToDWORD(value: number): number[] {
 
 function extractString(raw_data: number[], start_pos: number, num_char: number): string {
   const string_data = raw_data.slice(start_pos, start_pos + num_char);
-  const end_idx = string_data.findIndex((elem) => elem == 0);
+  const end_idx = string_data.findIndex((elem) => elem === 0);
   return String.fromCharCode(...string_data.slice(0, end_idx));
 }
 
@@ -135,7 +137,7 @@ function extractWString(raw_data: number[], start_pos: number, num_char: number)
   for (let char_idx = 0; char_idx < num_char; ++char_idx) {
     string_data.push(extractWORD(raw_data, start_pos + char_idx * 2));
   }
-  const end_idx = string_data.findIndex((elem) => elem == 0);
+  const end_idx = string_data.findIndex((elem) => elem === 0);
   return String.fromCharCode(...string_data.slice(0, end_idx));
 }
 
@@ -628,7 +630,7 @@ export function prtDevModeFromRawData(raw_data?: number[]): DevMode | undefined 
     dmPanningWidth: extractDWORD(raw_data, 148),
     dmPanningHeight: extractDWORD(raw_data, 152),
   };
-  if (struct.dmSize + struct.dmDriverExtra != raw_data.length) {
+  if (struct.dmSize + struct.dmDriverExtra !== raw_data.length) {
     return;
   }
 
@@ -691,7 +693,7 @@ export function prtDevModeWFromRawData(raw_data?: number[]): DevMode | undefined
     dmPanningWidth: extractDWORD(raw_data, 212),
     dmPanningHeight: extractDWORD(raw_data, 216),
   };
-  if (struct.dmSize + struct.dmDriverExtra != raw_data.length) {
+  if (struct.dmSize + struct.dmDriverExtra !== raw_data.length) {
     return;
   }
 

@@ -53,13 +53,19 @@ function GetBValue(color: number): number {
 }
 
 export function convertTextToColor(color_as_text: string): Color | null {
-  if (!/^[0-9]+$/.test(color_as_text)) return null;
+  if (!/^\d+$/.test(color_as_text)) {
+    return null;
+  }
 
   const color_as_number = parseInt(color_as_text);
-  if (isNaN(color_as_number)) return null;
+  if (isNaN(color_as_number)) {
+    return null;
+  }
 
   const color_mask = 0xffffff;
-  if ((color_as_number | color_mask) != color_mask) return null;
+  if ((color_as_number | color_mask) !== color_mask) {
+    return null;
+  }
 
   return Color.create(
     GetRValue(color_as_number) / 255,
@@ -99,7 +105,9 @@ function scanAssignment(
   }
 
   const color = convertTextToColor(color_value_node.text);
-  if (color === null) return;
+  if (color === null) {
+    return;
+  }
 
   colors.push({
     range: Range.create(
