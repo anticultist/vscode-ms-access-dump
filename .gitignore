@@ -4,6 +4,9 @@ node_modules
 .vscode-test
 *.code-workspace
 *.vsix
+
+tsconfig.tsbuildinfo
+
 /tree-sitter-ms-access-dump/bindings
 /tree-sitter-ms-access-dump/build
 /tree-sitter-ms-access-dump/src

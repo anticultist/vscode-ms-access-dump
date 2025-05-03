@@ -65,17 +65,17 @@
 		"test": "cd client && npm test"
 	},
 	"devDependencies": {
-		"@types/mocha": "^10.0.6",
-		"@types/node": "^20.14.2",
-		"@typescript-eslint/parser": "^7.13.0",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^20.17.32",
+		"@typescript-eslint/parser": "^8.31.1",
 		"copyfiles": "^2.4.1",
-		"eslint": "^8.56.0",
+		"eslint": "^9.26.0",
 		"merge-options": "^3.0.4",
 		"mocha": "^10.4.0",
 		"prettier": "^3.3.2",
-		"rimraf": "^5.0.7",
-		"ts-loader": "^9.5.1",
-		"typescript": "^5.4.5",
+		"rimraf": "^5.0.10",
+		"ts-loader": "^9.5.2",
+		"typescript": "^5.8.3",
 		"webpack": "^5.92.0",
 		"webpack-cli": "^5.1.4"
 	}

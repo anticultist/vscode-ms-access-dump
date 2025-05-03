@@ -21,7 +21,7 @@ export async function hoverFromAST(root: Parser.Tree, line: number, character: n
 }
 
 async function scanTopLevelStructure(
-  node: Parser.SyntaxNode,
+  node: Parser.Node,
   line: number,
   character: number,
 ): Promise<Hover | null> {
@@ -35,11 +35,14 @@ async function scanTopLevelStructure(
 }
 
 async function scanBlock(
-  node: Parser.SyntaxNode,
+  node: Parser.Node,
   line: number,
   character: number,
 ): Promise<Hover | null> {
   for (const syntax_node of node.namedChildren) {
+    if (syntax_node === null) {
+      continue;
+    }
     let ret = await scanTopLevelStructure(syntax_node, line, character);
     if (ret !== null) {
       return ret;
@@ -48,7 +51,7 @@ async function scanBlock(
   return null;
 }
 
-function positionInNode(line: number, character: number, node: Parser.SyntaxNode): boolean {
+function positionInNode(line: number, character: number, node: Parser.Node): boolean {
   return (
     (node.startPosition.row < line ||
       (node.startPosition.row === line && node.startPosition.column <= character)) &&
@@ -168,7 +171,7 @@ This is also the reason why this member seams always to have different content a
 const enablePictureData = false;
 
 async function scanAssignment(
-  assignment_node: Parser.SyntaxNode,
+  assignment_node: Parser.Node,
   line: number,
   character: number,
 ): Promise<Hover | null> {

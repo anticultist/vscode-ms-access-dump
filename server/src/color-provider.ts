@@ -10,7 +10,7 @@ export function colorsFromAST(uri: string, root: Parser.Tree) {
   return colors;
 }
 
-function scanTopLevelStructure(uri: string, node: Parser.SyntaxNode, colors: ColorInformation[]) {
+function scanTopLevelStructure(uri: string, node: Parser.Node, colors: ColorInformation[]) {
   switch (node.type) {
     case 'assignment':
       scanAssignment(uri, node, colors);
@@ -21,8 +21,11 @@ function scanTopLevelStructure(uri: string, node: Parser.SyntaxNode, colors: Col
   }
 }
 
-function scanBlock(uri: string, node: Parser.SyntaxNode, colors: ColorInformation[]) {
+function scanBlock(uri: string, node: Parser.Node, colors: ColorInformation[]) {
   for (const syntax_node of node.namedChildren) {
+    if (syntax_node === null) {
+      continue;
+    }
     scanTopLevelStructure(uri, syntax_node, colors);
   }
 }
@@ -83,11 +86,7 @@ export function convertColorToNumber(color: Color): number {
   );
 }
 
-function scanAssignment(
-  uri: string,
-  assignment_node: Parser.SyntaxNode,
-  colors: ColorInformation[],
-) {
+function scanAssignment(uri: string, assignment_node: Parser.Node, colors: ColorInformation[]) {
   if (
     !assignment_node.firstNamedChild ||
     !color_properties.includes(assignment_node.firstNamedChild.text)

@@ -12,13 +12,16 @@ export function symbolsFromAST(uri: string, root: Parser.Tree): SymbolInformatio
   const symbols: SymbolInformation[] = [];
 
   for (const syntax_node of root.rootNode.namedChildren) {
+    if (syntax_node === null) {
+      continue;
+    }
     scanTopLevelStructure(uri, syntax_node, symbols);
   }
 
   return symbols;
 }
 
-function scanTopLevelStructure(uri: string, node: Parser.SyntaxNode, symbols: SymbolInformation[]) {
+function scanTopLevelStructure(uri: string, node: Parser.Node, symbols: SymbolInformation[]) {
   switch (node.type) {
     case 'assignment':
       scanAssignment(uri, node, symbols);
@@ -39,11 +42,7 @@ function removeQuotes(text: string): string {
   return text.substring(1, text.length - 1);
 }
 
-function scanAssignment(
-  uri: string,
-  assignment_node: Parser.SyntaxNode,
-  symbols: SymbolInformation[],
-) {
+function scanAssignment(uri: string, assignment_node: Parser.Node, symbols: SymbolInformation[]) {
   if (assignment_node.firstNamedChild?.text === 'Name') {
     const name_node = assignment_node.firstNamedChild.nextNamedSibling;
     if (
@@ -82,7 +81,7 @@ function scanAssignment(
   }
 }
 
-function scanBlock(uri: string, node: Parser.SyntaxNode, symbols: SymbolInformation[]) {
+function scanBlock(uri: string, node: Parser.Node, symbols: SymbolInformation[]) {
   if (node.firstNamedChild?.type === 'identifier') {
     if (node.firstNamedChild.text === 'Form' || node.firstNamedChild.text === 'Report') {
       symbols.push({
@@ -100,11 +99,14 @@ function scanBlock(uri: string, node: Parser.SyntaxNode, symbols: SymbolInformat
   }
 
   for (const syntax_node of node.namedChildren) {
+    if (syntax_node === null) {
+      continue;
+    }
     scanTopLevelStructure(uri, syntax_node, symbols);
   }
 }
 
-function scanCodeSection(uri: string, node: Parser.SyntaxNode, symbols: SymbolInformation[]) {
+function scanCodeSection(uri: string, node: Parser.Node, symbols: SymbolInformation[]) {
   symbols.push({
     name: 'CodeBehindForm',
     kind: SymbolKind.Namespace,

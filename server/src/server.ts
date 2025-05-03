@@ -27,15 +27,17 @@ import { colorsFromAST, convertColorToNumber } from './color-provider';
 import { hoverFromAST } from './hover-provider';
 import { symbolsFromAST } from './symbols-creation';
 
-import * as Parser from 'web-tree-sitter';
+import { Parser, Language, Tree } from 'web-tree-sitter';
 import * as path from 'path';
+import { readFileSync } from 'fs';
 
 async function loadParser() {
+  // read the WebAssembly module as a buffer
+  const wasmBuffer = readFileSync(path.resolve(__dirname, '..', 'tree-sitter-ms_access_dump.wasm'));
+
   await Parser.init();
   parser = new Parser();
-  const MyLang = await Parser.Language.load(
-    path.resolve(__dirname, '..', 'tree-sitter-ms_access_dump.wasm'),
-  );
+  const MyLang = await Language.load(wasmBuffer);
   parser.setLanguage(MyLang);
 }
 
@@ -153,7 +155,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 connection.onDidChangeWatchedFiles((_change) => {});
 
-function parseDocument(uri: string): Parser.Tree | null {
+function parseDocument(uri: string): Tree | null {
   if (parser === undefined) {
     connection.console.log('parser is not available');
     return null;

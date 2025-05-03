@@ -1,9 +1,9 @@
 import Parser = require('web-tree-sitter');
 
-function hexValuesFromNode(node: Parser.SyntaxNode) {
+function hexValuesFromNode(node: Parser.Node) {
   let hex_values: string[] = [];
   for (const child_node of node.namedChildren) {
-    if (child_node.type !== 'hex_value') {
+    if (child_node == null || child_node.type !== 'hex_value') {
       continue;
     }
     hex_values.push(child_node.text);
@@ -11,7 +11,7 @@ function hexValuesFromNode(node: Parser.SyntaxNode) {
   return hex_values;
 }
 
-export function rawDataFromAST(assignment_node: Parser.SyntaxNode): number[] | undefined {
+export function rawDataFromAST(assignment_node: Parser.Node): number[] | undefined {
   let content_node = assignment_node.firstNamedChild?.nextNamedSibling;
   if (!content_node) {
     return;
