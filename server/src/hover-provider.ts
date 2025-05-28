@@ -161,6 +161,7 @@ This is also the reason why this member seams always to have different content a
   }
 
   content += Object.entries(struct)
+    .filter(([key]) => key !== '_driverData')
     .map((el) => formatEntry(el[0], el[1], 0))
     .join('\n');
 

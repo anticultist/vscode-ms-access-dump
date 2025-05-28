@@ -39,7 +39,12 @@ describe('convert binary printing device module data', () => {
       '0x00000000000000000000000000000000100000004450534d0100000000000000',
     ];
 
-    expect(prtDevModeFromRawData(hex2bin(hex_values))).toEqual({
+    const struct = prtDevModeFromRawData(hex2bin(hex_values));
+    expect(struct?._driverData?.length).toEqual(struct?.dmDriverExtra);
+    if (struct?._driverData) {
+      delete struct._driverData;
+    }
+    expect(struct).toEqual({
       dmDeviceName: '',
       dmSpecVersion: 1025,
       dmDriverVersion: 1536,
@@ -124,7 +129,12 @@ describe('convert binary printing device module data', () => {
       '0x00000000000000000000000000000000100000004450534d0100000000000000',
     ];
 
-    expect(prtDevModeWFromRawData(hex2bin(hex_values))).toEqual({
+    const struct = prtDevModeWFromRawData(hex2bin(hex_values));
+    expect(struct?._driverData?.length).toEqual(struct?.dmDriverExtra);
+    if (struct?._driverData) {
+      delete struct._driverData;
+    }
+    expect(struct).toEqual({
       dmDeviceName: '',
       dmSpecVersion: 1025,
       dmDriverVersion: 1536,

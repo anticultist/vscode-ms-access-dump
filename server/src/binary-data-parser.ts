@@ -85,14 +85,14 @@ export function hex2bin(hex_values: string[]): number[] {
 }
 
 /** signed, 2 bytes */
-function extractShort(raw_data: number[], start_pos: number): number {
+export function extractShort(raw_data: number[], start_pos: number): number {
   const unsigned = extractWORD(raw_data, start_pos);
   const [signed] = new Int16Array([unsigned]);
   return signed;
 }
 
 /** signed, 4 bytes */
-function extractLong(raw_data: number[], start_pos: number): number {
+export function extractLong(raw_data: number[], start_pos: number): number {
   const unsigned = extractDWORD(raw_data, start_pos);
   const [signed] = new Int32Array([unsigned]);
   return signed;
@@ -104,7 +104,7 @@ function extractBYTE(raw_data: number[], start_pos: number) {
 }
 
 /** maps to unsigned short, 2 bytes */
-function extractWORD(raw_data: number[], start_pos: number): number {
+export function extractWORD(raw_data: number[], start_pos: number): number {
   const data = raw_data.slice(start_pos, start_pos + 2);
   return data[0] + (data[1] << 8);
 }
@@ -117,10 +117,10 @@ export function extractDWORD(raw_data: number[], start_pos: number): number {
   return (data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)) >>> 0;
 }
 
-export function convertToDWORD(value: number): number[] {
+export function convertToDWORD(value: number, num_bytes: number = 4): number[] {
   let data: number[] = [];
 
-  for (let idx = 0; idx < 4; idx++) {
+  for (let idx = 0; idx < num_bytes; idx++) {
     data.push(value & 0xff);
     value = value >> 8;
   }
@@ -128,23 +128,27 @@ export function convertToDWORD(value: number): number[] {
   return data;
 }
 
-function extractString(raw_data: number[], start_pos: number, num_char: number): string {
-  const string_data = raw_data.slice(start_pos, start_pos + num_char);
-  const end_idx = string_data.findIndex((elem) => elem === 0);
-  return String.fromCharCode(...string_data.slice(0, end_idx));
+export function convertToWORD(value: number): number[] {
+  return convertToDWORD(value, 2);
 }
 
-function extractWString(raw_data: number[], start_pos: number, num_char: number): string {
+export function extractString(raw_data: number[], start_pos: number, num_char: number): string {
+  const string_data = raw_data.slice(start_pos, start_pos + num_char);
+  const end_idx = string_data.findIndex((elem) => elem === 0);
+  return String.fromCharCode(...string_data.slice(0, end_idx !== -1 ? end_idx : undefined));
+}
+
+export function extractWString(raw_data: number[], start_pos: number, num_char: number): string {
   let string_data: number[] = [];
   for (let char_idx = 0; char_idx < num_char; ++char_idx) {
     string_data.push(extractWORD(raw_data, start_pos + char_idx * 2));
   }
   const end_idx = string_data.findIndex((elem) => elem === 0);
-  return String.fromCharCode(...string_data.slice(0, end_idx));
+  return String.fromCharCode(...string_data.slice(0, end_idx !== -1 ? end_idx : undefined));
 }
 
 /** contains two long values, 8 bytes */
-function extractPOINTL(raw_data: number[], start_pos: number) {
+export function extractPOINTL(raw_data: number[], start_pos: number) {
   return {
     x: extractLong(raw_data, start_pos),
     y: extractLong(raw_data, start_pos + 4),
@@ -574,6 +578,7 @@ export type DevMode = {
   dmReserved2: number;
   dmPanningWidth: number;
   dmPanningHeight: number;
+  _driverData: number[] | undefined;
 };
 
 /**
@@ -631,6 +636,7 @@ export function prtDevModeFromRawData(raw_data?: number[]): DevMode | undefined 
     dmReserved2: extractDWORD(raw_data, 144),
     dmPanningWidth: extractDWORD(raw_data, 148),
     dmPanningHeight: extractDWORD(raw_data, 152),
+    _driverData: raw_data.slice(156),
   };
   if (struct.dmSize + struct.dmDriverExtra !== raw_data.length) {
     return;
@@ -694,6 +700,7 @@ export function prtDevModeWFromRawData(raw_data?: number[]): DevMode | undefined
     dmReserved2: extractDWORD(raw_data, 208),
     dmPanningWidth: extractDWORD(raw_data, 212),
     dmPanningHeight: extractDWORD(raw_data, 216),
+    _driverData: raw_data.slice(220),
   };
   if (struct.dmSize + struct.dmDriverExtra !== raw_data.length) {
     return;
