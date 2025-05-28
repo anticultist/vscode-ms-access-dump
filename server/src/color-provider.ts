@@ -2,31 +2,31 @@ import { Color, ColorInformation, Position, Range } from 'vscode-languageserver/
 
 import Parser = require('web-tree-sitter');
 
-export function colorsFromAST(uri: string, root: Parser.Tree) {
+export function colorsFromAST(root: Parser.Tree) {
   const colors: ColorInformation[] = [];
 
-  scanBlock(uri, root.rootNode, colors);
+  scanBlock(root.rootNode, colors);
 
   return colors;
 }
 
-function scanTopLevelStructure(uri: string, node: Parser.Node, colors: ColorInformation[]) {
+function scanTopLevelStructure(node: Parser.Node, colors: ColorInformation[]) {
   switch (node.type) {
     case 'assignment':
-      scanAssignment(uri, node, colors);
+      scanAssignment(node, colors);
       break;
     case 'block':
-      scanBlock(uri, node, colors);
+      scanBlock(node, colors);
       break;
   }
 }
 
-function scanBlock(uri: string, node: Parser.Node, colors: ColorInformation[]) {
+function scanBlock(node: Parser.Node, colors: ColorInformation[]) {
   for (const syntax_node of node.namedChildren) {
     if (syntax_node === null) {
       continue;
     }
-    scanTopLevelStructure(uri, syntax_node, colors);
+    scanTopLevelStructure(syntax_node, colors);
   }
 }
 
@@ -86,7 +86,7 @@ export function convertColorToNumber(color: Color): number {
   );
 }
 
-function scanAssignment(uri: string, assignment_node: Parser.Node, colors: ColorInformation[]) {
+function scanAssignment(assignment_node: Parser.Node, colors: ColorInformation[]) {
   if (
     !assignment_node.firstNamedChild ||
     !color_properties.includes(assignment_node.firstNamedChild.text)

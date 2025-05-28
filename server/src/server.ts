@@ -187,7 +187,7 @@ connection.onDocumentColor((params: DocumentColorParams, _token: CancellationTok
     return [];
   }
 
-  return colorsFromAST(params.textDocument.uri, ast);
+  return colorsFromAST(ast);
 });
 
 function colorHexRepresentation(color: Color): string {
