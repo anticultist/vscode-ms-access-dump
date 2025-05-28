@@ -112,7 +112,9 @@ function extractWORD(raw_data: number[], start_pos: number): number {
 /** maps to unsigned short, 4 bytes */
 export function extractDWORD(raw_data: number[], start_pos: number): number {
   const data = raw_data.slice(start_pos, start_pos + 4);
-  return data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
+  // NOTE: `>>> 0` is the unsigned right shift by 0 bits,
+  // which converts the signed integer to an unsigned integer.
+  return (data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)) >>> 0;
 }
 
 export function convertToDWORD(value: number): number[] {
