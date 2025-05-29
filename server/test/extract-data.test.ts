@@ -9,7 +9,7 @@ import {
   extractString,
   extractWORD,
   extractWString,
-} from '../src/extract-data';
+} from '../src/utils/extract-data';
 
 describe('extractDWORD', () => {
   test('extract number from DWORD', () => {

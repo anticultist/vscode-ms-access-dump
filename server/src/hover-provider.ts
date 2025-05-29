@@ -14,7 +14,7 @@ import {
   prtDevModeWFromRawData,
   rawDataFromAST,
 } from './binary-data-parser';
-import { convertToDWORD } from './convert-data';
+import { convertToDWORD } from './utils/convert-data';
 
 export async function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return await scanBlock(root.rootNode, line, character);

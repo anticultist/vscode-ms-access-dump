@@ -8,8 +8,8 @@ import {
   extractString,
   extractWORD,
   extractWString,
-} from './extract-data';
-import { convertToDWORD, convertToWORD } from './convert-data';
+} from './utils/extract-data';
+import { convertToDWORD, convertToWORD } from './utils/convert-data';
 
 function hexValuesFromNode(node: Parser.Node) {
   let hex_values: string[] = [];
