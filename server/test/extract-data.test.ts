@@ -1,25 +1,15 @@
 import { describe, expect, test } from '@jest/globals';
 
 import {
-  convertToDWORD,
   extractDWORD,
   extractLong,
+  extractPOINTL,
+  extractRGBQUAD,
   extractShort,
   extractString,
   extractWORD,
   extractWString,
-} from '../src/binary-data-parser';
-
-describe('convertToDWORD', () => {
-  test('convert number into DWORD', () => {
-    // 1 + (2 << 8) + (4 << 16) + (8 << 24) = 134480385
-    expect(convertToDWORD(134480385)).toEqual([1, 2, 4, 8]);
-  });
-
-  test('convert max number into DWORD', () => {
-    expect(convertToDWORD(4294967295)).toEqual([255, 255, 255, 255]);
-  });
-});
+} from '../src/extract-data';
 
 describe('extractDWORD', () => {
   test('extract number from DWORD', () => {

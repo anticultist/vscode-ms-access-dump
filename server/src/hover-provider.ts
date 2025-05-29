@@ -7,7 +7,6 @@ import Parser = require('web-tree-sitter');
 import {
   bitmapAsBase64EncodedString,
   bitmapInfoFromRawData,
-  convertToDWORD,
   DevMode,
   devModeConstants,
   extractDmFieldsFlags,
@@ -15,6 +14,7 @@ import {
   prtDevModeWFromRawData,
   rawDataFromAST,
 } from './binary-data-parser';
+import { convertToDWORD } from './convert-data';
 
 export async function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return await scanBlock(root.rootNode, line, character);
