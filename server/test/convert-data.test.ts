@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { convertToDWORD, convertToWORD } from '../src/utils/convert-data';
+import { convertToDWORD, convertToWORD } from '../src/binary-data/convert-data';
 
 describe('convertToDWORD', () => {
   test('convert number into DWORD', () => {

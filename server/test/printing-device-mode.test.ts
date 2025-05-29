@@ -1,6 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { prtDevModeFromRawData, prtDevModeWFromRawData, hex2bin } from '../src/binary-data-parser';
+import { hex2bin } from '../src/binary-data/utils';
+import {
+  prtDevModeFromRawData,
+  prtDevModeWFromRawData,
+} from '../src/binary-data/printing-device-mode';
 
 describe('convert binary printing device module data', () => {
   test('DevModeA', () => {
