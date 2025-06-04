@@ -416,7 +416,7 @@ export function prtDevModeFromRawData(raw_data?: number[]): DevMode | undefined 
     dmDuplex: extractShort(raw_data, 62),
     dmYResolution: extractShort(raw_data, 64),
     dmTTOption: extractShort(raw_data, 66),
-    dmCollate: extractShort(raw_data, 78),
+    dmCollate: extractShort(raw_data, 68),
     dmFormName: extractString(raw_data, 70, 32),
     dmLogPixels: extractWORD(raw_data, 102),
     dmBitsPerPel: extractDWORD(raw_data, 104),
