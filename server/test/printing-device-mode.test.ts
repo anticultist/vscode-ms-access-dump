@@ -4,6 +4,7 @@ import { hex2bin } from '../src/binary-data/utils';
 import {
   prtDevModeFromRawData,
   prtDevModeWFromRawData,
+  prtDevModeToRawData,
 } from '../src/binary-data/printing-device-mode';
 
 const dev_mode_a_hex_values = [
@@ -197,5 +198,25 @@ describe('convert binary printing device module data', () => {
     delete structW._driverData;
 
     expect(structA).toEqual(structW);
+  });
+});
+
+describe('decode from hex to struct and back again', () => {
+  test('DevModeA', () => {
+    const wstring = false;
+    const struct = prtDevModeFromRawData(hex2bin(dev_mode_a_hex_values));
+    expect(struct).not.toBeUndefined();
+    const hex_values = prtDevModeToRawData(struct!, wstring);
+    const struct2 = prtDevModeFromRawData(hex_values);
+    expect(struct).toEqual(struct2);
+  });
+
+  test('DevModeW', () => {
+    const wstring = true;
+    const struct = prtDevModeWFromRawData(hex2bin(dev_mode_w_hex_values));
+    expect(struct).not.toBeUndefined();
+    const hex_values = prtDevModeToRawData(struct!, wstring);
+    const struct2 = prtDevModeWFromRawData(hex_values);
+    expect(struct).toEqual(struct2);
   });
 });

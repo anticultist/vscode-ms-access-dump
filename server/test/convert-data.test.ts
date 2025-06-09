@@ -1,6 +1,11 @@
 import { describe, expect, test } from '@jest/globals';
 
-import { convertToDWORD, convertToWORD } from '../src/binary-data/convert-data';
+import {
+  convertToDWORD,
+  convertToWORD,
+  convertToString,
+  convertToShort,
+} from '../src/binary-data/convert-data';
 
 describe('convertToDWORD', () => {
   test('convert number into DWORD', () => {
@@ -10,5 +15,15 @@ describe('convertToDWORD', () => {
 
   test('convert max number into DWORD', () => {
     expect(convertToDWORD(4294967295)).toEqual([255, 255, 255, 255]);
+  });
+});
+
+describe('convertToString', () => {
+  test('convert ansi string into number array', () => {
+    expect(convertToString('test', false, 10)).toEqual([116, 101, 115, 116, 0, 0, 0, 0, 0, 0]);
+  });
+
+  test('convert wide string into number array', () => {
+    expect(convertToString('test', true, 5)).toEqual([116, 0, 101, 0, 115, 0, 116, 0, 0, 0]);
   });
 });

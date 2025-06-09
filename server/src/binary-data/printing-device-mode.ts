@@ -6,6 +6,7 @@ import {
   extractPOINTL,
   extractWString,
 } from './extract-data';
+import { convertToDWORD, convertToWORD, convertToShort, convertToString } from './convert-data';
 
 export function extractDmFieldsFlags(dmFields: number): {} {
   const flags: { [id: number]: string } = {};
@@ -506,4 +507,49 @@ export function prtDevModeWFromRawData(raw_data?: number[]): DevMode | undefined
   }
 
   return struct;
+}
+
+export function prtDevModeToRawData(struct: DevMode, wstring: boolean): number[] {
+  const raw_data: number[] = [];
+
+  raw_data.push(...convertToString(struct.dmDeviceName, wstring));
+  raw_data.push(...convertToWORD(struct.dmSpecVersion));
+  raw_data.push(...convertToWORD(struct.dmDriverVersion));
+  raw_data.push(...convertToWORD(struct.dmSize));
+  raw_data.push(...convertToWORD(struct.dmDriverExtra));
+  raw_data.push(...convertToDWORD(struct.dmFields));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmOrientation));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperLength));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperWidth));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmScale));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmCopies));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmDefaultSource));
+  raw_data.push(...convertToShort(struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPrintQuality));
+  raw_data.push(...convertToShort(struct.dmColor));
+  raw_data.push(...convertToShort(struct.dmDuplex));
+  raw_data.push(...convertToShort(struct.dmYResolution));
+  raw_data.push(...convertToShort(struct.dmTTOption));
+  raw_data.push(...convertToShort(struct.dmCollate));
+  raw_data.push(...convertToString(struct.dmFormName, wstring));
+  raw_data.push(...convertToWORD(struct.dmLogPixels));
+  raw_data.push(...convertToDWORD(struct.dmBitsPerPel));
+  raw_data.push(...convertToDWORD(struct.dmPelsWidth));
+  raw_data.push(...convertToDWORD(struct.dmPelsHeight));
+  raw_data.push(...convertToDWORD(struct.DUMMYUNIONNAME2.dmDisplayFlags));
+  raw_data.push(...convertToDWORD(struct.dmDisplayFrequency));
+  raw_data.push(...convertToDWORD(struct.dmICMMethod));
+  raw_data.push(...convertToDWORD(struct.dmICMIntent));
+  raw_data.push(...convertToDWORD(struct.dmMediaType));
+  raw_data.push(...convertToDWORD(struct.dmDitherType));
+  raw_data.push(...convertToDWORD(struct.dmReserved1));
+  raw_data.push(...convertToDWORD(struct.dmReserved2));
+  raw_data.push(...convertToDWORD(struct.dmPanningWidth));
+  raw_data.push(...convertToDWORD(struct.dmPanningHeight));
+
+  if (struct._driverData) {
+    raw_data.push(...struct._driverData);
+  }
+
+  return raw_data;
 }
