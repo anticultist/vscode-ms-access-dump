@@ -4,6 +4,7 @@ import {
   convertToDWORD,
   convertToWORD,
   convertToString,
+  convertToWString,
   convertToShort,
 } from '../src/binary-data/convert-data';
 
@@ -20,10 +21,12 @@ describe('convertToDWORD', () => {
 
 describe('convertToString', () => {
   test('convert ansi string into number array', () => {
-    expect(convertToString('test', false, 10)).toEqual([116, 101, 115, 116, 0, 0, 0, 0, 0, 0]);
+    expect(convertToString('test', 10)).toEqual([116, 101, 115, 116, 0, 0, 0, 0, 0, 0]);
   });
+});
 
+describe('convertToWString', () => {
   test('convert wide string into number array', () => {
-    expect(convertToString('test', true, 5)).toEqual([116, 0, 101, 0, 115, 0, 116, 0, 0, 0]);
+    expect(convertToWString('test', 5)).toEqual([116, 0, 101, 0, 115, 0, 116, 0, 0, 0]);
   });
 });

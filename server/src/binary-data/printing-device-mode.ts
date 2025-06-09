@@ -6,7 +6,13 @@ import {
   extractPOINTL,
   extractWString,
 } from './extract-data';
-import { convertToDWORD, convertToWORD, convertToShort, convertToString } from './convert-data';
+import {
+  convertToDWORD,
+  convertToWORD,
+  convertToShort,
+  convertToString,
+  convertToWString,
+} from './convert-data';
 
 export function extractDmFieldsFlags(dmFields: number): {} {
   const flags: { [id: number]: string } = {};
@@ -512,7 +518,11 @@ export function prtDevModeWFromRawData(raw_data?: number[]): DevMode | undefined
 export function prtDevModeToRawData(struct: DevMode, wstring: boolean): number[] {
   const raw_data: number[] = [];
 
-  raw_data.push(...convertToString(struct.dmDeviceName, wstring));
+  if (wstring) {
+    raw_data.push(...convertToWString(struct.dmDeviceName));
+  } else {
+    raw_data.push(...convertToString(struct.dmDeviceName));
+  }
   raw_data.push(...convertToWORD(struct.dmSpecVersion));
   raw_data.push(...convertToWORD(struct.dmDriverVersion));
   raw_data.push(...convertToWORD(struct.dmSize));
@@ -531,7 +541,11 @@ export function prtDevModeToRawData(struct: DevMode, wstring: boolean): number[]
   raw_data.push(...convertToShort(struct.dmYResolution));
   raw_data.push(...convertToShort(struct.dmTTOption));
   raw_data.push(...convertToShort(struct.dmCollate));
-  raw_data.push(...convertToString(struct.dmFormName, wstring));
+  if (wstring) {
+    raw_data.push(...convertToWString(struct.dmFormName));
+  } else {
+    raw_data.push(...convertToString(struct.dmFormName));
+  }
   raw_data.push(...convertToWORD(struct.dmLogPixels));
   raw_data.push(...convertToDWORD(struct.dmBitsPerPel));
   raw_data.push(...convertToDWORD(struct.dmPelsWidth));
