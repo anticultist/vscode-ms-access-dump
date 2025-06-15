@@ -17,15 +17,25 @@ import {
   SymbolInformation,
   TextDocuments,
   TextDocumentSyncKind,
+  CodeLensParams,
 } from 'vscode-languageserver/node';
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
 import { TextEdit } from 'vscode-languageserver-types';
 
-import { colorsFromAST, convertColorToNumber } from './color-provider';
-import { hoverFromAST } from './hover-provider';
-import { symbolsFromAST } from './symbols-creation';
+import { colorsFromAST, convertColorToNumber } from './provider/color-provider';
+import { hoverFromAST } from './provider/hover-provider';
+import { symbolsFromAST } from './provider/symbol-information-provider';
+import { codeLensesFromAST, PRT_DEV_PROPERTIES } from './provider/code-lens-provider';
+import { getPropertyValuesFromAST } from './provider/ast-utils';
+import { rawDataFromAST, bin2hex } from './binary-data/utils';
+import {
+  prtDevModeFromRawData,
+  prtDevModeToRawData,
+  prtDevModeWFromRawData,
+  DevMode,
+} from './binary-data/printing-device-mode';
 
 import { Parser, Language, Tree } from 'web-tree-sitter';
 import * as path from 'path';
@@ -37,8 +47,8 @@ async function loadParser() {
 
   await Parser.init();
   parser = new Parser();
-  const MyLang = await Language.load(wasmBuffer);
-  parser.setLanguage(MyLang);
+  language = await Language.load(wasmBuffer);
+  parser.setLanguage(language);
 }
 
 // Create a connection for the server, using Node's IPC as a transport.
@@ -49,6 +59,7 @@ let connection = createConnection(ProposedFeatures.all);
 let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 let parser: Parser;
+let language: Language;
 
 let hasConfigurationCapability: boolean = false;
 let hasWorkspaceFolderCapability: boolean = false;
@@ -70,6 +81,9 @@ connection.onInitialize(async (params: InitializeParams) => {
       documentSymbolProvider: true,
       colorProvider: true,
       hoverProvider: true,
+      codeLensProvider: {
+        resolveProvider: true,
+      },
     },
   };
   if (hasWorkspaceFolderCapability) {
@@ -219,6 +233,78 @@ connection.onHover(async (params: HoverParams) => {
   }
 
   return await hoverFromAST(ast, params.position.line, params.position.character);
+});
+
+connection.onCodeLens((params: CodeLensParams) => {
+  const ast = parseDocument(params.textDocument.uri);
+  if (ast === null) {
+    return [];
+  }
+
+  return codeLensesFromAST(ast);
+});
+
+connection.onCodeLensResolve((codeLens, _token) => {
+  return codeLens;
+});
+
+connection.onRequest('access-dump/remove-driver-data', async (params: { uri: string }) => {
+  const root = parseDocument(params.uri);
+  if (root === null) {
+    return [];
+  }
+
+  const document = documents.get(params.uri);
+  if (!document) {
+    return [];
+  }
+
+  const edits: TextEdit[] = [];
+  getPropertyValuesFromAST(root.rootNode, PRT_DEV_PROPERTIES).forEach((node) => {
+    const assignment_node = node.parent!;
+    const propertyName = assignment_node.children[0]?.text!;
+    const isWString = propertyName === 'PrtDevModeW';
+    let struct: DevMode | undefined;
+
+    if (isWString) {
+      struct = prtDevModeWFromRawData(rawDataFromAST(assignment_node));
+    } else {
+      struct = prtDevModeFromRawData(rawDataFromAST(assignment_node));
+    }
+    if (!struct) {
+      return;
+    }
+
+    if (struct?._driverData) {
+      delete struct._driverData;
+    }
+    struct.dmDriverExtra = 0;
+
+    const hex_values = prtDevModeToRawData(struct, isWString);
+    const newValue = 'Begin\n        ' + bin2hex(hex_values).join('\n        ') + '\n    End';
+
+    edits.push(
+      TextEdit.replace(
+        {
+          start: { line: node.startPosition.row, character: node.startPosition.column },
+          end: { line: node.endPosition.row, character: node.endPosition.column },
+        },
+        newValue,
+      ),
+    );
+  });
+
+  connection.workspace.applyEdit({
+    documentChanges: [
+      {
+        textDocument: {
+          uri: params.uri,
+          version: document.version,
+        },
+        edits,
+      },
+    ],
+  });
 });
 
 // Make the text document manager listen on the connection

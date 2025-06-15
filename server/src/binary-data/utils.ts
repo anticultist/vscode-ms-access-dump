@@ -42,6 +42,31 @@ export function hex2bin(hex_values: string[]): number[] {
   return raw_data;
 }
 
+export function bin2hex(raw_data: number[]): string[] {
+  const result: string[] = [];
+  let currentString = '';
+
+  for (const byte of raw_data) {
+    const validByte = Math.max(0, Math.min(255, Math.floor(byte)));
+    // convert to hex and pad with leading zero if needed
+    const hex = validByte.toString(16).padStart(2, '0').toLowerCase();
+
+    // check if adding this hex value would exceed 64 characters
+    if (currentString.length + hex.length > 64) {
+      result.push('0x' + currentString);
+      currentString = '';
+    }
+
+    currentString += hex;
+  }
+
+  if (currentString.length > 0) {
+    result.push('0x' + currentString);
+  }
+
+  return result;
+}
+
 export type StructMember = [string, 'SHORT' | 'LONG' | 'WORD' | 'DWORD' | 'POINTL' | 'RGBQUAD'];
 
 export function extractStruct(raw_data: number[], structDef: StructMember[]) {

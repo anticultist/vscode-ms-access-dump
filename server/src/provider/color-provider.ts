@@ -1,37 +1,31 @@
 import { Color, ColorInformation, Position, Range } from 'vscode-languageserver/node';
+import { getPropertyValuesFromAST } from './ast-utils';
 
 import Parser = require('web-tree-sitter');
 
 export function colorsFromAST(root: Parser.Tree) {
   const colors: ColorInformation[] = [];
 
-  scanBlock(root.rootNode, colors);
+  getPropertyValuesFromAST(root.rootNode, COLOR_PROPERTIES).forEach((node) => {
+    const color = convertTextToColor(node.text);
+    if (color === null) {
+      return;
+    }
+
+    colors.push({
+      range: Range.create(
+        Position.create(node.startPosition.row, node.startPosition.column),
+        Position.create(node.endPosition.row, node.endPosition.column),
+      ),
+      color: color,
+    });
+  });
 
   return colors;
 }
 
-function scanTopLevelStructure(node: Parser.Node, colors: ColorInformation[]) {
-  switch (node.type) {
-    case 'assignment':
-      scanAssignment(node, colors);
-      break;
-    case 'block':
-      scanBlock(node, colors);
-      break;
-  }
-}
-
-function scanBlock(node: Parser.Node, colors: ColorInformation[]) {
-  for (const syntax_node of node.namedChildren) {
-    if (syntax_node === null) {
-      continue;
-    }
-    scanTopLevelStructure(syntax_node, colors);
-  }
-}
-
 // https://learn.microsoft.com/en-us/office/vba/api/access.form.datasheetgridlinescolor
-const color_properties = [
+const COLOR_PROPERTIES = [
   'AlternateBackColor',
   'BackColor',
   'BorderColor',
@@ -84,35 +78,4 @@ export function convertColorToNumber(color: Color): number {
     ((Math.trunc(color.green * 255) & 0xff) << 8) +
     ((Math.trunc(color.blue * 255) & 0xff) << 16)
   );
-}
-
-function scanAssignment(assignment_node: Parser.Node, colors: ColorInformation[]) {
-  if (
-    !assignment_node.firstNamedChild ||
-    !color_properties.includes(assignment_node.firstNamedChild.text)
-  ) {
-    return;
-  }
-
-  const color_value_node = assignment_node.firstNamedChild.nextNamedSibling;
-  if (
-    color_value_node === undefined ||
-    color_value_node?.startPosition === undefined ||
-    color_value_node?.endPosition === undefined
-  ) {
-    return;
-  }
-
-  const color = convertTextToColor(color_value_node.text);
-  if (color === null) {
-    return;
-  }
-
-  colors.push({
-    range: Range.create(
-      Position.create(color_value_node.startPosition.row, color_value_node.startPosition.column),
-      Position.create(color_value_node.endPosition.row, color_value_node.endPosition.column),
-    ),
-    color: color,
-  });
 }

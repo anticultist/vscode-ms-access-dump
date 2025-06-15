@@ -36,7 +36,7 @@ function scanTopLevelStructure(uri: string, node: Parser.Node, symbols: SymbolIn
 }
 
 function removeQuotes(text: string): string {
-  if (text.charAt(0) !== '"' || text.charAt(text.length - 1) !== '"') {
+  if (!text.startsWith('"') || !text.endsWith('"')) {
     return text;
   }
   return text.substring(1, text.length - 1);

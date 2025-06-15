@@ -8,6 +8,8 @@ import {
   convertToShort,
 } from '../src/binary-data/convert-data';
 
+import { bin2hex } from '../src/binary-data/utils';
+
 describe('convertToDWORD', () => {
   test('convert number into DWORD', () => {
     // 1 + (2 << 8) + (4 << 16) + (8 << 24) = 134480385
@@ -28,5 +30,11 @@ describe('convertToString', () => {
 describe('convertToWString', () => {
   test('convert wide string into number array', () => {
     expect(convertToWString('test', 5)).toEqual([116, 0, 101, 0, 115, 0, 116, 0, 0, 0]);
+  });
+});
+
+describe('abc', () => {
+  test('abc', () => {
+    expect(bin2hex([116, 0, 101, 0, 115, 0, 116, 0, 0, 0])).toEqual(['']);
   });
 });

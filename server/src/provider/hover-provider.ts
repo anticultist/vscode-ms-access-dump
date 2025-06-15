@@ -4,16 +4,16 @@ import Jimp = require('jimp');
 
 import Parser = require('web-tree-sitter');
 
-import { rawDataFromAST } from './binary-data/utils';
+import { rawDataFromAST } from '../binary-data/utils';
 import {
   prtDevModeWFromRawData,
   prtDevModeFromRawData,
   DevMode,
   devModeConstants,
   extractDmFieldsFlags,
-} from './binary-data/printing-device-mode';
-import { bitmapAsBase64EncodedString, bitmapInfoFromRawData } from './binary-data/bitmap-data';
-import { convertToDWORD } from './binary-data/convert-data';
+} from '../binary-data/printing-device-mode';
+import { bitmapAsBase64EncodedString, bitmapInfoFromRawData } from '../binary-data/bitmap-data';
+import { convertToDWORD } from '../binary-data/convert-data';
 
 export async function hoverFromAST(root: Parser.Tree, line: number, character: number) {
   return await scanBlock(root.rootNode, line, character);

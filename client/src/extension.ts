@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
 
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { workspace, ExtensionContext, commands, window } from 'vscode';
 
 import {
   LanguageClient,
@@ -51,6 +51,40 @@ export function activate(context: ExtensionContext) {
 
   // Start the client. This will also launch the server
   client.start();
+
+  // Register the command and send a request to the server
+  context.subscriptions.push(
+    commands.registerCommand('access-dump.edit-prt-dev-mode', async () => {
+      const pick = await window.showQuickPick(
+        ['Cleanup strings', 'Change orientation', 'Change paper size', 'Remove driver data'],
+        {
+          placeHolder: 'Select an edit option',
+          canPickMany: false,
+        },
+      );
+      if (!pick) {
+        window.showWarningMessage('No option selected.');
+        return;
+      }
+      window.showInformationMessage('You selected: ' + pick);
+
+      const editor = window.activeTextEditor;
+      if (!editor) {
+        window.showWarningMessage('No active editor.');
+        return;
+      }
+
+      try {
+        if (pick === 'Remove driver data') {
+          await client.sendRequest('access-dump/remove-driver-data', {
+            uri: editor.document.uri.toString(),
+          });
+        }
+      } catch (err) {
+        window.showErrorMessage('Failed to perform edit operation: ' + err);
+      }
+    }),
+  );
 }
 
 export function deactivate(): Thenable<void> | undefined {
