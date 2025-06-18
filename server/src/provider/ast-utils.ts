@@ -88,6 +88,6 @@ export function getDevModeStructFromNode(
 
 export function devModeStructToString(struct: DevMode, isWString: boolean): string {
   const hex_values = prtDevModeToRawData(struct, isWString);
-  const newValue = 'Begin\n        ' + bin2hex(hex_values).join('\n        ') + '\n    End';
+  const newValue = 'Begin\n        ' + bin2hex(hex_values).join(' ,\n        ') + '\n    End';
   return newValue;
 }
