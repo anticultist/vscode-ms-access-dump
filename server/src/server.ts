@@ -28,14 +28,12 @@ import { colorsFromAST, convertColorToNumber } from './provider/color-provider';
 import { hoverFromAST } from './provider/hover-provider';
 import { symbolsFromAST } from './provider/symbol-information-provider';
 import { codeLensesFromAST, PRT_DEV_PROPERTIES } from './provider/code-lens-provider';
-import { getPropertyValuesFromAST } from './provider/ast-utils';
-import { rawDataFromAST, bin2hex } from './binary-data/utils';
 import {
-  prtDevModeFromRawData,
-  prtDevModeToRawData,
-  prtDevModeWFromRawData,
-  DevMode,
-} from './binary-data/printing-device-mode';
+  getDevModeStructFromNode,
+  getPropertyValuesFromAST,
+  getParentPropertyName,
+  devModeStructToString,
+} from './provider/ast-utils';
 
 import { Parser, Language, Tree } from 'web-tree-sitter';
 import * as path from 'path';
@@ -241,7 +239,7 @@ connection.onCodeLens((params: CodeLensParams) => {
     return [];
   }
 
-  return codeLensesFromAST(ast);
+  return codeLensesFromAST(params.textDocument.uri, ast);
 });
 
 connection.onCodeLensResolve((codeLens, _token) => {
@@ -260,17 +258,9 @@ connection.onRequest('access-dump/remove-driver-data', async (params: { uri: str
   }
 
   const edits: TextEdit[] = [];
-  getPropertyValuesFromAST(root.rootNode, PRT_DEV_PROPERTIES).forEach((node) => {
-    const assignment_node = node.parent!;
-    const propertyName = assignment_node.children[0]?.text!;
-    const isWString = propertyName === 'PrtDevModeW';
-    let struct: DevMode | undefined;
-
-    if (isWString) {
-      struct = prtDevModeWFromRawData(rawDataFromAST(assignment_node));
-    } else {
-      struct = prtDevModeFromRawData(rawDataFromAST(assignment_node));
-    }
+  getPropertyValuesFromAST(root.rootNode, PRT_DEV_PROPERTIES).forEach((valueNode) => {
+    const isWString = getParentPropertyName(valueNode) === 'PrtDevModeW';
+    const struct = getDevModeStructFromNode(valueNode, isWString);
     if (!struct) {
       return;
     }
@@ -280,14 +270,13 @@ connection.onRequest('access-dump/remove-driver-data', async (params: { uri: str
     }
     struct.dmDriverExtra = 0;
 
-    const hex_values = prtDevModeToRawData(struct, isWString);
-    const newValue = 'Begin\n        ' + bin2hex(hex_values).join('\n        ') + '\n    End';
+    const newValue = devModeStructToString(struct, isWString);
 
     edits.push(
       TextEdit.replace(
         {
-          start: { line: node.startPosition.row, character: node.startPosition.column },
-          end: { line: node.endPosition.row, character: node.endPosition.column },
+          start: { line: valueNode.startPosition.row, character: valueNode.startPosition.column },
+          end: { line: valueNode.endPosition.row, character: valueNode.endPosition.column },
         },
         newValue,
       ),

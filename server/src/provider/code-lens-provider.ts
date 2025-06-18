@@ -3,7 +3,7 @@ import { getPropertyValuesFromAST } from './ast-utils';
 
 import Parser = require('web-tree-sitter');
 
-export function codeLensesFromAST(root: Parser.Tree) {
+export function codeLensesFromAST(uri: string, root: Parser.Tree) {
   const codeLenses: CodeLens[] = [];
 
   getPropertyValuesFromAST(root.rootNode, PRT_DEV_PROPERTIES).forEach((node) => {
@@ -15,8 +15,7 @@ export function codeLensesFromAST(root: Parser.Tree) {
       command: {
         title: 'Edit structure',
         command: 'access-dump.edit-prt-dev-mode',
-        // TODO: pass uri
-        arguments: [],
+        arguments: [uri],
       },
     });
   });

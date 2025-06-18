@@ -1,5 +1,15 @@
 import Parser = require('web-tree-sitter');
 
+import {
+  prtDevModeFromRawData,
+  prtDevModeWFromRawData,
+  prtDevModeToRawData,
+  DevMode,
+} from '../binary-data/printing-device-mode';
+import { bin2hex, rawDataFromAST } from '../binary-data/utils';
+
+// TODO: rethink splitting of ast-utils, utils and printing-device-mode
+
 export function getPropertyValuesFromAST(
   root: Parser.Node,
   propertyNames: string[],
@@ -57,4 +67,27 @@ function scanAssignment(
   }
 
   properties.push(valueNode);
+}
+
+export function getParentPropertyName(node: Parser.Node): string | undefined {
+  return node.parent?.children[0]?.text;
+}
+
+export function getDevModeStructFromNode(
+  node: Parser.Node,
+  isWString: boolean,
+): DevMode | undefined {
+  const assignment_node = node.parent!;
+
+  if (isWString) {
+    return prtDevModeWFromRawData(rawDataFromAST(assignment_node));
+  } else {
+    return prtDevModeFromRawData(rawDataFromAST(assignment_node));
+  }
+}
+
+export function devModeStructToString(struct: DevMode, isWString: boolean): string {
+  const hex_values = prtDevModeToRawData(struct, isWString);
+  const newValue = 'Begin\n        ' + bin2hex(hex_values).join('\n        ') + '\n    End';
+  return newValue;
 }
