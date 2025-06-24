@@ -121,6 +121,46 @@ export function extractDmFieldsFlags(dmFields: number): {} {
   return flags;
 }
 
+// dm fields flags
+export const DM_ORIENTATION = 1;
+export const DM_PAPERSIZE = 2;
+export const DM_PAPERLENGTH = 4;
+export const DM_PAPERWIDTH = 8;
+export const DM_SCALE = 16;
+export const DM_POSITION = 32;
+export const DM_NUP = 64;
+export const DM_DISPLAYORIENTATION = 128;
+export const DM_COPIES = 256;
+export const DM_DEFAULTSOURCE = 512;
+export const DM_PRINTQUALITY = 1024;
+export const DM_COLOR = 2048;
+export const DM_DUPLEX = 4096;
+export const DM_YRESOLUTION = 8192;
+export const DM_TTOPTION = 16384;
+export const DM_COLLATE = 32768;
+export const DM_FORMNAME = 65536;
+export const DM_LOGPIXELS = 131072;
+export const DM_BITSPERPEL = 262144;
+export const DM_PELSWIDTH = 524288;
+export const DM_PELSHEIGHT = 1048576;
+export const DM_DISPLAYFLAGS = 2097152;
+export const DM_DISPLAYFREQUENCY = 4194304;
+export const DM_ICMMETHOD = 8388608;
+export const DM_ICMINTENT = 16777216;
+export const DM_MEDIATYPE = 33554432;
+export const DM_DITHERTYPE = 67108864;
+export const DM_PANNINGWIDTH = 134217728;
+export const DM_PANNINGHEIGHT = 268435456;
+export const DM_DISPLAYFIXEDOUTPUT = 536870912;
+
+// dev mode constants
+export const DMORIENT_PORTRAIT = 1;
+export const DMORIENT_LANDSCAPE = 2;
+export const DMTT_BITMAP = 1;
+export const DMTT_DOWNLOAD = 2;
+export const DMTT_DOWNLOAD_OUTLINE = 4;
+export const DMTT_SUBDEV = 3;
+
 export const devModeConstants: { [id: string]: { [id: number | string]: string } } = {
   dmCollate: {
     0: 'DMCOLLATE_FALSE',

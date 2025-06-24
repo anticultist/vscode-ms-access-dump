@@ -54,30 +54,75 @@ export function activate(context: ExtensionContext) {
 
   // Register the command and send a request to the server
   context.subscriptions.push(
-    commands.registerCommand('access-dump.edit-prt-dev-mode', async () => {
-      const pick = await window.showQuickPick(
+    commands.registerCommand('access-dump.edit-prt-dev-mode', async (uri: string | undefined) => {
+      const editOption = await window.showQuickPick(
         ['Cleanup strings', 'Change orientation', 'Change paper size', 'Remove driver data'],
         {
           placeHolder: 'Select an edit option',
           canPickMany: false,
         },
       );
-      if (!pick) {
-        window.showWarningMessage('No option selected.');
+      if (!editOption) {
         return;
       }
-      window.showInformationMessage('You selected: ' + pick);
 
       const editor = window.activeTextEditor;
       if (!editor) {
-        window.showWarningMessage('No active editor.');
+        // window.showWarningMessage('No active editor.');
         return;
       }
 
+      if (!uri) {
+        uri = editor.document.uri.toString();
+      }
+
       try {
-        if (pick === 'Remove driver data') {
+        if (editOption === 'Cleanup strings') {
+          await client.sendRequest('access-dump/cleanup-strings', {
+            uri,
+          });
+        } else if (editOption === 'Remove driver data') {
           await client.sendRequest('access-dump/remove-driver-data', {
-            uri: editor.document.uri.toString(),
+            uri,
+          });
+        } else if (editOption === 'Change orientation') {
+          const paperOrientation = await window.showQuickPick(['Portrait', 'Landscape'], {
+            placeHolder: 'Select paper orientation',
+            canPickMany: false,
+          });
+          if (!paperOrientation) {
+            return;
+          }
+          await client.sendRequest('access-dump/select-paper-orientation', {
+            uri,
+            paperOrientation,
+          });
+        } else if (editOption === 'Change paper size') {
+          const paperSize = await window.showQuickPick(
+            [
+              'A4',
+              'A5',
+              'A6',
+              'B5 (JIS)',
+              'B6 (JIS)',
+              'Envelope C6',
+              'Executive',
+              'Legal',
+              'Letter',
+              'RA4',
+              'Statement',
+            ],
+            {
+              placeHolder: 'Select paper size',
+              canPickMany: false,
+            },
+          );
+          if (!paperSize) {
+            return;
+          }
+          await client.sendRequest('access-dump/select-paper-size', {
+            uri,
+            paperSize,
           });
         }
       } catch (err) {

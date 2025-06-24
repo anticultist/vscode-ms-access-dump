@@ -34,6 +34,12 @@ import {
   getParentPropertyName,
   devModeStructToString,
 } from './provider/ast-utils';
+import {
+  DM_ORIENTATION,
+  DM_PAPERSIZE,
+  DMORIENT_LANDSCAPE,
+  DMORIENT_PORTRAIT,
+} from './binary-data/printing-device-mode';
 
 import { Parser, Language, Tree } from 'web-tree-sitter';
 import * as path from 'path';
@@ -246,15 +252,62 @@ connection.onCodeLensResolve((codeLens, _token) => {
   return codeLens;
 });
 
+connection.onRequest('access-dump/cleanup-strings', async (params: { uri: string }) => {
+  modifyDevModeStructs(params, (struct, params) => {
+    // NOTE: doing nothing here cleans up the strings as a side effect
+  });
+});
+
 connection.onRequest('access-dump/remove-driver-data', async (params: { uri: string }) => {
+  modifyDevModeStructs(params, (struct, params) => {
+    if (struct?._driverData) {
+      delete struct._driverData;
+    }
+    struct.dmDriverExtra = 0;
+  });
+});
+
+connection.onRequest(
+  'access-dump/select-paper-orientation',
+  async (params: { uri: string; paperOrientation: string }) => {
+    modifyDevModeStructs(params, (struct, params) => {
+      if (params.paperOrientation.toLowerCase() === 'portrait') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmOrientation = DMORIENT_PORTRAIT;
+      } else if (params.paperOrientation.toLowerCase() === 'landscape') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmOrientation = DMORIENT_LANDSCAPE;
+      } else {
+        // TODO: show error message
+      }
+
+      struct.dmFields |= DM_ORIENTATION;
+    });
+  },
+);
+
+connection.onRequest(
+  'access-dump/select-paper-size',
+  async (params: { uri: string; paperSize: string }) => {
+    modifyDevModeStructs(params, (struct, params) => {
+      struct.dmFields |= DM_PAPERSIZE;
+      // TODO: continue
+    });
+  },
+);
+
+function modifyDevModeStructs(
+  params: any,
+  modifyCallbackStruct: (struct: any, params: any) => void,
+): void {
   const root = parseDocument(params.uri);
   if (root === null) {
-    return [];
+    // TODO: show error message
+    return;
   }
 
   const document = documents.get(params.uri);
   if (!document) {
-    return [];
+    // TODO: show error message
+    return;
   }
 
   const edits: TextEdit[] = [];
@@ -262,13 +315,11 @@ connection.onRequest('access-dump/remove-driver-data', async (params: { uri: str
     const isWString = getParentPropertyName(valueNode) === 'PrtDevModeW';
     const struct = getDevModeStructFromNode(valueNode, isWString);
     if (!struct) {
+      // TODO: show error message
       return;
     }
 
-    if (struct?._driverData) {
-      delete struct._driverData;
-    }
-    struct.dmDriverExtra = 0;
+    modifyCallbackStruct(struct, params);
 
     const newValue = devModeStructToString(struct, isWString);
 
@@ -294,7 +345,7 @@ connection.onRequest('access-dump/remove-driver-data', async (params: { uri: str
       },
     ],
   });
-});
+}
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
