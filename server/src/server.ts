@@ -35,10 +35,20 @@ import {
   devModeStructToString,
 } from './provider/ast-utils';
 import {
+  DevMode,
   DM_ORIENTATION,
   DM_PAPERSIZE,
   DMORIENT_LANDSCAPE,
   DMORIENT_PORTRAIT,
+  DMPAPER_A4,
+  DMPAPER_A5,
+  DMPAPER_A6,
+  DMPAPER_B6_JIS,
+  DMPAPER_ENV_C6,
+  DMPAPER_EXECUTIVE,
+  DMPAPER_LEGAL,
+  DMPAPER_LETTER,
+  DMPAPER_STATEMENT,
 } from './binary-data/printing-device-mode';
 
 import { Parser, Language, Tree } from 'web-tree-sitter';
@@ -263,6 +273,7 @@ connection.onRequest('access-dump/remove-driver-data', async (params: { uri: str
     if (struct?._driverData) {
       delete struct._driverData;
     }
+    struct.dmDriverVersion = 0;
     struct.dmDriverExtra = 0;
   });
 });
@@ -288,15 +299,46 @@ connection.onRequest(
   'access-dump/select-paper-size',
   async (params: { uri: string; paperSize: string }) => {
     modifyDevModeStructs(params, (struct, params) => {
+      if (params.paperSizeString === 'A4') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_A4;
+        struct.dmFormName = 'A4';
+      } else if (params.paperSizeString === 'A5') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_A5;
+        struct.dmFormName = 'A5';
+      } else if (params.paperSizeString === 'A6') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_A6;
+        struct.dmFormName = 'A6';
+      } else if (params.paperSizeString === 'B6 (JIS)') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_B6_JIS;
+        struct.dmFormName = 'B6 (JIS)';
+      } else if (params.paperSizeString === 'Envelope C6') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_ENV_C6;
+        struct.dmFormName = 'Envelope C6';
+      } else if (params.paperSizeString === 'Executive') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_EXECUTIVE;
+        struct.dmFormName = 'Executive';
+      } else if (params.paperSizeString === 'Legal') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_LEGAL;
+        struct.dmFormName = 'Legal';
+      } else if (params.paperSizeString === 'Letter') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_LETTER;
+        struct.dmFormName = 'Letter';
+      } else if (params.paperSizeString === 'Statement') {
+        struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_STATEMENT;
+        struct.dmFormName = 'Statement';
+      } else {
+        // TODO: show error message
+        return;
+      }
+
       struct.dmFields |= DM_PAPERSIZE;
-      // TODO: continue
     });
   },
 );
 
 function modifyDevModeStructs(
   params: any,
-  modifyCallbackStruct: (struct: any, params: any) => void,
+  modifyCallbackStruct: (struct: DevMode, params: any) => void,
 ): void {
   const root = parseDocument(params.uri);
   if (root === null) {
