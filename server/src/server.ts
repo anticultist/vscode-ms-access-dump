@@ -297,7 +297,7 @@ connection.onRequest(
 
 connection.onRequest(
   'access-dump/select-paper-size',
-  async (params: { uri: string; paperSize: string }) => {
+  async (params: { uri: string; paperSizeString: string }) => {
     modifyDevModeStructs(params, (struct, params) => {
       if (params.paperSizeString === 'A4') {
         struct.DUMMYUNIONNAME.DUMMYSTRUCTNAME.dmPaperSize = DMPAPER_A4;
@@ -336,9 +336,9 @@ connection.onRequest(
   },
 );
 
-function modifyDevModeStructs(
-  params: any,
-  modifyCallbackStruct: (struct: DevMode, params: any) => void,
+function modifyDevModeStructs<T extends { uri: string }>(
+  params: T,
+  modifyCallbackStruct: (struct: DevMode, params: T) => void,
 ): void {
   const root = parseDocument(params.uri);
   if (root === null) {
