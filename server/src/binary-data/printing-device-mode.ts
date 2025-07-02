@@ -728,3 +728,40 @@ export function prtDevModeToRawData(struct: DevMode, wstring: boolean): number[]
 
   return raw_data;
 }
+
+export const DM_FIELD_MAPPINGS = [
+  { flag: DM_ORIENTATION, name: 'DM_ORIENTATION' },
+  { flag: DM_PAPERSIZE, name: 'DM_PAPERSIZE' },
+  { flag: DM_PAPERLENGTH, name: 'DM_PAPERLENGTH' },
+  { flag: DM_PAPERWIDTH, name: 'DM_PAPERWIDTH' },
+  { flag: DM_SCALE, name: 'DM_SCALE' },
+  { flag: DM_POSITION, name: 'DM_POSITION' },
+  { flag: DM_NUP, name: 'DM_NUP' },
+  { flag: DM_DISPLAYORIENTATION, name: 'DM_DISPLAYORIENTATION' },
+  { flag: DM_COPIES, name: 'DM_COPIES' },
+  { flag: DM_DEFAULTSOURCE, name: 'DM_DEFAULTSOURCE' },
+  { flag: DM_PRINTQUALITY, name: 'DM_PRINTQUALITY' },
+  { flag: DM_COLOR, name: 'DM_COLOR' },
+  { flag: DM_DUPLEX, name: 'DM_DUPLEX' },
+  { flag: DM_YRESOLUTION, name: 'DM_YRESOLUTION' },
+  { flag: DM_TTOPTION, name: 'DM_TTOPTION' },
+  { flag: DM_COLLATE, name: 'DM_COLLATE' },
+  { flag: DM_FORMNAME, name: 'DM_FORMNAME' },
+  { flag: DM_LOGPIXELS, name: 'DM_LOGPIXELS' },
+  { flag: DM_BITSPERPEL, name: 'DM_BITSPERPEL' },
+  { flag: DM_PELSWIDTH, name: 'DM_PELSWIDTH' },
+  { flag: DM_PELSHEIGHT, name: 'DM_PELSHEIGHT' },
+  { flag: DM_DISPLAYFLAGS, name: 'DM_DISPLAYFLAGS' },
+  { flag: DM_DISPLAYFREQUENCY, name: 'DM_DISPLAYFREQUENCY' },
+  { flag: DM_ICMMETHOD, name: 'DM_ICMMETHOD' },
+  { flag: DM_ICMINTENT, name: 'DM_ICMINTENT' },
+  { flag: DM_MEDIATYPE, name: 'DM_MEDIATYPE' },
+  { flag: DM_DITHERTYPE, name: 'DM_DITHERTYPE' },
+  { flag: DM_PANNINGWIDTH, name: 'DM_PANNINGWIDTH' },
+  { flag: DM_PANNINGHEIGHT, name: 'DM_PANNINGHEIGHT' },
+  { flag: DM_DISPLAYFIXEDOUTPUT, name: 'DM_DISPLAYFIXEDOUTPUT' },
+] as const;
+
+export const DM_FIELD_NAME_TO_FLAG: Record<string, number> = Object.fromEntries(
+  DM_FIELD_MAPPINGS.map(({ flag, name }) => [name, flag]),
+);

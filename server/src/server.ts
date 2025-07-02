@@ -36,6 +36,8 @@ import {
 } from './provider/ast-utils';
 import {
   DevMode,
+  DM_FIELD_MAPPINGS,
+  DM_FIELD_NAME_TO_FLAG,
   DM_ORIENTATION,
   DM_PAPERSIZE,
   DMORIENT_LANDSCAPE,
@@ -332,6 +334,62 @@ connection.onRequest(
       }
 
       struct.dmFields |= DM_PAPERSIZE;
+    });
+  },
+);
+
+connection.onRequest('access-dump/get-dmfields', async (params: { uri: string }) => {
+  const root = parseDocument(params.uri);
+  if (root === null) {
+    // TODO: show error message
+    return [];
+  }
+
+  const document = documents.get(params.uri);
+  if (!document) {
+    // TODO: show error message
+    return [];
+  }
+
+  const prtDevNodes = getPropertyValuesFromAST(root.rootNode, PRT_DEV_PROPERTIES);
+
+  if (prtDevNodes.length === 0) {
+    return [];
+  }
+
+  const currentDmFields: string[] = [];
+
+  prtDevNodes.forEach((valueNode) => {
+    const isWString = getParentPropertyName(valueNode) === 'PrtDevModeW';
+    const struct = getDevModeStructFromNode(valueNode, isWString);
+    if (!struct) {
+      return;
+    }
+
+    DM_FIELD_MAPPINGS.forEach(({ flag, name }) => {
+      if (struct.dmFields & flag) {
+        currentDmFields.push(name);
+      }
+    });
+  });
+
+  return [...new Set(currentDmFields)];
+});
+
+connection.onRequest(
+  'access-dump/set-dmfields',
+  async (params: { uri: string; dmFields: string[] }) => {
+    modifyDevModeStructs(params, (struct, params) => {
+      let newDmFields = 0;
+
+      params.dmFields.forEach((fieldName) => {
+        const flag = DM_FIELD_NAME_TO_FLAG[fieldName];
+        if (flag !== undefined) {
+          newDmFields |= flag;
+        }
+      });
+
+      struct.dmFields = newDmFields;
     });
   },
 );
