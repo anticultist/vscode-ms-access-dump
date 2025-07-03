@@ -2,14 +2,9 @@
 
 ## About
 
-Through the COM interface it is possible to dump internal resources (e.g. forms, macros, queries, reports etc.) of a Microsoft Access application into separate files[\[1\]](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development).
+Through the COM interface it is possible to [dump internal resources](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development) (e.g. forms, macros, queries, reports etc.) of a Microsoft Access application into separate files.
 This allows to develop a Microsoft Access application with multiple developers simultaneously.
 To ease the handling of such files this VSCode extension provides syntax highlighting for this custom dump format.
-
-## Call for Sponsorship
-
-This is a **free extension**.
-If you find it useful to yourself or your business then you might consider [sponsoring](https://ko-fi.com/anticultist) it.
 
 ## Feature Overview
 
@@ -17,7 +12,7 @@ If you find it useful to yourself or your business then you might consider [spon
 - embedded syntax highlighting for SQL and Visual Basic
 - breadcrumbs support
 - color picker
-- encoding of the PrtDevMode(W) block
+- encoding and editing of the PrtDevMode(W) block
 
 ### Syntax highlighting
 
@@ -57,6 +52,13 @@ These links may be interesting to further improve the development.
 - [Microsoft Access Developer and VBA Programming Help Center](http://www.fmsinc.com/microsoftaccess/developer/index.html)
 - [MDB Tools](https://github.com/mdbtools/mdbtools)
 
-## Feedback
+## 🙏 Found This Extension Helpful?
 
-Share your feedback as a [GitHub issue](https://github.com/anticultist/vscode-ms-access-dump/issues/new).
+If this extension has saved you time or improved your workflow, please consider:
+
+- ⭐ **Star this repository** on GitHub
+- ☕ **[Buy me a coffee](https://ko-fi.com/anticultist)** to support development
+- 📝 **Leave a review** in the VS Code marketplace
+- 📢 **Share it** with other developers who work with MS Access
+
+Your support makes a huge difference in keeping this project alive and improving!
