@@ -20,6 +20,9 @@ export function activate(context: ExtensionContext) {
   // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
   let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
 
+  // Show donation reminder occasionally (every 30 days)
+  showDonationReminder(context);
+
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
   let serverOptions: ServerOptions = {
@@ -204,6 +207,28 @@ export function activate(context: ExtensionContext) {
       }
     }),
   );
+
+  // Register support development command
+  context.subscriptions.push(
+    commands.registerCommand('access-dump.support-development', async () => {
+      const response = await window.showInformationMessage(
+        '💖 Thank you for considering supporting this extension!',
+        'Open Ko-fi ☕',
+        'Copy Link',
+        'Cancel',
+      );
+
+      if (response === 'Open Ko-fi ☕') {
+        commands.executeCommand('vscode.open', 'https://ko-fi.com/anticultist');
+      } else if (response === 'Copy Link') {
+        await window.showInformationMessage('Donation link copied to clipboard!');
+        commands.executeCommand(
+          'editor.action.clipboardCopyAction',
+          'https://ko-fi.com/anticultist',
+        );
+      }
+    }),
+  );
 }
 
 export function deactivate(): Thenable<void> | undefined {
@@ -211,4 +236,31 @@ export function deactivate(): Thenable<void> | undefined {
     return undefined;
   }
   return client.stop();
+}
+
+async function showDonationReminder(context: ExtensionContext) {
+  const now = Date.now();
+  const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+  const lastShown = context.globalState.get<number>(
+    'donationReminderLastShown',
+    now + thirtyDaysInMs,
+  );
+
+  if (now - lastShown > thirtyDaysInMs) {
+    const response = await window.showInformationMessage(
+      '💖 MS Access Dump Format Extension has been helpful? Consider supporting its development!',
+      'Support ☕',
+      'Maybe Later',
+      "Don't Show Again",
+    );
+
+    if (response === 'Support ☕') {
+      commands.executeCommand('vscode.open', 'https://ko-fi.com/anticultist');
+    } else if (response === "Don't Show Again") {
+      context.globalState.update('donationReminderLastShown', now + 365 * 24 * 60 * 60 * 1000);
+      return;
+    }
+
+    context.globalState.update('donationReminderLastShown', now);
+  }
 }
