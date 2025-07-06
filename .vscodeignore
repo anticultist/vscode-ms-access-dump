@@ -27,11 +27,11 @@ server/**
 !server/out/tree-sitter.wasm
 !server/tree-sitter-ms_access_dump.wasm
 
-.eslintignore
 .gitignore
 .markdownlint.json
 .prettierignore
 CONTRIBUTING.md
+eslint.config.mjs
 NOTES.md
 ROADMAP.md
 shared.webpack.config.js

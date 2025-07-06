@@ -66,6 +66,8 @@ Than switch to the debug viewlet and select `Launch Client`.
 - [Online RegEx tester](https://rubular.com/)
 - [Article: About writing a TextMate grammar](https://www.apeth.com/nonblog/stories/textmatebundle.html)
 - [NPM package to write TextMate grammar tests for VSCode](https://www.npmjs.com/package/vscode-tmgrammar-test)
+- [TmLanguage-Syntax-Highlighter](https://github.com/RedCMD/TmLanguage-Syntax-Highlighter)
+- [Extension README.md preview markdown codeblock language detection](https://github.com/microsoft/vscode/issues/205328)
 
 ## Tree-sitter
 
@@ -112,3 +114,8 @@ In addition you can install and test the new version with this command:
 ```sh
 code --install-extension extension_filename.vsix
 ```
+
+You may also need to use the following links:
+
+- [Azure DevOps](https://dev.azure.com/)
+- [Visual Studio Marketplace - Manage Publishers & Extensions](https://marketplace.visualstudio.com/manage)
