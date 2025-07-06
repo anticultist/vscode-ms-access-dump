@@ -22,9 +22,9 @@ This extension has syntax highlighting and breadcrumbs support so that the conte
 
 ### PrtDevMode(W)
 
-![PrtDevModeW](./images/PrtDevModeW.png)
+![PrtDevModeW](./images/PrtDevModeW.gif)
 
-You can hover over the PrtDevMode(W) block to display the information stored there.
+You can hover over a PrtDevMode(W) block to view its stored information, or use the code lens feature to edit it directly.
 
 ## File Association
 
