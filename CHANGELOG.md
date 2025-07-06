@@ -1,5 +1,11 @@
 # MS Access Dump Format Change Log
 
+## 0.7.0
+
+- Added code lens to edit PrtDevMode(W) structures
+- Fixed parsing big DWORD values
+- Fixed extracting dmCollate value from the DevModeA structure
+
 ## 0.6.1
 
 - Improved syntax highlighting for the 'Solarized Dark' theme

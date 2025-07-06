@@ -6,7 +6,7 @@
 	"sponsor": {
 		"url": "https://ko-fi.com/anticultist"
 	},
-	"version": "0.6.1",
+	"version": "0.7.0",
 	"publisher": "anticultist",
 	"icon": "images/icon.png",
 	"repository": {
@@ -48,6 +48,12 @@
 					"meta.embedded.block.vba": "vba",
 					"source.asp.vb.net": "vb"
 				}
+			}
+		],
+		"commands": [
+			{
+				"command": "access-dump.edit-prt-dev-mode",
+				"title": "Access Dump: Edit PrtDevMode structure"
 			}
 		]
 	},

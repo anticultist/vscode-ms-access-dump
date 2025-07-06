@@ -207,28 +207,6 @@ export function activate(context: ExtensionContext) {
       }
     }),
   );
-
-  // Register support development command
-  context.subscriptions.push(
-    commands.registerCommand('access-dump.support-development', async () => {
-      const response = await window.showInformationMessage(
-        '💖 Thank you for considering supporting this extension!',
-        'Open Ko-fi ☕',
-        'Copy Link',
-        'Cancel',
-      );
-
-      if (response === 'Open Ko-fi ☕') {
-        commands.executeCommand('vscode.open', 'https://ko-fi.com/anticultist');
-      } else if (response === 'Copy Link') {
-        await window.showInformationMessage('Donation link copied to clipboard!');
-        commands.executeCommand(
-          'editor.action.clipboardCopyAction',
-          'https://ko-fi.com/anticultist',
-        );
-      }
-    }),
-  );
 }
 
 export function deactivate(): Thenable<void> | undefined {
