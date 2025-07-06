@@ -2,34 +2,47 @@
 
 ## About
 
-Through the COM interface it is possible to [dump internal resources](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development) (e.g. forms, macros, queries, reports etc.) of a Microsoft Access application into separate files.
-This allows to develop a Microsoft Access application with multiple developers simultaneously.
-To ease the handling of such files this VSCode extension provides syntax highlighting for this custom dump format.
+Microsoft Access allows you to [dump internal resources](https://stackoverflow.com/questions/187506/how-do-you-use-version-control-with-access-development) (forms, macros, queries, reports, etc.) into separate files through its COM interface. This enables collaborative development of Access applications with multiple developers working simultaneously.
 
-## Feature Overview
+This VS Code extension provides comprehensive language support for MS Access dump files, making it easier to read, navigate, and maintain these files with advanced syntax highlighting and intelligent code analysis.
 
-- Syntax highlighting for MS Access dump format (forms, macros, queries, reports)
-- embedded syntax highlighting for SQL and Visual Basic
-- breadcrumbs support
-- color picker
-- encoding and editing of the PrtDevMode(W) block
+## Features
 
-### Syntax highlighting
+- **Advanced Syntax Highlighting** - Full syntax support for MS Access dump format (forms, macros, queries, reports)
+- **Embedded Language Support** - Syntax highlighting for SQL and Visual Basic code within dump files
+- **Smart Navigation** - Breadcrumbs support for easy file navigation
+- **Color Picker Integration** - Interactive color picker for color values
+- **PrtDevMode(W) Support** - Decode, view, and edit printer device mode settings
+
+### Syntax Highlighting
 
 ![Screenshot](./images/screenshot.png)
 
-This extension has syntax highlighting and breadcrumbs support so that the content can be analyzed more quickly.
+The extension provides comprehensive syntax highlighting and breadcrumbs support, making it easier to quickly analyze and understand the structure of your Access dump files.
 
-### PrtDevMode(W)
+### PrtDevMode(W) Block Support
 
 ![PrtDevModeW](./images/PrtDevModeW.gif)
 
-You can hover over a PrtDevMode(W) block to view its stored information, or use the code lens feature to edit it directly.
+The extension can decode and display printer device mode settings stored in PrtDevMode(W) blocks. You can:
 
-## File Association
+- **Hover** over a PrtDevMode(W) block to view its stored information
+- **Use Code Lens** to edit the settings directly in a user-friendly interface
 
-This extension has a predefined file association for the following file endings: `*.form`, `*.mac`, `*.qry`, `*.report`.
-If your project uses different file endings you can also add new [file association](https://code.visualstudio.com/docs/languages/overview#_add-a-file-extension-to-a-language) in `settings.json`, e.g.:
+## Configuration
+
+### File Association
+
+This extension automatically recognizes files with the following extensions:
+
+- `*.form` - Access forms
+- `*.mac` - Access macros  
+- `*.qry` - Access queries
+- `*.report` - Access reports
+
+### Custom File Extensions
+
+If your project uses different file extensions, you can add custom [file associations](https://code.visualstudio.com/docs/languages/overview#_add-a-file-extension-to-a-language) in your `settings.json`:
 
 ```json
 {
@@ -40,25 +53,37 @@ If your project uses different file endings you can also add new [file associati
 }
 ```
 
-## Useful Links
+## Additional Resources
 
-These links may be interesting to further improve the development.
+### Development Tools
 
-- [Rubberduck](https://rubberduckvba.com/)
-- [vbWatchdog](https://www.everythingaccess.com/vbwatchdog.asp)
-- Export Access data to: [MySQL](https://www.bullzip.com/products/a2m/info.php), [MSSQL](https://www.bullzip.com/products/a2s/info.php), [PostgreSQL](https://www.bullzip.com/products/a2p/info.php) \[Bullzip\]
-- Using the ribbon menu in Access: [General documentation](https://www.accessribbon.de/en/), [list of imageMSO pictures](https://bert-toolkit.com/imagemso-list.html), [imageMso gallery](http://www.spreadsheet1.com/office-excel-ribbon-imagemso-icons-gallery-page-01.html)
-- [Allen Browne's tips for Microsoft Access](http://allenbrowne.com/tips.html)
-- [Microsoft Access Developer and VBA Programming Help Center](http://www.fmsinc.com/microsoftaccess/developer/index.html)
-- [MDB Tools](https://github.com/mdbtools/mdbtools)
+- [Rubberduck](https://rubberduckvba.com/) - VBA code quality and refactoring tools
+- [vbWatchdog](https://www.everythingaccess.com/vbwatchdog.asp) - Error handling and logging for VBA
+- [MDB Tools](https://github.com/mdbtools/mdbtools) - Open-source tools for reading MDB files
 
-## 🙏 Found This Extension Helpful?
+### Data Migration Tools
 
-If this extension has saved you time or improved your workflow, please consider:
+Export Access data to other databases:
 
-- ⭐ **Star this repository** on GitHub
-- ☕ **[Buy me a coffee](https://ko-fi.com/anticultist)** to support development
-- 📝 **Leave a review** in the VS Code marketplace
-- 📢 **Share it** with other developers who work with MS Access
+- [MySQL](https://www.bullzip.com/products/a2m/info.php) (Bullzip A2M)
+- [MSSQL](https://www.bullzip.com/products/a2s/info.php) (Bullzip A2S)  
+- [PostgreSQL](https://www.bullzip.com/products/a2p/info.php) (Bullzip A2P)
 
-Your support makes a huge difference in keeping this project alive and improving!
+### Access Development Resources
+
+- [Access Ribbon Documentation](https://www.accessribbon.de/en/) - General ribbon customization guide
+- [ImageMSO List](https://bert-toolkit.com/imagemso-list.html) - Complete list of built-in Office icons
+- [ImageMSO Gallery](http://www.spreadsheet1.com/office-excel-ribbon-imagemso-icons-gallery-page-01.html) - Visual gallery of Office icons
+- [Allen Browne's Access Tips](http://allenbrowne.com/tips.html) - Comprehensive Access development tips
+- [FMS Access Developer Center](http://www.fmsinc.com/microsoftaccess/developer/index.html) - VBA programming resources
+
+## Support This Project
+
+If this extension has improved your workflow or saved you time, please consider supporting its development:
+
+- ⭐ **[Star this repository](https://github.com/anticultist/vscode-ms-access-dump)** on GitHub
+- ☕ **[Buy me a coffee](https://ko-fi.com/anticultist)** to support continued development
+- 📝 **[Leave a review](https://marketplace.visualstudio.com/items?itemName=anticultist.ms-access-dump-format)** in the VS Code marketplace
+- 📢 **Share it** with other developers working with MS Access
+
+Your support helps keep this project active and enables new features and improvements!
