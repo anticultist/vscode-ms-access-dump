@@ -1,6 +1,6 @@
 import { Hover, Range, Position } from 'vscode-languageserver/node';
 
-import Jimp = require('jimp');
+import { Jimp } from 'jimp';
 
 import Parser = require('web-tree-sitter');
 
@@ -241,8 +241,8 @@ async function scanAssignment(
         const buf = Buffer.from(u8);
 
         try {
-          const img = await Jimp.create(buf);
-          preview += `![Preview](${await img.getBase64Async('image/bmp')})`;
+          const img = await Jimp.fromBuffer(buf);
+          preview += `![Preview](${await img.getBase64('image/bmp')})`;
         } catch {
           return {
             contents: '*could not parse structure*',
@@ -257,8 +257,8 @@ async function scanAssignment(
         const buf = Buffer.from(u8);
 
         try {
-          const img = await Jimp.create(buf);
-          preview += `![Preview](${await img.getBase64Async('image/png')})`;
+          const img = await Jimp.fromBuffer(buf);
+          preview += `![Preview](${await img.getBase64('image/png')})`;
         } catch {
           return {
             contents: '*could not parse structure*',

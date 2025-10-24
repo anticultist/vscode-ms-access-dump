@@ -15,7 +15,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"jimp": "^0.22.12",
+		"jimp": "^1.6.0",
 		"vscode-languageserver": "^9.0.1",
 		"vscode-languageserver-textdocument": "^1.0.12",
 		"web-tree-sitter": "^0.25.3"
