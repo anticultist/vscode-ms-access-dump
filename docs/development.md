@@ -68,6 +68,7 @@ Than switch to the debug viewlet and select `Launch Client`.
 - [NPM package to write TextMate grammar tests for VSCode](https://www.npmjs.com/package/vscode-tmgrammar-test)
 - [TmLanguage-Syntax-Highlighter](https://github.com/RedCMD/TmLanguage-Syntax-Highlighter)
 - [Extension README.md preview markdown codeblock language detection](https://github.com/microsoft/vscode/issues/205328)
+- [ast-grep(sg)](https://github.com/ast-grep/ast-grep)
 
 ## Tree-sitter
 
