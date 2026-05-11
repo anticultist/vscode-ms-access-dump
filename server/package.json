@@ -24,7 +24,7 @@
 		"@types/emscripten": "^1.40.1",
 		"@types/node": "^20.17.32",
 		"@types/vscode": "^1.90.0",
-		"ts-jest": "^29.1.4",
+		"ts-jest": "^29.4.9",
 		"vscode-test": "^1.6.1"
 	},
 	"overrides": {
